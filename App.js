@@ -1,7 +1,7 @@
 import { StatusBar } from "expo-status-bar";
 import * as React from "react";
 import MapView, { Marker } from "react-native-maps";
-import { Dimensions, StyleSheet, Text, View } from "react-native";
+import { Dimensions, StyleSheet, Text, View, Image } from "react-native";
 import * as Location from "expo-location";
 
 export default function App() {
@@ -48,10 +48,13 @@ export default function App() {
               longitudeDelta: 0.0421,
             }}
           >
-            {/* <Marker
+            <Marker
               title="You are here"
-              coordinate={{ latitude: lat, longitude: lon }}
-            /> */}
+              coordinate={{ latitude: lat, longitude: lon }}>
+              <Image
+              style={styles.pin}
+              source={{uri: 'https://media3.giphy.com/media/wWue0rCDOphOE/giphy.gif'}} />
+            </Marker>
           </MapView>
         )}
         <StatusBar style="auto" />
@@ -71,4 +74,12 @@ const styles = StyleSheet.create({
     width: Dimensions.get("window").width,
     height: Dimensions.get("window").height,
   },
+  pin: {
+    width: 40,
+    height: 40, 
+    borderTopRightRadius: 400, 
+    borderBottomLeftRadius: 400, 
+    borderBottomRightRadius: 400,
+    borderTopLeftRadius: 400
+  }
 });
