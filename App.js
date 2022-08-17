@@ -1,6 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import * as React from "react";
-import MapView from "react-native-maps";
+import MapView, { Marker } from "react-native-maps";
 import { Dimensions, StyleSheet, Text, View } from "react-native";
 import * as Location from "expo-location";
 
@@ -27,25 +27,36 @@ export default function App() {
   if (errorMsg) {
     text = errorMsg;
   } else if (location) {
-    text = JSON.stringify(location);
     console.log(location);
     lat = location.coords.latitude;
     lon = location.coords.longitude;
   }
 
   return (
-    <View style={styles.container}>
-      <MapView
-        style={styles.map}
-        initialRegion={{
-          latitude: lat,
-          longitude: lon,
-          latitudeDelta: 0.09,
-          longitudeDelta: 0.09,
-        }}
-      />
-      <StatusBar style="auto" />
-    </View>
+    <>
+      <View style={styles.container}>
+        {!location ? (
+          <Text style={{ textAlign: "center" }}>{text}</Text>
+        ) : (
+          <MapView
+            style={styles.map}
+            showsUserLocation={true}
+            initialRegion={{
+              latitude: lat,
+              longitude: lon,
+              latitudeDelta: 0.0922,
+              longitudeDelta: 0.0421,
+            }}
+          >
+            {/* <Marker
+              title="You are here"
+              coordinate={{ latitude: lat, longitude: lon }}
+            /> */}
+          </MapView>
+        )}
+        <StatusBar style="auto" />
+      </View>
+    </>
   );
 }
 
