@@ -1,15 +1,26 @@
 import { StatusBar } from "expo-status-bar";
 import * as React from "react";
 import MapView, { Marker } from "react-native-maps";
-import { Dimensions, StyleSheet, Text, View } from "react-native";
+import { Dimensions, StyleSheet, Text, View, Animated } from "react-native";
 import * as Location from "expo-location";
+import LoadingScreen from "./components/LoadingScreen";
+import MapMarkers from "./components/MapMarkers";
 
 export default function App() {
   const [location, setLocation] = React.useState(null);
   const [errorMsg, setErrorMsg] = React.useState(null);
+  const [loading, setLoading] = React.useState(false);
+  const fadeAnim = React.useRef(new Animated.Value(0)).current;
 
   React.useEffect(() => {
     (async () => {
+      setLoading(true);
+      Animated.timing(fadeAnim, {
+        toValue: 1,
+        duration: 1000,
+        useNativeDriver: true,
+      }).start();
+
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== "granted") {
         setErrorMsg("Permission to access location was denied");
@@ -17,45 +28,41 @@ export default function App() {
       }
       let location = await Location.getCurrentPositionAsync({});
       setLocation(location);
+      setLoading(false);
     })();
-  }, []);
+  }, [fadeAnim]);
 
   let text = "Waiting...";
-  let lat;
-  let lon;
 
   if (errorMsg) {
     text = errorMsg;
-  } else if (location) {
-    console.log(location);
-    lat = location.coords.latitude;
-    lon = location.coords.longitude;
   }
 
   return (
     <>
-      <View style={styles.container}>
-        {!location ? (
-          <Text style={{ textAlign: "center" }}>{text}</Text>
+      <Animated.View style={{ ...styles.container, opacity: fadeAnim }}>
+        {loading === true ? (
+          <LoadingScreen />
         ) : (
-          <MapView
-            style={styles.map}
-            showsUserLocation={true}
-            initialRegion={{
-              latitude: lat,
-              longitude: lon,
-              latitudeDelta: 0.0922,
-              longitudeDelta: 0.0421,
-            }}
-          >
-            {/* <Marker
-              title="You are here"
-              coordinate={{ latitude: lat, longitude: lon }}
-            /> */}
-          </MapView>
+          <View>
+            {location && (
+              <MapView
+                style={styles.map}
+                showsUserLocation={true}
+                // initialRegion={{
+                //   latitude: location?.coords?.latitude,
+                //   longitude: location?.coords?.longitude,
+                //   latitudeDelta: 0.0922,
+                //   longitudeDelta: 0.0421,
+                // }}
+              >
+                <MapMarkers />
+              </MapView>
+            )}
+          </View>
         )}
         <StatusBar style="auto" />
-      </View>
+      </Animated.View>
     </>
   );
 }
