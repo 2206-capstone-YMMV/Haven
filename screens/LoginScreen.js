@@ -6,14 +6,13 @@ import {
     signInWithEmailAndPassword,
     signOut,
     onAuthStateChanged} from 'firebase/auth'
-import { useNavigation } from '@react-navigation/core'
 import { db } from '../firebase'
 import { collection, addDoc} from 'firebase/firestore' 
-const LoginScreen = () => {
+
+const LoginScreen = ({ navigation }) => {
    const [email, setEmail] = useState('')
    const [password, setPassword] = useState('')
    const [isSignedIn, setIsSignedIn] = useState(false)
-   const navigation = useNavigation()
 
    const [name, setName] = useState('')
    const [role, setRole] = useState('')
@@ -28,7 +27,7 @@ const LoginScreen = () => {
     useEffect(() => {
        const unsbuscribe = onAuthStateChanged(auth, (user) => {
             if (user) {
-                navigation.navigate('Map')
+                navigation.navigate('Home')
             }
           })
           return unsbuscribe
