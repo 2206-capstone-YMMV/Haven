@@ -2,9 +2,15 @@ import { StatusBar } from "expo-status-bar";
 import * as React from "react";
 import MapView, { Marker } from "react-native-maps";
 import { Dimensions, StyleSheet, Text, View, Animated } from "react-native";
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import Home from './screens/Home'
+import LoginScreen from './screens/LoginScreen';
 import * as Location from "expo-location";
 import LoadingScreen from "./components/LoadingScreen";
 import MapMarkers from "./components/MapMarkers";
+const Stack = createNativeStackNavigator();
+
 
 export default function App() {
   const [location, setLocation] = React.useState(null);
@@ -39,6 +45,7 @@ export default function App() {
   }
 
   return (
+
     <>
       <Animated.View style={{ ...styles.container, opacity: fadeAnim }}>
         {loading === true ? (
@@ -64,18 +71,23 @@ export default function App() {
         <StatusBar style="auto" />
       </Animated.View>
     </>
+
+    <NavigationContainer>
+      <Stack.Navigator>
+      {/* <Stack.Screen name="Map" component={MapScreen} /> */}
+      <Stack.Screen name="Login" component={LoginScreen} />
+      <Stack.Screen name="Home" component={Home} />
+      </Stack.Navigator>
+    </NavigationContainer>
+
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  map: {
-    width: Dimensions.get("window").width,
-    height: Dimensions.get("window").height,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
