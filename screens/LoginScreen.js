@@ -1,28 +1,12 @@
-import { KeyboardAvoidingView, StyleSheet, Text, TextInput, Touchable, TouchableOpacity, View } from 'react-native'
+import { KeyboardAvoidingView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { auth } from '../firebase'
-import { 
-    createUserWithEmailAndPassword,
-    signInWithEmailAndPassword,
-    signOut,
-    onAuthStateChanged} from 'firebase/auth'
-import { db } from '../firebase'
-import { collection, addDoc} from 'firebase/firestore' 
+import { signInWithEmailAndPassword, onAuthStateChanged} from 'firebase/auth'
 
 const LoginScreen = ({ navigation }) => {
+
    const [email, setEmail] = useState('')
    const [password, setPassword] = useState('')
-   const [isSignedIn, setIsSignedIn] = useState(false)
-
-   const [name, setName] = useState('')
-   const [role, setRole] = useState('')
-   const [pwd, setPwd] = useState('')
-   const [pwd2, setPwd2] = useState('')
-
-   const colRef = collection(db, 'users')
-
-
-
 
     useEffect(() => {
        const unsbuscribe = onAuthStateChanged(auth, (user) => {
@@ -33,59 +17,17 @@ const LoginScreen = ({ navigation }) => {
           return unsbuscribe
     },[])
 
-   const handleSignUp = () => {
-  
-      createUserWithEmailAndPassword(auth, email, password)
-      .then(userCredentials => {
-        const user = userCredentials.user;
-        console.log('Registered with:', user.email);
-        setIsSignedIn(true)
-      })
-      .catch(error => alert(error.message))
-  }
-
 const handleSignIn = () => {
   
     signInWithEmailAndPassword(auth, email, password)
-    .then((re) => {
-
-      setIsSignedIn(true)
+    .then(() => {
+      setEmail('')
+      setPassword('')
+      
     })
     .catch(error => alert(error.message))
 }
 
-
-
-const SignUp = () => {
-
-    if (pwd == pwd2) {
-        createUserWithEmailAndPassword(auth, email, pwd)
-            .then((x) => {
-             addDoc(colRef, {
-                uid: x.user.uid,
-                email: email,
-                name: name,
-                role: role,
-             })
-            })
-            .catch((error) => {
-                alert(error.message)
-                // ..
-            });
-    } else {
-        alert("Passwords are different!")
-    }
-}
-
-const In = () => {
-  
-    signInWithEmailAndPassword(auth, email, pwd)
-    .then((re) => {
-
-      setIsSignedIn(true)
-    })
-    .catch(error => alert(error.message))
-}
   return (
     <KeyboardAvoidingView
     style={styles.container}
@@ -106,11 +48,9 @@ const In = () => {
                 style={styles.input}
                 secureTextEntry
                 />
-
             </View>
 
             <View style={styles.buttonContainer}>
-            
                 <TouchableOpacity
                     onPress={handleSignIn}
                     style={styles.button}
@@ -120,35 +60,10 @@ const In = () => {
                 
 
                 <TouchableOpacity
-                    onPress={handleSignUp}
+                    onPress={() => navigation.navigate('SignUp')}
                     style={[styles.button, styles.buttonOutline]}
                 >
                     <Text style={styles.buttonOutLineText}>Register</Text>
-                </TouchableOpacity>
-
-
-                
-            </View>
-
-            <View>
-            <TextInput style={styles.input} placeholder="Full Name" onChangeText={text => setName(text)} />
-        <TextInput style={styles.input} placeholder="Email Address" onChangeText={text => setEmail(text)} />
-        <TextInput style={styles.input} placeholder="Who are you? (Student or Teacher)" onChangeText={text => setRole(text)}/>
-        <TextInput style={styles.input} placeholder="Password" secureTextEntry={true}  onChangeText={text => setPwd(text)}/>
-        <TextInput style={styles.input} placeholder="Confirme Password" secureTextEntry={true}  onChangeText={text => setPwd2(text)}/>
-        
-        <TouchableOpacity
-                    style={[styles.button, styles.buttonOutline]}
-                    onPress={In}
-                >   
-                    <Text style={styles.buttonOutLineText}>in</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                    onPress={SignUp}
-                    style={[styles.button, styles.buttonOutline]}
-                >
-                    <Text style={styles.buttonOutLineText}>up</Text>
                 </TouchableOpacity>
             </View>
         </KeyboardAvoidingView>
