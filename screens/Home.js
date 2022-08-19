@@ -6,6 +6,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Map from './Map'
 import Profile from './Profile'
 import Posts from './Posts'
+import MessagesTab from './MessagesTab'
 
 const Tab = createBottomTabNavigator();
 
@@ -26,12 +27,16 @@ export default function Home(){
                     else if (rn === "Profile"){
                         iconName = focused ? 'Profile' : 'Profile-outline'
                     }
-                    return <Text>{iconName}</Text>
+                    else if (rn === "Messages"){
+                        iconName = focused ? 'Messages' : 'Messages-outline'
+                    }
+                    return <Text>No Image</Text>
                 },
             })}>
                 <Tab.Screen name="Map" component={Map}/>
                 <Tab.Screen name="Profile" component={Profile}/>
                 <Tab.Screen name="Posts" component={Posts}/>
+                <Tab.Screen name="Messages" component={MessagesTab}/>
             </Tab.Navigator>
     )
 }
