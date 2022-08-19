@@ -1,9 +1,9 @@
 import { StatusBar } from "expo-status-bar";
 import * as React from "react";
 import MapView, { Marker } from "react-native-maps";
-import { Dimensions, StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
+import { Dimensions, StyleSheet, Text, View, Image, } from "react-native";
 import * as Location from "expo-location";
-import { Icon } from 'react-native-elements'
+
 
 export default function MapScreen() {
   const [location, setLocation] = React.useState(null);
