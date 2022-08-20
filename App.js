@@ -6,6 +6,8 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import Home from './screens/Home'
 import LoginScreen from './screens/LoginScreen';
 import SignUpScreen from './screens/SignUpScreen';
+import NewPost from './screens/NewPost';
+import CameraTake from './components/CameraTake';
 const Stack = createNativeStackNavigator();
 
 
@@ -15,7 +17,9 @@ export default function App() {
        <SafeAreaProvider>
       <Stack.Navigator>
         <Stack.Screen name="Login" component={LoginScreen}  />
-        <Stack.Screen name="SignUp" component={SignUpScreen} />
+        <Stack.Screen name="SignUp" component={SignUpScreen} options={{ title: 'Sign Up' }}/>
+        <Stack.Screen name="NewPost" component={NewPost}  />
+        <Stack.Screen name="CameraTake" component={CameraTake}  />
         <Stack.Screen name="Home" component={Home} options={{ headerShown: false }}/>
       </Stack.Navigator>
       </SafeAreaProvider>
