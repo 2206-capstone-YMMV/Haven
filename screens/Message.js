@@ -2,21 +2,15 @@ import React, { useEffect, useState } from 'react'
 import { StyleSheet, Text, View, KeyboardAvoidingView, TextInput, TouchableOpacity, } from "react-native";
 import { auth } from '../firebase'
 import { db } from '../firebase'
-import { collection, onSnapshot, query, where, addDoc, getDoc, doc } from 'firebase/firestore' 
+import { collection, onSnapshot, query, where, addDoc, getDoc, doc, getDocs } from 'firebase/firestore' 
+import { withTheme } from 'react-native-elements';
 
 export default function Message({ route }) {
     const { ConversationId } = route.params
     const [conversation, setConversation] = useState([])
     const [message, setMessage] = useState('')
     const [displayName, setDisplayName] = useState('')
-    
-    query(collection(db, 'users'), where('uid', '==', auth.currentUser?.uid)), (snapshot) =>
-            setDisplayName(snapshot.docs[0].data())
-    console.log(displayName)
 
-    // getDoc(doc(db, 'users', auth.currentUser.uid))
-    //     .then(doc => setDisplayName(doc.data().name))
-    // console.log(auth.currentUser.uid)
     useEffect(
         () => 
             onSnapshot(query(collection(db, 'Messages'), where('ConversationId', '==', ConversationId)), (snapshot) =>
@@ -26,9 +20,15 @@ export default function Message({ route }) {
             )
     ,[])
 
+    useEffect(
+      () => {
+            getDocs(query(collection(db, 'users'), where('uid', '==', auth.currentUser?.uid)))
+            .then(user => setDisplayName(user.docs[0].data().name))
+          })
+
     const handleSend = () => {
   
-        addDoc(collection(db, 'Messages'),{ConversationId, timestamp: Date.now(), content: displayName + ':' + message})
+        addDoc(collection(db, 'Messages'),{ConversationId, timestamp: Date.now(), content: displayName + ': ' + message})
         .then(() => {
           setMessage('')
         })
@@ -37,7 +37,9 @@ export default function Message({ route }) {
     
     return (
         <KeyboardAvoidingView style={{ flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-            {conversation.map((convo,index) => <Text key={index}>{convo.content}</Text>)}
+            <View style={styles.messageContainer}>
+              {conversation.map((convo,index) => <Text key={index} style={styles.message}>{convo.content}</Text>)}
+            </View>
             <View style={styles.inputContainer}>
                 <TextInput 
                 placeholder='Message'
@@ -46,7 +48,6 @@ export default function Message({ route }) {
                 style={styles.input}
                 />
             </View>
-
             <View style={styles.buttonContainer}>
                 <TouchableOpacity
                     onPress={handleSend}
@@ -65,6 +66,18 @@ const styles = StyleSheet.create({
       flex: 1,
       justifyContent: 'center',
       alignItems: 'center',
+    },
+    messageContainer: {
+      alignSelf: 'flex-start',
+      alignItems: 'left',
+      paddingHorizontal: '10%'
+    },
+    message: {
+      backgroundColor: 'white',
+      paddingVertical: 5,
+      paddingHorizontal: 5,
+      marginTop: 5,
+      borderRadius: 10
     },
     inputContainer: {
       width: '80%'
