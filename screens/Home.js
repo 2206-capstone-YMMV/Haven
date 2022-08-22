@@ -1,5 +1,4 @@
 import * as React from "react";
-import { NavigationContainer } from '@react-navigation/native'
 import { Text } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
@@ -7,7 +6,6 @@ import Map from './Map'
 import Profile from './Profile'
 import Posts from './Posts'
 import Chat from './Chat'
-import NewPost from "./NewPost";
 
 
 const Tab = createBottomTabNavigator();

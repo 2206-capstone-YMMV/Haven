@@ -2,7 +2,6 @@ import { StyleSheet, Text, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { auth, db } from '../firebase'
 import { collection, onSnapshot, query, where, orderBy } from 'firebase/firestore' 
-
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { useCollectionData } from 'react-firebase-hooks/firestore'
 
@@ -10,7 +9,7 @@ const Chat = () => {
 
   return (
     <View>
-      <Text>Chat</Text>
+      <Text>chat</Text>
     </View>
   )
 }

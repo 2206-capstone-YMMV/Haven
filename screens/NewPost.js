@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Text, View, StyleSheet, TouchableOpacity, TextInput } from "react-native";
 import { db } from '../firebase'
-import { collection, onSnapshot, query, where, addDoc } from 'firebase/firestore' 
+import { collection, onSnapshot, query, where, addDoc, serverTimestamp } from 'firebase/firestore' 
 import * as Location from "expo-location";
 import CameraTake from '../components/CameraTake';
 import { useNavigation } from '@react-navigation/core'
@@ -11,7 +11,9 @@ const NewPost = () => {
     const navigation = useNavigation()
     const [location, setLocation] = useState('');
     const [errorMsg, setErrorMsg] = useState(null);
-    const [content, setContent] = useState('')
+    const [description, setDescription] = useState('')
+    const [contents, setContents] = useState('')
+
     const [profile, setProfile] = useState({})
     const colRef = collection(db, 'Post')
     useEffect(() => {
@@ -42,11 +44,14 @@ const NewPost = () => {
               )
       ,[])
       
-      const handleAddContent= () => {
+      const handleAddPost= () => {
         addDoc(colRef,    {
             username: profile.name,
-            description: content,
-            icon: "dog",
+            role: profile.role,
+            description: description,
+            email: profile.email,
+            createAt: serverTimestamp(),
+            contents: contents,
             location: {
                 latitude: lat,
                 longitude: lon,
@@ -55,16 +60,17 @@ const NewPost = () => {
             }
           })
         .then(() => {
-   
+            navigation.navigate('Home')
  
         })
     }
   return (
     <View>
       <Text>NewPost</Text>
-      <TextInput style={styles.input} placeholder="Content" onChangeText={text => setContent(text)} />
+      <TextInput style={styles.input} placeholder="description" onChangeText={text => setDescription(text)} />
+      <TextInput style={styles.input} placeholder="contents" onChangeText={text => setContents(text)} />
       <TouchableOpacity
-            onPress={handleAddContent}
+            onPress={handleAddPost}
             style={[styles.button]}
         >
             <Text style={styles.buttonOutLineText}>Submit</Text>
@@ -75,4 +81,18 @@ const NewPost = () => {
 
 export default NewPost
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({   input: {
+  backgroundColor: 'white',
+  paddingHorizontal: 15,
+  paddingVertical: 10,
+  borderRadius: 10,
+  marginTop: 5,
+},
+button: {
+  backgroundColor: '#0782F9',
+  width: '100%',
+  padding: 15,
+  borderRadius: 10,
+  alignItems: 'center',
+},
+})
