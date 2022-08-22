@@ -4,9 +4,10 @@ import MapView, { Marker } from "react-native-maps";
 import { Dimensions, StyleSheet, Text, View, Image } from "react-native";
 import * as Location from "expo-location";
 import { db } from "../firebase";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, doc, getDocs } from "firebase/firestore";
 
 export default function MapScreen() {
+  const [markers, setMarkers] = React.useState([]);
   const [location, setLocation] = React.useState(null);
   const [errorMsg, setErrorMsg] = React.useState(null);
   const [marked, setMarked] = React.useState(null);
@@ -18,15 +19,6 @@ export default function MapScreen() {
   };
 
   React.useEffect(() => {
-    const getPins = async () => {
-      const data = await getDocs(locationCollectionRef);
-      console.log(data);
-    };
-
-    getPins();
-  }, []);
-
-  React.useEffect(() => {
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== "granted") {
@@ -36,7 +28,22 @@ export default function MapScreen() {
       let location = await Location.getCurrentPositionAsync({});
       setLocation(location);
     })();
+
+    (async () => {
+      const data = await getDocs(locationCollectionRef);
+      setMarkers(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+    })();
+    console.log(location);
   }, []);
+
+  const mapMarker = () => {
+    return markers?.map((pin) => (
+      <Marker
+        key={pin.id}
+        coordinate={{ latitude: pin.coords._lat, longitude: pin.coords._long }}
+      ></Marker>
+    ));
+  };
 
   let text = "Waiting...";
   let lat;
@@ -45,7 +52,6 @@ export default function MapScreen() {
   if (errorMsg) {
     text = errorMsg;
   } else if (location) {
-    console.log(location);
     lat = location.coords.latitude;
     lon = location.coords.longitude;
   }
@@ -65,23 +71,9 @@ export default function MapScreen() {
               latitudeDelta: 0.0922,
               longitudeDelta: 0.0421,
             }}
-            onPress={onMapPress}
+            onPress={(e) => onMapPress(e)}
           >
-            {marked ? (
-              <Marker coordinate={marked} />
-            ) : (
-              <Marker
-                title="You are here"
-                coordinate={{ latitude: lat, longitude: lon }}
-              >
-                <Image
-                  style={styles.pin}
-                  source={{
-                    uri: "https://media3.giphy.com/media/wWue0rCDOphOE/giphy.gif",
-                  }}
-                />
-              </Marker>
-            )}
+            {mapMarker()}
           </MapView>
         )}
         <StatusBar style="auto" />
@@ -112,4 +104,19 @@ const styles = StyleSheet.create({
 });
 
 {
+  /* {marked ? (
+              <Marker coordinate={marked} />
+            ) : (
+              <Marker
+                title="You are here"
+                coordinate={{ latitude: lat, longitude: lon }}
+              >
+                <Image
+                  style={styles.pin}
+                  source={{
+                    uri: "https://media3.giphy.com/media/wWue0rCDOphOE/giphy.gif",
+                  }}
+                />
+              </Marker>
+            )} */
 }
