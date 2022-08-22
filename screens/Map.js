@@ -1,13 +1,22 @@
 import { StatusBar } from "expo-status-bar";
 import * as React from "react";
 import MapView, { Marker } from "react-native-maps";
-import { Dimensions, StyleSheet, Text, View, Image, } from "react-native";
+import { Dimensions, StyleSheet, Text, View, Image } from "react-native";
 import * as Location from "expo-location";
-
+import { db } from "../firebase";
+import { collection, doc, getDocs } from "firebase/firestore";
 
 export default function MapScreen() {
+  const [markers, setMarkers] = React.useState([]);
   const [location, setLocation] = React.useState(null);
   const [errorMsg, setErrorMsg] = React.useState(null);
+  const [marked, setMarked] = React.useState(null);
+
+  const locationCollectionRef = collection(db, "location");
+
+  const onMapPress = (e) => {
+    setMarked(e.nativeEvent.coordinate);
+  };
 
   React.useEffect(() => {
     (async () => {
@@ -19,7 +28,22 @@ export default function MapScreen() {
       let location = await Location.getCurrentPositionAsync({});
       setLocation(location);
     })();
+
+    (async () => {
+      const data = await getDocs(locationCollectionRef);
+      setMarkers(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+    })();
+    console.log(location);
   }, []);
+
+  const mapMarker = () => {
+    return markers?.map((pin) => (
+      <Marker
+        key={pin.id}
+        coordinate={{ latitude: pin.coords._lat, longitude: pin.coords._long }}
+      ></Marker>
+    ));
+  };
 
   let text = "Waiting...";
   let lat;
@@ -28,7 +52,6 @@ export default function MapScreen() {
   if (errorMsg) {
     text = errorMsg;
   } else if (location) {
-    console.log(location);
     lat = location.coords.latitude;
     lon = location.coords.longitude;
   }
@@ -48,14 +71,9 @@ export default function MapScreen() {
               latitudeDelta: 0.0922,
               longitudeDelta: 0.0421,
             }}
+            onPress={(e) => onMapPress(e)}
           >
-            <Marker
-              title="You are here"
-              coordinate={{ latitude: lat, longitude: lon }}>
-              <Image
-              style={styles.pin}
-              source={{uri: 'https://media3.giphy.com/media/wWue0rCDOphOE/giphy.gif'}} />
-            </Marker>
+            {mapMarker()}
           </MapView>
         )}
         <StatusBar style="auto" />
@@ -77,10 +95,28 @@ const styles = StyleSheet.create({
   },
   pin: {
     width: 40,
-    height: 40, 
-    borderTopRightRadius: 400, 
-    borderBottomLeftRadius: 400, 
+    height: 40,
+    borderTopRightRadius: 400,
+    borderBottomLeftRadius: 400,
     borderBottomRightRadius: 400,
-    borderTopLeftRadius: 400
-  }
+    borderTopLeftRadius: 400,
+  },
 });
+
+{
+  /* {marked ? (
+              <Marker coordinate={marked} />
+            ) : (
+              <Marker
+                title="You are here"
+                coordinate={{ latitude: lat, longitude: lon }}
+              >
+                <Image
+                  style={styles.pin}
+                  source={{
+                    uri: "https://media3.giphy.com/media/wWue0rCDOphOE/giphy.gif",
+                  }}
+                />
+              </Marker>
+            )} */
+}
