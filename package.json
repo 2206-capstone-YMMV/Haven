@@ -9,6 +9,8 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@react-native-firebase/app": "^15.3.0",
+    "@react-native-firebase/firestore": "^15.3.0",
     "@react-navigation/bottom-tabs": "^6.3.2",
     "@react-navigation/native": "^6.0.11",
     "@react-navigation/native-stack": "^6.7.0",
@@ -21,7 +23,10 @@
     "expo-status-bar": "~1.4.0",
     "expo-task-manager": "~10.3.0",
     "firebase": "^9.9.2",
-    "react": "18.0.0",
+    "firestore": "^1.1.6",
+    "native": "^0.3.3",
+    "react": "^18.0.0",
+    "react-expo": "^0.0.0",
     "react-firebase-hooks": "^5.0.3",
     "react-native": "0.69.4",
     "react-native-elements": "^3.4.2",
