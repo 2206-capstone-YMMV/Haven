@@ -13,7 +13,7 @@ export default function Message({ route }) {
 
     useEffect(
         () => 
-            onSnapshot(query(collection(db, 'Messages'), where('ConversationId', '==', ConversationId)), (snapshot) =>
+            onSnapshot(query(collection(db, 'Messages'), where('ConversationId', '==', id)), (snapshot) =>
             setConversation(snapshot.docs.map(convo => {
                 return convo.data()
             }).sort((a,b) => a.timestamp - b.timestamp))
