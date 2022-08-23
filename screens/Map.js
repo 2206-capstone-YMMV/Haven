@@ -10,12 +10,13 @@ export default function MapScreen() {
   const [markers, setMarkers] = React.useState([]);
   const [location, setLocation] = React.useState(null);
   const [errorMsg, setErrorMsg] = React.useState(null);
-  const [marked, setMarked] = React.useState(null);
+  const [marked, setMarked] = React.useState([]);
 
   const locationCollectionRef = collection(db, "location");
 
   const onMapPress = (e) => {
-    setMarked(e.nativeEvent.coordinate);
+    setMarked([...marked, e.nativeEvent.coordinate]);
+    console.log("marked", marked);
   };
 
   React.useEffect(() => {
@@ -73,6 +74,17 @@ export default function MapScreen() {
             }}
             onPress={(e) => onMapPress(e)}
           >
+            {/* {!marked
+              ? null
+              : marked.map((mark, index) => (
+                  <Marker
+                    key={index}
+                    coordinate={{
+                      latitude: mark.longitude,
+                      longitude: mark.latitude,
+                    }}
+                  />
+                ))} */}
             {mapMarker()}
           </MapView>
         )}
@@ -102,21 +114,3 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 400,
   },
 });
-
-{
-  /* {marked ? (
-              <Marker coordinate={marked} />
-            ) : (
-              <Marker
-                title="You are here"
-                coordinate={{ latitude: lat, longitude: lon }}
-              >
-                <Image
-                  style={styles.pin}
-                  source={{
-                    uri: "https://media3.giphy.com/media/wWue0rCDOphOE/giphy.gif",
-                  }}
-                />
-              </Marker>
-            )} */
-}
