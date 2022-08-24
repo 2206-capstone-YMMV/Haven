@@ -6,29 +6,33 @@ import { collection, onSnapshot, query, where, addDoc, getDoc, doc, getDocs } fr
 import { withTheme } from 'react-native-elements';
 
 export default function Message({ route }) {
-    const { ConversationId } = route.params
+    const { conversationId } = route.params
     const [conversation, setConversation] = useState([])
     const [message, setMessage] = useState('')
     const [displayName, setDisplayName] = useState('')
 
     useEffect(
         () => 
-            onSnapshot(query(collection(db, 'Messages'), where('ConversationId', '==', id)), (snapshot) =>
+            onSnapshot(query(collection(db, 'Messages'), where('conversationId', '==', conversationId)), (snapshot) =>
             setConversation(snapshot.docs.map(convo => {
+              console.log('Grabbing Messages')
                 return convo.data()
             }).sort((a,b) => a.timestamp - b.timestamp))
             )
     ,[])
 
-    useEffect(
-      () => {
-            getDocs(query(collection(db, 'users'), where('uid', '==', auth.currentUser?.uid)))
-            .then(user => setDisplayName(user.docs[0].data().name))
-          })
+    if (!displayName){
+      getDocs(query(collection(db, 'users'), where('uid', '==', auth.currentUser?.uid)))
+      .then(user => {
+        console.log('Grabbing Username'),
+        setDisplayName(user.docs[0].data().name)
+      })
+    }
+           
+          
 
     const handleSend = () => {
-  
-        addDoc(collection(db, 'Messages'),{ConversationId, timestamp: Date.now(), content: displayName + ': ' + message})
+        addDoc(collection(db, 'Messages'),{conversationId, timestamp: Date.now(), content: displayName + ': ' + message})
         .then(() => {
           setMessage('')
         })
