@@ -74,17 +74,17 @@ export default function MapScreen() {
             }}
             onPress={(e) => onMapPress(e)}
           >
-            {/* {!marked
+            {!marked
               ? null
               : marked.map((mark, index) => (
                   <Marker
                     key={index}
                     coordinate={{
-                      latitude: mark.longitude,
-                      longitude: mark.latitude,
+                      latitude: mark.latitude,
+                      longitude: mark.longitude,
                     }}
                   />
-                ))} */}
+                ))}
             {mapMarker()}
           </MapView>
         )}
