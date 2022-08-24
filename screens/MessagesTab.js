@@ -17,7 +17,7 @@ export default function MessagesTab({ navigation }) {
             }))
             )
         ,[])
-    
+
     const conversationIds = conversations.map(convo => convo.conversationId)
     const otherUsersId = conversations.map(convo => convo.otherUser)
 
@@ -25,7 +25,7 @@ export default function MessagesTab({ navigation }) {
         otherUsersId.push('aaaaaaaaaaa')
     }
 
-    if (conversations.length > 0 && otherUsers.length === 0){ //After the conversations have been grabbed, but dont want this to repeat when page rerenders
+    if ((conversations.length > 0 && otherUsers.length === 0) || conversations.length > otherUsers.length){ //After the conversations have been grabbed, but dont want this to repeat when page rerenders
             getDocs(query(collection(db, 'users'), where('uid', 'in', otherUsersId)))
             .then(users =>
             setOtherUsers(users.docs.map(user => {
@@ -43,9 +43,13 @@ export default function MessagesTab({ navigation }) {
         }
     })
 
+    console.log(names)
+
+    
+
     return (
         <View style={{ flex: 1, alignItems: 'center'}}>
-            <Text style={[styles.convo, styles.new]} onPress={() => navigation.navigate('NewConversation', {conversations })}>New Conversation</Text>
+            <Text style={[styles.convo, styles.new]} onPress={() => navigation.navigate('NewConversation', { conversations })}>New Conversation</Text>
             {conversationIds.map((conversationId,index) => <Text key={index} style={styles.convo} onPress={() => navigation.navigate('Message', {conversationId})}>Conversation with {names[index]}</Text>)}
         </View>
     )
