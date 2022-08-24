@@ -8,6 +8,7 @@ import Home from './screens/Home'
 import LoginScreen from './screens/LoginScreen';
 import SignUpScreen from './screens/SignUpScreen';
 import Message from './screens/Message'
+import StartConversation from './screens/StartConversation'
 
 const Stack = createNativeStackNavigator();
 
@@ -21,6 +22,7 @@ export default function App() {
         <Stack.Screen name="SignUp" component={SignUpScreen} />
         <Stack.Screen name="Home" component={Home} options={{ headerShown: false }}/>
         <Stack.Screen name="Message" component={Message}/>
+        <Stack.Screen name="NewConversation" component={StartConversation}/>
       </Stack.Navigator>
       </SafeAreaProvider>
     </NavigationContainer>
