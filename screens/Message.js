@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { StyleSheet, Text, View, KeyboardAvoidingView, TextInput, TouchableOpacity, } from "react-native";
 import { auth } from '../firebase'
 import { db } from '../firebase'
-import { collection, onSnapshot, query, where, addDoc, getDoc, doc, getDocs } from 'firebase/firestore' 
-import { withTheme } from 'react-native-elements';
+import { collection, onSnapshot, query, where, addDoc, getDocs } from 'firebase/firestore' 
 
 export default function Message({ route }) {
     const { conversationId } = route.params

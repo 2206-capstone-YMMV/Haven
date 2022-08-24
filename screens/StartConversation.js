@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import { auth } from '../firebase'
 import { db } from '../firebase'
 import { collection, onSnapshot, query, where, addDoc } from 'firebase/firestore' 
@@ -37,8 +37,23 @@ export default function MessagesTab({ navigation, route }) {
     }
     
     return (
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-            {people.map((person,index) => <Text key={index} onClick={() => newConversation(person)}>{person.name}</Text>)}
+        <View style={{ flex: 1, alignItems: 'center'}}>
+            <Text style={styles.header}>Start a new conversation with</Text>
+            {people.map((person,index) => <Text key={index} style={styles.person} onPress={() => newConversation(person)}>{person.name}</Text>)}
         </View>
     )
 }
+
+
+const styles = StyleSheet.create({
+    header: {
+        fontSize: '20%'
+    },
+    person: {
+        backgroundColor: 'white',
+        paddingVertical: 5,
+        paddingHorizontal: 5,
+        marginTop: 5,
+        borderRadius: 10
+    }
+})
