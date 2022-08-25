@@ -59,12 +59,14 @@ const  Profile = ({ navigation }) => {
                 <Text style={styles.input}>Hello {profile.name}</Text>
                 <Text style={styles.input}>role: {profile.role}</Text>
                 <Text style={styles.input}>email: {profile.email}</Text>
-                <Text
-                    onPress={handleSignOut}
-                    style={styles.button}
-                >
-                    Sign Out
-                </Text>
+                <TouchableOpacity onPress={() => navigation.navigate('EditProfile')}
+                    style={styles.button}>
+                    <Text>Edit Profile</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={handleSignOut}
+                    style={styles.button}>
+                    <Text>Sign Out</Text>
+                </TouchableOpacity>
             </View>
             <View>
             <TextInput 
@@ -120,7 +122,7 @@ const styles = StyleSheet.create({
       paddingHorizontal: 15,
       paddingVertical: 10,
       borderRadius: 10,
-      marginTop: 5,
+      marginBottom: 5,
     },
     buttonContainer: {
       width: '60%',
@@ -134,6 +136,7 @@ const styles = StyleSheet.create({
       padding: 15,
       borderRadius: 10,
       alignItems: 'center',
+      marginBottom: 5
     },
     buttonOutline: {
       backgroundColor: 'white',
