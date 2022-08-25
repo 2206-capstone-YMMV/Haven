@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { Text, View, FlatList, StyleSheet, TextInput, TouchableOpacity } from "react-native";
-import { db } from '../firebase'
-import { collection, onSnapshot, query, where } from 'firebase/firestore' 
+import { auth, db } from '../firebase'
+import { collection, onSnapshot, addDoc, getDocs, updateDoc, deleteDoc, query, doc, where } from 'firebase/firestore' 
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
-import * as Location from "expo-location";
 import { useNavigation } from '@react-navigation/core'
 const  Posts = () => {
     const colRef = collection(db, 'Post')
@@ -14,27 +13,45 @@ const  Posts = () => {
     const filterData = posts.filter((post) => {
         return post.description.indexOf(search) >= 0
     })
+
    useEffect(  
     () => 
       onSnapshot(colRef, (snapshot) => 
       setPosts(snapshot.docs.map((doc) => ({...doc.data(), id: doc.id})))
-    
     )
   ,[])
 
   const renderFriend = (({item}) => {
     return (
         <View style={{flexDirection: 'row', padding: 20, marginBottom: 20, backgroundColor:'white', borderRadius: 12,
-        shadowColor: '#000', shadowOffset: {width:0, height: 10}, shadowOpacity: 0.3, shadowRadius: 20
-        }}>
-        <View>
-            <Text style={{fontSize: 22, fontWeight: '700'}}>{item.description}</Text>
-            <Text style={{fontSize: 18, opacity: 0.7}}>posted by: {item.username}</Text>
-            <Text style={{fontSize: 14, opacity: 0.8, color: '#0099cc'}}>{item.contents} </Text>
+            shadowColor: '#000', shadowOffset: {width:0, height: 10}, shadowOpacity: 0.3, shadowRadius: 20
+            }}>
+            <View>
+                <Text style={{fontSize: 22, fontWeight: '700'}}>{item.description}</Text>
+                <Text style={{fontSize: 18, opacity: 0.7}}>posted by: {item.username}</Text>
+                <Text style={{fontSize: 14, opacity: 0.8, color: '#0099cc'}}>{item.contents} </Text>
+                <Text onPress={() => like(item.id, item.likes)}>Like        Likes:  {item.likes}</Text>
+            </View>
         </View>
-    </View>
-    )
-})
+        )
+    })
+
+    const like = (id, postLikes) => {
+        console.log('Updating likes')
+        getDocs(query(collection(db, 'Likes'), where ('postId', '==', id), where ('uid', '==', auth.currentUser.uid)))
+        .then(checkLike => {
+            if (checkLike.docs.length < 1){ //If this user hasn't liked this post already
+                addDoc(collection(db, 'Likes'), {postId: id, uid: auth.currentUser.uid})
+                .then(updateDoc(doc(db, 'Post', id), {likes: postLikes + 1}))
+            }
+            else{
+                deleteDoc(doc(db, 'Likes', checkLike.docs[0].id))
+                .then(updateDoc(doc(db, 'Post', id), {likes: postLikes - 1}))
+            }
+        })
+        
+    }
+
 
     return (
         <View>
