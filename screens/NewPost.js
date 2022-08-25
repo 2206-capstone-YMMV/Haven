@@ -58,7 +58,8 @@ const NewPost = () => {
                 longitude: lon,
                 latitudeDelta: 0.0922,
                 longitudeDelta: 0.0421,
-            }
+            },
+            likes: 0
           })
         .then(() => {
             navigation.navigate('Home')
