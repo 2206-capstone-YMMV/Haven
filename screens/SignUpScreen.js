@@ -38,9 +38,9 @@ const SignUpScreen = () => {
     <View>
         <TextInput style={styles.input} placeholder="Full Name" onChangeText={text => setName(text)} />
         <TextInput style={styles.input} placeholder="Email Address" onChangeText={text => setEmail(text)} />
-        <TextInput style={styles.input} placeholder="Who are you? (Student or Teacher)" onChangeText={text => setRole(text)}/>
+        <TextInput style={styles.input} placeholder="Who are you? (User or Helper)" onChangeText={text => setRole(text)}/>
         <TextInput style={styles.input} placeholder="Password" secureTextEntry={true}  onChangeText={text => setPwd(text)}/>
-        <TextInput style={styles.input} placeholder="Confirme Password" secureTextEntry={true}  onChangeText={text => setPwd2(text)}/>
+        <TextInput style={styles.input} placeholder="Confirm Password" secureTextEntry={true}  onChangeText={text => setPwd2(text)}/>
 
         <TouchableOpacity
             onPress={SignUp}

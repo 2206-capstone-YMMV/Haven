@@ -4,6 +4,9 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Provider } from 'react-redux';
+import { store } from './redux';
+
+
 import Home from './screens/Home'
 import LoginScreen from './screens/LoginScreen';
 import SignUpScreen from './screens/SignUpScreen';
@@ -11,9 +14,10 @@ import Message from './screens/Message'
 import StartConversation from './screens/StartConversation'
 import Friends from './screens/Fridens';
 import NewPost from './screens/NewPost';
-import { store } from './redux';
 import SinglePost from './screens/SinglePost';
 import MyPosts from './screens/MyPosts';
+import EditProfile from './screens/EditProfile'
+
 const Stack = createNativeStackNavigator();
 
 
@@ -31,7 +35,8 @@ export default function App() {
         <Stack.Screen name="NewPost" component={NewPost}  />
         <Stack.Screen name="SinglePost" component={SinglePost}  />
         <Stack.Screen name="MyPosts" component={MyPosts}  />
-        <Stack.Screen name="NewConversation" component={StartConversation}/>
+        <Stack.Screen name="NewConversation" component={StartConversation} />
+        <Stack.Screen name="EditProfile" component={EditProfile} />
       </Stack.Navigator>
       </SafeAreaProvider>
     </NavigationContainer>

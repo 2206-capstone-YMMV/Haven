@@ -56,16 +56,17 @@ const  Profile = ({ navigation }) => {
     return (
         <View >
             <View>
-                <Text>Hello {profile.name}</Text>
-                <Text>role: {profile.role}</Text>
-                <Text>email: {profile.email}</Text>
-
-                <Text
-                    onPress={handleSignOut}
-                    style={{ fontSize: 26, fontWeight: "bold" }}
-                >
-                    Sign Out
-                </Text>
+                <Text style={styles.input}>Hello {profile.name}</Text>
+                <Text style={styles.input}>role: {profile.role}</Text>
+                <Text style={styles.input}>email: {profile.email}</Text>
+                <TouchableOpacity onPress={() => navigation.navigate('EditProfile')}
+                    style={styles.button}>
+                    <Text>Edit Profile</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={handleSignOut}
+                    style={styles.button}>
+                    <Text>Sign Out</Text>
+                </TouchableOpacity>
             </View>
             <View>
             <TextInput 
@@ -93,7 +94,7 @@ const  Profile = ({ navigation }) => {
                     renderItem={renderFriend}
                 />
             </View>
-        </View>
+    </View>
     )
 }
 
@@ -107,5 +108,50 @@ const styles = StyleSheet.create({
       margin: 5,
       borderColor: '#009688',
       backgroundColor: 'white'
-    }
-})
+    },
+    container: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    inputContainer: {
+      width: '80%'
+    },
+    input: {
+      backgroundColor: 'white',
+      paddingHorizontal: 15,
+      paddingVertical: 10,
+      borderRadius: 10,
+      marginBottom: 5,
+    },
+    buttonContainer: {
+      width: '60%',
+      justifyContent: 'center',
+      alignItems: 'center',
+      marginTop: 40,
+    },
+    button: {
+      backgroundColor: '#0782F9',
+      width: '100%',
+      padding: 15,
+      borderRadius: 10,
+      alignItems: 'center',
+      marginBottom: 5
+    },
+    buttonOutline: {
+      backgroundColor: 'white',
+      marginTop: 5,
+      borderColor: '#0782F9',
+      borderWidth: 2,
+    },
+    buttonText: {
+      color: 'white',
+      fontWeight: '700',
+      fontSize: 16,
+    },
+    buttonOutlineText: {
+      color: '#0782F9',
+      fontWeight: '700',
+      fontSize: 16,
+    },
+  })

@@ -8,6 +8,7 @@ import { useNavigation } from '@react-navigation/core'
 
 
 const Friends = () => {
+    console.log('hi')
     const navigation = useNavigation()
     const [users, setUsers] = useState([])
     const [search, setSearch] = useState('')
