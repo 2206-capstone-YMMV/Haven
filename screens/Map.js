@@ -71,10 +71,12 @@ const MapScreen = (props) => {
     lon = location.coords.longitude;
   }
 
-  const onMapPress = async () => {
-    setMarked([...marked, location.coords]);
+  const onMapPress = async (e) => {
+    let coordinate = e.nativeEvent.coordinate;
+    console.log(coordinate);
+    setMarked([...marked, coordinate]);
     const docRef = await addDoc(locationCollectionRef, {
-      coords: new GeoPoint(location.coords.latitude, location.coords.longitude),
+      coords: new GeoPoint(coordinate.latitude, coordinate.longitude),
     });
   };
 
@@ -94,6 +96,7 @@ const MapScreen = (props) => {
                 latitudeDelta: 0.0922,
                 longitudeDelta: 0.0421,
               }}
+              onPress={(e) => onMapPress(e)}
             >
               {/* loads marker on current location */}
 
@@ -112,11 +115,6 @@ const MapScreen = (props) => {
               {/* loads markers saved in database */}
               {mapMarker()}
 
-              {/* button to activate marker load on location */}
-              <TouchableOpacity
-                onPress={onMapPress}
-                style={styles.roundBtn}
-              ></TouchableOpacity>
               {post
           ? post.map((x) => (
               <Marker
@@ -159,28 +157,17 @@ const MapScreen = (props) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
     alignItems: "center",
   },
   map: {
-    zIndex: -1,
     width: Dimensions.get("window").width,
     height: Dimensions.get("window").height,
   },
-  roundBtn: {
+  carousel: {
     position: "absolute",
     zIndex: 10,
-    width: 50,
-    height: 50,
-    justifyContent: "center",
-    alignItems: "center",
-    padding: 10,
-    borderRadius: 50,
-    backgroundColor: "orange",
-    alignSelf: "flex-end",
-    marginTop: -5,
-    top: 10,
-    right: 10,
+    bottom: 0,
+    marginBottom: 48,
   },
   pin: {
     width: 40,
