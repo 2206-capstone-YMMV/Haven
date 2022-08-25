@@ -1,6 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import * as React from "react";
-import MapView, { Marker } from "react-native-maps";
+import MapView, { Marker, Callout } from "react-native-maps";
 import {
   Dimensions,
   StyleSheet,
@@ -11,14 +11,20 @@ import {
 } from "react-native";
 import * as Location from "expo-location";
 import { db } from "../firebase";
-import { collection, doc, getDocs, addDoc, GeoPoint } from "firebase/firestore";
+import { collection, doc, getDocs, addDoc, GeoPoint, onSnapshot } from "firebase/firestore";
+import { useNavigation } from '@react-navigation/core'
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
+import { connect } from "react-redux";
+import { get_Post } from "../redux";
 
-export default function MapScreen() {
+const MapScreen = (props) => {
+  const navigation = useNavigation()
+  const colRef = collection(db, 'Post')
   const [markers, setMarkers] = React.useState([]);
   const [location, setLocation] = React.useState(null);
   const [errorMsg, setErrorMsg] = React.useState(null);
   const [marked, setMarked] = React.useState([]);
-
+  const [post, setPost] = React.useState([]);
   const locationCollectionRef = collection(db, "location");
 
   React.useEffect(() => {
@@ -39,6 +45,12 @@ export default function MapScreen() {
     console.log(markers);
   }, []);
 
+  React.useEffect(  
+    () => 
+      onSnapshot(colRef, (snapshot) => 
+      setPost(snapshot.docs.map((doc) => ({...doc.data(), id: doc.id})))
+    )
+  ,[])
   const mapMarker = () => {
     return markers?.map((pin) => (
       <Marker
@@ -105,6 +117,36 @@ export default function MapScreen() {
                 onPress={onMapPress}
                 style={styles.roundBtn}
               ></TouchableOpacity>
+              {post
+          ? post.map((x) => (
+              <Marker
+                keyExtractor={x.email}
+                coordinate={x.location}
+                title={x.username}
+                description={x.description}
+              >
+               <MaterialCommunityIcons name={x.role === "Student"? 'heart':'account'} color={x.role === "Student"? 'red':'blue'} size={25}  onPress={() => props.getPost(x)}/> 
+               <Callout tooltip style={styles.box}>
+                <View >
+                  <View style={styles.bubble}>
+                    <Text>{x.description}</Text>
+                    <TouchableOpacity
+                      onPress={() => navigation.navigate('SinglePost')}
+                      >
+                      <Text style={styles.buttonOutLineText}>View Detail</Text>
+                    </TouchableOpacity>
+
+                    {/* <TouchableOpacity
+                      onPress={() => props.getPost(x)}
+                      >
+                      <Text style={styles.buttonOutLineText}>Updata</Text>
+                    </TouchableOpacity> */}
+                  </View>
+                </View>
+               </Callout>
+              </Marker>
+            ))
+          : null}
             </MapView>
           </View>
         )}
@@ -148,4 +190,17 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 400,
     borderTopLeftRadius: 400,
   },
+  bubble: {
+    backgroundColor:'white'
+  },
+  box: {
+    width: 90
+  }
 });
+
+
+const mapDispatchToProps = (dispatch) => ({
+  getPost : (post) => dispatch(get_Post(post))
+})
+
+export default connect(null, mapDispatchToProps)(MapScreen)
