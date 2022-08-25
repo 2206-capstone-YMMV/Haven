@@ -18,6 +18,7 @@ export default function MapScreen() {
   const [location, setLocation] = React.useState(null);
   const [errorMsg, setErrorMsg] = React.useState(null);
   const [marked, setMarked] = React.useState([]);
+  const isCarousel = React.useRef(null);
 
   const locationCollectionRef = collection(db, "location");
 
@@ -59,10 +60,12 @@ export default function MapScreen() {
     lon = location.coords.longitude;
   }
 
-  const onMapPress = async () => {
-    setMarked([...marked, location.coords]);
+  const onMapPress = async (e) => {
+    let coordinate = e.nativeEvent.coordinate;
+    console.log(coordinate);
+    setMarked([...marked, coordinate]);
     const docRef = await addDoc(locationCollectionRef, {
-      coords: new GeoPoint(location.coords.latitude, location.coords.longitude),
+      coords: new GeoPoint(coordinate.latitude, coordinate.longitude),
     });
   };
 
@@ -82,6 +85,7 @@ export default function MapScreen() {
                 latitudeDelta: 0.0922,
                 longitudeDelta: 0.0421,
               }}
+              onPress={(e) => onMapPress(e)}
             >
               {/* loads marker on current location */}
 
@@ -99,12 +103,6 @@ export default function MapScreen() {
 
               {/* loads markers saved in database */}
               {mapMarker()}
-
-              {/* button to activate marker load on location */}
-              <TouchableOpacity
-                onPress={onMapPress}
-                style={styles.roundBtn}
-              ></TouchableOpacity>
             </MapView>
           </View>
         )}
@@ -117,28 +115,17 @@ export default function MapScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
     alignItems: "center",
   },
   map: {
-    zIndex: -1,
     width: Dimensions.get("window").width,
     height: Dimensions.get("window").height,
   },
-  roundBtn: {
+  carousel: {
     position: "absolute",
     zIndex: 10,
-    width: 50,
-    height: 50,
-    justifyContent: "center",
-    alignItems: "center",
-    padding: 10,
-    borderRadius: 50,
-    backgroundColor: "orange",
-    alignSelf: "flex-end",
-    marginTop: -5,
-    top: 10,
-    right: 10,
+    bottom: 0,
+    marginBottom: 48,
   },
   pin: {
     width: 40,
