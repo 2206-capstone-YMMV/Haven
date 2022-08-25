@@ -7,6 +7,9 @@ import Map from './Map'
 import Profile from './Profile'
 import Posts from './Posts'
 import MessagesTab from './MessagesTab'
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
+
+
 
 const Tab = createBottomTabNavigator();
 
@@ -19,18 +22,19 @@ export default function Home(){
                     let iconName
                     let rn = route.name
                     if (rn === "Map"){
-                        iconName = focused ? 'home' : 'home-outline'
+                        iconName = focused ?  <MaterialCommunityIcons name="home" color={color} size={26} />:  <MaterialCommunityIcons name="home" color={color} size={26} />
+                       
                     }
                     else if (rn === "Posts"){
-                        iconName = focused ? 'Posts' : 'Posts-outline'
+                        iconName = focused ?  <MaterialCommunityIcons name="plus-circle-outline" color={color} size={26} /> : <MaterialCommunityIcons name="plus-circle-outline" color={color} size={26} />
                     }
                     else if (rn === "Profile"){
-                        iconName = focused ? 'Profile' : 'Profile-outline'
+                        iconName = focused ? <MaterialCommunityIcons name="account-circle" color={color} size={26} /> : <MaterialCommunityIcons name="account-circle" color={color} size={26} />
                     }
                     else if (rn === "Messages"){
-                        iconName = focused ? 'Messages' : 'Messages-outline'
+                        iconName = focused ?  <MaterialCommunityIcons name="chat" color={color} size={26} />  : <MaterialCommunityIcons name="chat" color={color} size={26} />
                     }
-                    return <Text>No Image</Text>
+                    return <Text>{iconName}</Text>
                 },
             })}>
                 <Tab.Screen name="Map" component={Map}/>
