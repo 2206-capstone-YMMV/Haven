@@ -92,7 +92,7 @@ const  Profile = ({ navigation }) => {
                     renderItem={renderFriend}
                 />
             </View>
-        </View>
+    </View>
     )
 }
 
