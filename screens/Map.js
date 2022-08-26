@@ -8,15 +8,15 @@ import {
   View,
   Image,
   TouchableOpacity,
-  TextInput,
   Button,
+  TextInput,
+  Modal,
 } from "react-native";
 import * as Location from "expo-location";
 import { db } from "../firebase";
 import {
   collection,
   doc,
-  getDocs,
   addDoc,
   GeoPoint,
   onSnapshot,
@@ -25,7 +25,7 @@ import { useNavigation } from "@react-navigation/core";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { connect } from "react-redux";
 import { get_Post } from "../redux";
-import DialogInput from "react-native-dialog-input";
+import DropDownPicker from "react-native-dropdown-picker";
 
 const { width, height } = Dimensions.get("window");
 const CARD_HEIGHT = 220;
@@ -39,6 +39,17 @@ const MapScreen = (props) => {
   const [marked, setMarked] = React.useState([]);
   const [post, setPost] = React.useState([]);
   const [isVis, setIsVis] = React.useState(false);
+  const [title, setTitle] = React.useState("");
+  const [content, setContent] = React.useState("");
+
+  const [open, setOpen] = React.useState(false);
+  const [value, setValue] = React.useState(null);
+  const [items, setItems] = React.useState([
+    { label: "Food", value: "food" },
+    { label: "Clothing", value: "clothing" },
+    { label: "Shelter", value: "shelter" },
+    { label: "Items", value: "items" },
+  ]);
 
   const colRef = collection(db, "Post");
   const locationCollectionRef = collection(db, "location");
@@ -53,13 +64,15 @@ const MapScreen = (props) => {
       let location = await Location.getCurrentPositionAsync({});
       setLocation(location);
     })();
-
-    (async () => {
-      const data = await getDocs(locationCollectionRef);
-      setMarkers(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
-    })();
-    console.log(markers);
   }, []);
+
+  React.useEffect(
+    () =>
+      onSnapshot(locationCollectionRef, (snapshot) =>
+        setMarkers(snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
+      ),
+    []
+  );
 
   React.useEffect(
     () =>
@@ -74,7 +87,7 @@ const MapScreen = (props) => {
       <Marker
         key={pin.id}
         coordinate={{ latitude: pin.coords._lat, longitude: pin.coords._long }}
-        title="Test Title"
+        title={pin.title}
         description={pin.content?.inputText}
       />
     ));
@@ -95,10 +108,12 @@ const MapScreen = (props) => {
     setIsVis(!isVis);
   };
 
-  const sendInput = async (inputText) => {
-    console.log(inputText);
-    const docRef = await addDoc(locationCollectionRef, {
+  const sendInput = async (title, inputText, value) => {
+    console.log(title, inputText);
+    await addDoc(locationCollectionRef, {
       content: { inputText },
+      title,
+      category: value,
       coords: new GeoPoint(location.coords.latitude, location.coords.longitude),
     });
     setMarked([...marked, location.coords]);
@@ -112,12 +127,49 @@ const MapScreen = (props) => {
           <Text style={{ textAlign: "center" }}>{text}</Text>
         ) : (
           <View style={styles.container}>
-            <DialogInput
-              title={"What can you find here?"}
-              isDialogVisible={isVis}
-              closeDialog={showDialog}
-              submitInput={(inputText) => sendInput(inputText)}
-            ></DialogInput>
+            <Modal visible={isVis}>
+              <View
+                style={{
+                  flex: 1,
+                  alignItems: "center",
+                  justifyContent: "center",
+                  height: 50,
+                }}
+              >
+                <Text style={styles.formLabel}> Location Form </Text>
+                <View>
+                  <TextInput
+                    onChangeText={(text) => setTitle(text)}
+                    placeholder="Enter Title"
+                    style={{ ...styles.inputStyle, height: 40 }}
+                  />
+                  <TextInput
+                    onChangeText={(text) => setContent(text)}
+                    placeholder="Content"
+                    multiline
+                    numberOfLines={4}
+                    style={{ ...styles.inputStyle, height: 80 }}
+                  />
+                  <DropDownPicker
+                    open={open}
+                    value={value}
+                    items={items}
+                    setOpen={setOpen}
+                    setValue={setValue}
+                    setItems={setItems}
+                    style={styles.dropdown}
+                  />
+                </View>
+                <View>
+                  <Button
+                    title="Submit"
+                    onPress={() => sendInput(title, content, value)}
+                  />
+                  <Button title="Hide" onPress={() => setIsVis(!isVis)} />
+                </View>
+              </View>
+            </Modal>
+
             <MapView
               style={styles.map}
               showsUserLocation={true}
@@ -182,9 +234,10 @@ const MapScreen = (props) => {
                     </Marker>
                   ))
                 : null}
-              <TouchableOpacity style={styles.Btn} onPress={showDialog}>
-                <Text style={{ fontSize: 9 }}>NEW</Text>
-              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.Btn}
+                onPress={() => setIsVis(!isVis)}
+              ></TouchableOpacity>
             </MapView>
           </View>
         )}
@@ -195,10 +248,6 @@ const MapScreen = (props) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-  },
   map: {
     width: Dimensions.get("window").width,
     height: Dimensions.get("window").height,
@@ -244,19 +293,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     backgroundColor: "rgba(0,0,0,0.2)",
   },
-  modalView: {
-    alignItems: "center",
-    justifyContent: "center",
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    elevation: 5,
-    transform: [{ translateX: -(width * 0.4) }, { translateY: -90 }],
-    height: 180,
-    width: width * 0.8,
-    backgroundColor: "#fff",
-    borderRadius: 7,
-  },
   textInput: {
     width: "80%",
     borderRadius: 5,
@@ -271,6 +307,24 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "#fff",
+  },
+  formLabel: {
+    fontSize: 20,
+    color: "black",
+  },
+  inputStyle: {
+    marginTop: 20,
+    width: 300,
+    paddingHorizontal: 10,
+    borderRadius: 10,
+    backgroundColor: "#DCDCDC",
+  },
+  dropdown: {
+    marginTop: 20,
+    width: 300,
+    paddingHorizontal: 10,
+    borderRadius: 10,
+    backgroundColor: "#DCDCDC",
   },
 });
 
