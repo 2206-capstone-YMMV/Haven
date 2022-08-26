@@ -120,9 +120,19 @@ const MapScreen = (props) => {
     setIsVis(!isVis);
   };
 
+  let soup = require('../gifs/soup.gif')
+
   return (
     <>
       <View>
+        <Image
+          style={styles.pin}
+          source={{uri: 'https://media2.giphy.com/media/hICiFp6y2rDyw/giphy.gif?cid=ecf05e47naqpg7n6gaenqwl4nd5nsfd5fmxgxjxc28ejqdn8&rid=giphy.gif&ct=g'}} 
+        />
+        <Image
+          style={styles.pin}
+          source={{uri: 'https://giphy.com/gifs/food-sandwich-sandwiches-74E4pNT4svUwJCfeeF'}} 
+        />
         {!location ? (
           <Text style={{ textAlign: "center" }}>{text}</Text>
         ) : (
@@ -180,6 +190,11 @@ const MapScreen = (props) => {
                 longitudeDelta: 0.0421,
               }}
             >
+            <Marker coordinate={{latitude: lat + 0.1, longitude: lon}}>
+              <Image
+                style={styles.pin}
+                source={soup} />
+            </Marker>
               {/* loads marker on current location */}
               {!marked
                 ? null
