@@ -27,6 +27,8 @@ import { connect } from "react-redux";
 import { get_Post } from "../redux";
 import DropDownPicker from "react-native-dropdown-picker";
 
+import Gifs from "../gifs/gifs.js"
+
 const { width, height } = Dimensions.get("window");
 const CARD_HEIGHT = 220;
 const CARD_WIDTH = width * 0.8;
@@ -41,7 +43,6 @@ const MapScreen = (props) => {
   const [isVis, setIsVis] = React.useState(false);
   const [title, setTitle] = React.useState("");
   const [content, setContent] = React.useState("");
-
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState(null);
   const [items, setItems] = React.useState([
@@ -50,7 +51,6 @@ const MapScreen = (props) => {
     { label: "Shelter", value: "shelter" },
     { label: "Items", value: "items" },
   ]);
-
   const colRef = collection(db, "Post");
   const locationCollectionRef = collection(db, "location");
 
@@ -81,6 +81,19 @@ const MapScreen = (props) => {
       ),
     []
   );
+
+  React.useEffect(() => {
+    const func = async () => {
+      console.log('Grabbing gifs')
+      const storage = getStorage()
+      const reference = ref(storage, '/Gifs/soup.gif')
+      await getDownloadURL(reference).then(img => {
+        console.log(img)
+        setSoup(img)
+      })
+    }
+    func()
+  },[])
 
   const mapMarker = () => {
     return markers?.map((pin) => (
@@ -120,19 +133,10 @@ const MapScreen = (props) => {
     setIsVis(!isVis);
   };
 
-  let soup = require('../gifs/soup.gif')
 
   return (
     <>
       <View>
-        <Image
-          style={styles.pin}
-          source={{uri: 'https://media2.giphy.com/media/hICiFp6y2rDyw/giphy.gif?cid=ecf05e47naqpg7n6gaenqwl4nd5nsfd5fmxgxjxc28ejqdn8&rid=giphy.gif&ct=g'}} 
-        />
-        <Image
-          style={styles.pin}
-          source={{uri: 'https://giphy.com/gifs/food-sandwich-sandwiches-74E4pNT4svUwJCfeeF'}} 
-        />
         {!location ? (
           <Text style={{ textAlign: "center" }}>{text}</Text>
         ) : (
@@ -190,10 +194,10 @@ const MapScreen = (props) => {
                 longitudeDelta: 0.0421,
               }}
             >
-            <Marker coordinate={{latitude: lat + 0.1, longitude: lon}}>
+            <Marker coordinate={{latitude: lat + 0.01, longitude: lon}}>
               <Image
                 style={styles.pin}
-                source={soup} />
+                source={{uri: Gifs.fishing}} />
             </Marker>
               {/* loads marker on current location */}
               {!marked
