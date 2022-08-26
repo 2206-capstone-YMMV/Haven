@@ -29,6 +29,8 @@ import DropDownPicker from "react-native-dropdown-picker";
 
 import Gifs from "../gifs/gifs.js"
 
+import Gifs from "../gifs/gifs.js"
+
 const { width, height } = Dimensions.get("window");
 const CARD_HEIGHT = 220;
 const CARD_WIDTH = width * 0.8;
