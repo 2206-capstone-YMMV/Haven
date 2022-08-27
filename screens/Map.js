@@ -27,7 +27,7 @@ import { connect } from "react-redux";
 import { get_Post } from "../redux";
 import DropDownPicker from "react-native-dropdown-picker";
 
-import Gifs from "../gifs/gifs.js"
+import Gifs from "../gifs/gifs";
 
 const { width, height } = Dimensions.get("window");
 const CARD_HEIGHT = 220;
@@ -84,16 +84,16 @@ const MapScreen = (props) => {
 
   React.useEffect(() => {
     const func = async () => {
-      console.log('Grabbing gifs')
-      const storage = getStorage()
-      const reference = ref(storage, '/Gifs/soup.gif')
-      await getDownloadURL(reference).then(img => {
-        console.log(img)
-        setSoup(img)
-      })
-    }
-    func()
-  },[])
+      console.log("Grabbing gifs");
+      const storage = getStorage();
+      const reference = ref(storage, "/Gifs/soup.gif");
+      await getDownloadURL(reference).then((img) => {
+        console.log(img);
+        setSoup(img);
+      });
+    };
+    func();
+  }, []);
 
   const mapMarker = () => {
     return markers?.map((pin) => (
@@ -132,7 +132,6 @@ const MapScreen = (props) => {
     setMarked([...marked, location.coords]);
     setIsVis(!isVis);
   };
-
 
   return (
     <>
@@ -194,11 +193,9 @@ const MapScreen = (props) => {
                 longitudeDelta: 0.0421,
               }}
             >
-            <Marker coordinate={{latitude: lat + 0.01, longitude: lon}}>
-              <Image
-                style={styles.pin}
-                source={{uri: Gifs.fishing}} />
-            </Marker>
+              <Marker coordinate={{ latitude: lat + 0.01, longitude: lon }}>
+                <Image style={styles.pin} source={{ uri: Gifs.fishing }} />
+              </Marker>
               {/* loads marker on current location */}
               {!marked
                 ? null

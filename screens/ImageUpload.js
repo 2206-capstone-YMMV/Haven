@@ -14,7 +14,18 @@ import "react-native-get-random-values";
 import { v4 as uuidv4 } from "uuid";
 import uuid from "react-native-uuid";
 
-const pickImageHandler = async () => {
+const ImageUpload = async () => {
+  useEffect(() => {
+    (async () => {
+      if (Platform.OS !== "web") {
+        const { status } =
+          await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (status !== "granted") {
+          alert("Sorry, we need camera roll permissions to make this work!");
+        }
+      }
+    })();
+  }, []);
   try {
     // console.log(uuidv4());
 
@@ -46,7 +57,7 @@ const pickImageHandler = async () => {
   return (
     <View style={styles.container}>
       <View style={styles.imageContainer}>
-        <Image source={selectedImage} style={styles.previewImage} />
+        <Image source={path} style={styles.previewImage} />
       </View>
       <View styles={styles.button}>
         <TouchableHighlight onPress={pickImageHandler}>

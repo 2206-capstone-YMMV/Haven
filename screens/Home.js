@@ -69,7 +69,7 @@ export default function Home() {
       <Tab.Screen name="Profile" component={Profile} />
       <Tab.Screen name="Posts" component={Posts} />
       <Tab.Screen name="Messages" component={MessagesTab} />
-      {/* <Tab.Screen name="ImageUpload" component={ImageUpload} /> */}
+      <Tab.Screen name="ImageUpload" component={ImageUpload} />
     </Tab.Navigator>
   );
 }

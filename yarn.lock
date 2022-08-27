@@ -5699,6 +5699,14 @@
   "resolved" "https://registry.npmjs.org/getenv/-/getenv-1.0.0.tgz"
   "version" "1.0.0"
 
+"gifs@^0.0.8":
+  "integrity" "sha512-JhmpK2D+zthDDdJBackXzdnU2iT+9Eztsu47kCRNax5Jvgy/emWDBvgaLJdTOAkgJrOAV1HWH5xz9mW29d18MQ=="
+  "resolved" "https://registry.npmjs.org/gifs/-/gifs-0.0.8.tgz"
+  "version" "0.0.8"
+  dependencies:
+    "underscore" "~1.6.0"
+    "yargs" "~1.1.3"
+
 "glob-parent@^3.1.0":
   "integrity" "sha512-E8Ak/2+dZY6fnzlR7+ueWvhsH1SjHr4jjss4YS/h4py44jY9MhK/VFdaZJAWDz6BbL21KeteKxFSFpq8OS5gVA=="
   "resolved" "https://registry.npmjs.org/glob-parent/-/glob-parent-3.1.0.tgz"
@@ -7680,6 +7688,11 @@
   "integrity" "sha512-Jsjnk4bw3YJqYzbdyBiNsPWHPfO++UGG749Cxs6peCu5Xg4nrena6OVxOYxrQTqww0Jmwt+Ref8rggumkTLz9Q=="
   "resolved" "https://registry.npmjs.org/minimist/-/minimist-1.2.6.tgz"
   "version" "1.2.6"
+
+"minimist@~0.0.1":
+  "integrity" "sha512-iotkTvxc+TwOm5Ieim8VnSNvCDjCK9S8G3scJ50ZthspSxa7jx50jkhYduuAtAjvfDUwSgOwf8+If99AlOEhyw=="
+  "resolved" "https://registry.npmjs.org/minimist/-/minimist-0.0.10.tgz"
+  "version" "0.0.10"
 
 "minipass-collect@^1.0.2":
   "integrity" "sha512-6T6lH0H8OG9kITm/Jm6tdooIbogG9e0tLgpY6mphXSm/A9u8Nq1ryBG+Qspiub9LjWlBPsPS3tWQ/Botq4FdxA=="
@@ -11071,6 +11084,11 @@
     "has-symbols" "^1.0.3"
     "which-boxed-primitive" "^1.0.2"
 
+"underscore@~1.6.0":
+  "integrity" "sha512-z4o1fvKUojIWh9XuaVLUDdf86RQiq13AC1dmHbTpoyuu+bquHms76v16CjycCbec87J7z0k//SiQVk0sMdFmpQ=="
+  "resolved" "https://registry.npmjs.org/underscore/-/underscore-1.6.0.tgz"
+  "version" "1.6.0"
+
 "unicode-canonical-property-names-ecmascript@^2.0.0":
   "integrity" "sha512-yY5PpDlfVIU5+y/BSCxAJRBIS1Zc2dDG3Ujq+sR0U+JjUevW2JhocOF+soROYDSaAezOzOKuyyixhD6mBknSmQ=="
   "resolved" "https://registry.npmjs.org/unicode-canonical-property-names-ecmascript/-/unicode-canonical-property-names-ecmascript-2.0.0.tgz"
@@ -11787,6 +11805,13 @@
     "string-width" "^4.2.0"
     "y18n" "^5.0.5"
     "yargs-parser" "^20.2.2"
+
+"yargs@~1.1.3":
+  "integrity" "sha512-4kLAAiGhN830ln7AyIuQ8OEprArhM1Myy6CooW1Q6DnhOPrtkrNjiSVmc9qGPmAwE21TkqeOgr0xiZd2cZEykg=="
+  "resolved" "https://registry.npmjs.org/yargs/-/yargs-1.1.3.tgz"
+  "version" "1.1.3"
+  dependencies:
+    "minimist" "~0.0.1"
 
 "yocto-queue@^0.1.0":
   "integrity" "sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q=="
