@@ -56,17 +56,27 @@ const  Profile = ({ navigation }) => {
     return (
         <View >
             <View>
-                <Text style={styles.input}>Hello {profile.name}</Text>
-                <Text style={styles.input}>role: {profile.role}</Text>
-                <Text style={styles.input}>email: {profile.email}</Text>
+              <View style={styles.container}>
+                <View style={styles.border}>
+                  <Text style={styles.input}>Hello, {profile.name}!</Text>
+                </View>
+                <View style={styles.border}>
+                  <Text style={styles.input}>Role: {profile.role}</Text>
+                </View>
+                <View style={styles.border}>
+                  <Text style={styles.input}>Email: {profile.email}</Text>
+                </View>
+              </View>
+              <View style={styles.buttonContainer}>
                 <TouchableOpacity onPress={() => navigation.navigate('EditProfile')}
                     style={styles.button}>
-                    <Text>Edit Profile</Text>
+                    <Text style={styles.buttonText}>Edit Profile</Text>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={handleSignOut}
                     style={styles.button}>
-                    <Text>Sign Out</Text>
+                    <Text style={styles.buttonText}>Sign Out</Text>
                 </TouchableOpacity>
+              </View>
             </View>
             <View>
             <TextInput 
@@ -76,14 +86,11 @@ const  Profile = ({ navigation }) => {
                 underlineColorAndroid='transparent'
                 onChangeText={(text) => setSearch(text)}
                 />
-                <MaterialCommunityIcons style={styles.iconStyle} name="backspace-outline"  size={23}onPress={() => {
-                    setSearch('');
-                }} /> 
                 <TouchableOpacity
                     onPress={() => navigation.navigate('Friends')}
                     style={[styles.button]}
                     >
-                    <Text >Add/Remove Friend</Text>
+                    <Text style={styles.buttonText}>Add/Remove Friend</Text>
                 </TouchableOpacity>
                 <Text >My Friends: </Text>
                 <FlatList 
@@ -101,57 +108,49 @@ const  Profile = ({ navigation }) => {
 export default Profile
 
 const styles = StyleSheet.create({
+    input: {
+      backgroundColor: 'white',
+      paddingHorizontal: 5,
+      paddingVertical: 5,
+      fontSize: 25,
+    },
+    border: {
+      borderColor: '#fff',
+      borderWidth: 3,
+      marginTop: 5,
+      borderRadius: 10,
+    },
+    container: {
+      margin: 5,
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      justifyContent: 'space-evenly'
+    },
+    buttonText: {
+      fontSize: 20
+    },
+    button: {
+      backgroundColor: '#0782F9',
+      padding: 15,
+      borderRadius: 10,
+      alignItems: 'center',
+      alignSelf: 'center',
+      marginTop: 5,
+      margin: 5
+    },
+    buttonContainer: {
+      flexDirection: 'row',
+      justifyContent: 'space-evenly'
+    },
     textInput: {
       height: 50,
+      width: '80%',
+      alignSelf: 'center',
       borderWidth: 1,
+      borderRadius: 5,
       paddingLeft: 20,
       margin: 5,
       borderColor: '#009688',
       backgroundColor: 'white'
-    },
-    container: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
-    inputContainer: {
-      width: '80%'
-    },
-    input: {
-      backgroundColor: 'white',
-      paddingHorizontal: 15,
-      paddingVertical: 10,
-      borderRadius: 10,
-      marginBottom: 5,
-    },
-    buttonContainer: {
-      width: '60%',
-      justifyContent: 'center',
-      alignItems: 'center',
-      marginTop: 40,
-    },
-    button: {
-      backgroundColor: '#0782F9',
-      width: '100%',
-      padding: 15,
-      borderRadius: 10,
-      alignItems: 'center',
-      marginBottom: 5
-    },
-    buttonOutline: {
-      backgroundColor: 'white',
-      marginTop: 5,
-      borderColor: '#0782F9',
-      borderWidth: 2,
-    },
-    buttonText: {
-      color: 'white',
-      fontWeight: '700',
-      fontSize: 16,
-    },
-    buttonOutlineText: {
-      color: '#0782F9',
-      fontWeight: '700',
-      fontSize: 16,
     },
   })
