@@ -142,7 +142,6 @@ const NewPost = () => {
 
   return (
     <View>
-      <Text>NewPost</Text>
       <TextInput
         style={styles.input}
         placeholder="description"
@@ -152,6 +151,7 @@ const NewPost = () => {
         style={styles.input}
         placeholder="contents"
         onChangeText={(text) => setContents(text)}
+        multiline={true}
       />
       {image && (
         <Image
@@ -168,7 +168,9 @@ const NewPost = () => {
     </View>
   );
 };
-export default NewPost;
+
+export default NewPost
+
 const styles = StyleSheet.create({
   input: {
     backgroundColor: "white",
@@ -186,3 +188,4 @@ const styles = StyleSheet.create({
     marginVertical: 15,
   },
 });
+

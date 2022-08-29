@@ -216,6 +216,37 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
   },
+  line: {
+        borderWidth: 1,
+        margin: 5,
+        opacity: 0.1
+    },
+  divider: {
+        borderWidth: 1,
+        margin: 5,
+        opacity: 0.3
+    },
+  button: {
+        backgroundColor: '#0782F9',
+        padding: 15,
+        borderRadius: 10,
+        alignItems: 'center',
+        alignSelf: 'center',
+        marginTop: 5,
+        margin: 5,
+        overflow: 'hidden',
+    },
+  shadow: {
+        shadowColor: 'black',
+        shadowOffset: {width: 4, height: 4},
+        shadowRadius: 1,
+        shadowOpacity: 0.2
+    },
+  buttonContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-evenly',
+        
+    },
 });
 
 const mapDispatch = (dispatch) => ({
