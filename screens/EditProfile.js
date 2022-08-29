@@ -41,6 +41,12 @@ const EditProfile = () => {
         >
             <Text style={styles.buttonOutLineText}>Edit Profile</Text>
         </TouchableOpacity>
+        <TouchableOpacity
+            onPress={Edit}
+            style={[styles.button]}
+        >
+            <Text style={styles.buttonOutLineText}>Back</Text>
+        </TouchableOpacity>
     </View>
   )
 }
