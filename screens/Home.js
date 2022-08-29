@@ -12,6 +12,7 @@ import ImageUpload2 from "./ImageUpload2";
 import ReportScreen from "./ReportScreen";
 const Tab = createBottomTabNavigator();
 
+
 export default function Home() {
   return (
     <Tab.Navigator
