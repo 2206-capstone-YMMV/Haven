@@ -67,10 +67,9 @@ const NewPost = () => {
         })
     }
   return (
-    <View>
-      <Text>NewPost</Text>
+    <View style={styles.container}>
       <TextInput style={styles.input} placeholder="description" onChangeText={text => setDescription(text)} />
-      <TextInput style={styles.input} placeholder="contents" onChangeText={text => setContents(text)} />
+      <TextInput multiline={true} style={styles.input} placeholder="contents" onChangeText={text => setContents(text)} />
       <TouchableOpacity
             onPress={handleAddPost}
             style={[styles.button]}
@@ -96,5 +95,5 @@ button: {
   padding: 15,
   borderRadius: 10,
   alignItems: 'center',
-},
+}
 })

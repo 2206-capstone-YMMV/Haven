@@ -55,14 +55,21 @@ const  Posts = () => {
 
     return (
         <View>
-            <View >
-                <Text
+            <View style={{padding: 20}}/>
+            <View style={styles.line}/>
+            <View style={styles.buttonContainer}>
+                <View style={styles.shadow}>
+                    <Text
                     onPress={() => navigation.navigate('NewPost')}
-                    style={{ fontSize: 26, fontWeight: "bold" }}>New Posts</Text>
+                    style={styles.button}>Make a Post</Text>
+                </View>
+                <View style={styles.shadow}>
                     <Text
                     onPress={() => navigation.navigate('MyPosts')}
-                    style={{ fontSize: 26, fontWeight: "bold" }}>My Posts</Text>
+                    style={styles.button}>My Posts</Text>
+                </View>
             </View>
+            <View style={styles.divider}/>
             <View>
             <View style={styles.searchWrapperStyle}>
                 <TextInput 
@@ -72,10 +79,8 @@ const  Posts = () => {
                 underlineColorAndroid='transparent'
                 onChangeText={(text) => setSearch(text)}
                 />
-                <MaterialCommunityIcons style={styles.iconStyle} name="backspace-outline"  size={23}onPress={() => {
-                    setSearch('');
-                }} /> 
             </View>
+            <View style={styles.line}/>
             <FlatList 
                 data={filterData}
                 contentContainerStyle={{
@@ -92,6 +97,37 @@ const  Posts = () => {
 export default Posts
 
 const styles = StyleSheet.create({
+    line: {
+        borderWidth: 1,
+        margin: 5,
+        opacity: 0.1
+      },
+    divider: {
+        borderWidth: 1,
+        margin: 5,
+        opacity: 0.3
+      },
+    button: {
+        backgroundColor: '#0782F9',
+        padding: 15,
+        borderRadius: 10,
+        alignItems: 'center',
+        alignSelf: 'center',
+        marginTop: 5,
+        margin: 5,
+        overflow: 'hidden',
+      },
+    shadow: {
+        shadowColor: 'black',
+        shadowOffset: {width: 4, height: 4},
+        shadowRadius: 1,
+        shadowOpacity: 0.2
+    },
+    buttonContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-evenly',
+        
+      },
     posts: {
         marginTop: 10,
         marginBottom: 30

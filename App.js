@@ -32,11 +32,11 @@ export default function App() {
         <Stack.Screen name="Home" component={Home} options={{ headerShown: false }}/>
         <Stack.Screen name="Message" component={Message}/>
         <Stack.Screen name="Friends" component={Friends}  />
-        <Stack.Screen name="NewPost" component={NewPost}  />
+        <Stack.Screen name="NewPost" component={NewPost}/>
         <Stack.Screen name="SinglePost" component={SinglePost}  />
         <Stack.Screen name="MyPosts" component={MyPosts}  />
         <Stack.Screen name="NewConversation" component={StartConversation} />
-        <Stack.Screen name="EditProfile" component={EditProfile} />
+        <Stack.Screen name="EditProfile" component={EditProfile} options={{ headerShown: false }}/>
       </Stack.Navigator>
       </SafeAreaProvider>
     </NavigationContainer>
