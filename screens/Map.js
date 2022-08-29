@@ -220,26 +220,27 @@ const MapScreen = (props) => {
               {mapMarker()}
 
               {post
-                ? post.map((x, index) => (
+                ? post.map((item, index) => (
                     <Marker
-                      keyExtractor={x.email}
-                      coordinate={x.location}
-                      title={x.username}
-                      description={x.description}
+                      keyExtractor={item.email}
+                      coordinate={item.location}
+                      title={item.username}
+                      description={item.description}
                       key={index}
                     >
                       <MaterialCommunityIcons
-                        name={x.role === "Student" ? "heart" : "account"}
-                        color={x.role === "Student" ? "red" : "blue"}
+                        name={item.role === "Student" ? "heart" : "account"}
+                        color={item.role === "Student" ? "red" : "blue"}
                         size={25}
-                        onPress={() => props.getPost(x)}
                       />
                       <Callout tooltip style={styles.box}>
                         <View>
                           <View style={styles.bubble}>
-                            <Text>{x.description}</Text>
+                            <Text>{item.description}</Text>
                             <TouchableOpacity
-                              onPress={() => navigation.navigate("SinglePost")}
+                              onPress={() =>
+                                navigation.navigate("SinglePost", { item })
+                              }
                             >
                               <Text style={styles.buttonOutLineText}>
                                 View Detail

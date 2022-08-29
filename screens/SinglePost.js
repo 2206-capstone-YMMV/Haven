@@ -1,24 +1,25 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React, { useEffect, useState } from 'react'
-import { connect } from 'react-redux'
+import { StyleSheet, Text, View } from "react-native";
+import React, { useEffect, useState } from "react";
+import { connect } from "react-redux";
 
 const SinglePost = (props) => {
-  console.log('----------',props.userPost)
+  let element = props.route.params.item;
+  console.log("route", props.route.params);
   return (
     <View>
-      <Text>Post By: {props.userPost.post.username}</Text>
-      <Text>Description: {props.userPost.post.description}</Text>
-      <Text>Content: {props.userPost.post.contents}</Text>
+      <Text>Post By: {element.username}</Text>
+      <Text>Description: {element.description}</Text>
+      <Text>Content: {element.contents}</Text>
     </View>
-  )
-}
+  );
+};
 
 const mapState = (state) => {
   return {
-    userPost: state
-  }
-}
+    userPost: state,
+  };
+};
 
-export default connect(mapState)(SinglePost)
+export default connect(mapState)(SinglePost);
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({});
