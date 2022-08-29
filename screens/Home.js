@@ -12,6 +12,7 @@ import ReportScreen from "./ReportScreen";
 import Modal from "./Modal";
 const Tab = createBottomTabNavigator();
 
+
 export default function Home() {
   return (
     <Tab.Navigator
