@@ -5,6 +5,8 @@ import {
   StyleSheet,
   TouchableOpacity,
   TextInput,
+  Image,
+  Platform,
 } from "react-native";
 import { db } from "../firebase";
 import {
@@ -13,6 +15,7 @@ import {
   query,
   where,
   addDoc,
+  serverTimestamp,
 } from "firebase/firestore";
 import * as Location from "expo-location";
 import { useNavigation } from "@react-navigation/core";
@@ -28,11 +31,12 @@ const NewPost = () => {
   const navigation = useNavigation();
   const [location, setLocation] = useState("");
   const [errorMsg, setErrorMsg] = useState(null);
-  const [content, setContent] = useState("");
+  const [description, setDescription] = useState("");
+  const [contents, setContents] = useState("");
   const [profile, setProfile] = useState({});
   const colRef = collection(db, "Post");
-  const [pickedImagePath, setPickedImagePath] = useState("");
-
+  const [image, setImage] = useState("");
+  //const [pickedImagePath, setPickedImagePath] = useState("");
   useEffect(() => {
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
@@ -47,46 +51,46 @@ const NewPost = () => {
   let text = "Waiting...";
   let lat;
   let lon;
-
-  // useEffect(() => {
-  //   if (image) {
-  //     console.log("useEffect: " + image);
-  //     setSelectedImage({ uri: image });
-  //   }
-  // }, [image]);
-
   if (errorMsg) {
     text = errorMsg;
   } else if (location) {
     lat = location.coords.latitude;
     lon = location.coords.longitude;
   }
-  // const get_Post = (user) => {
-  //   return async (dispatch) => {
-  //     getDocs(
-  //       query(collection(db, "Post"), where("createAt", " == ", user.createAt))
-  //     ).then((snapshot) => {
-  //       snapshot.docs.forEach((doc) => {
-  //         dispatch(getPost({ ...doc.data(), id: doc.id }));
-  //       });
-  //     });
-  //   };
-  // };
-  const handleAddContent = () => {
-    addDoc(colRef, {
-      username: profile.name,
-      description: content,
-      icon: "dog",
-      // pickedImagePath: path,
+  useEffect(
+    () =>
+      onSnapshot(
+        query(
+          collection(db, "users"),
+          where("uid", "==", auth.currentUser?.uid)
+        ),
+        (snapshot) => setProfile(snapshot.docs[0].data())
+      ),
+    []
+  );
 
+  const handleAddPost = async ({ path }) => {
+    await addDoc(colRef, {
+      uid: auth.currentUser?.uid,
+      username: profile.name,
+      role: profile.role,
+      description: description,
+      email: profile.email,
+      createAt: serverTimestamp(),
+      contents: contents,
+      image: path,
       location: {
         latitude: lat,
         longitude: lon,
         latitudeDelta: 0.0922,
         longitudeDelta: 0.0421,
       },
-    }).then(() => {});
+    });
+
+    navigation.navigate("Home");
   };
+
+  //to pick image and display image
   const showImagePicker = async () => {
     const permissionResult =
       await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -94,41 +98,46 @@ const NewPost = () => {
       alert("You've refused to allow this appp to access your photos!");
       return;
     }
-    const result = await ImagePicker.launchImageLibraryAsync();
+
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    let imageUrl =
+      Platform.OS === "ios" ? result.uri.replace("file://", "") : result.uri;
     if (!result.cancelled) {
-      setPickedImagePath(result.uri);
+      setImage(imageUrl);
     }
   };
 
+  //real deal sent to firebase
   const pickImage = async () => {
     try {
-      // console.log(uuidv4());
+      const storage = getStorage(); //the storage itself
+      const path = `images/${new Date() + uuidv4()}`;
+      //new Date()
+      // const ref_con = ref(storage, 'image.jpg'); //how the image will be addressed inside the storage
+      const ref_con = ref(storage, path); //how the image will be addressed inside the storage
 
-      let result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.All,
-        allowsEditing: true,
-        aspect: [4, 3],
-        quality: 1,
-      });
+      //convert image to array of bytes  --substep
+      const img = await fetch(image);
+      const bytes = await img.blob();
+      await uploadBytes(ref_con, bytes); //upload images
 
-      if (!result.cancelled) {
-        const storage = getStorage(); //the storage itself
-        const path = `images/${new Date() + uuidv4()}`;
-        // const ref_con = ref(storage, 'image.jpg'); //how the image will be addressed inside the storage
-        const ref_con = ref(storage, path); //how the image will be addressed inside the storage
-
-        //convert image to array of bytes  --substep
-        const img = await fetch(result.uri);
-        const bytes = await img.blob();
-        await uploadBytes(ref_con, bytes); //upload images
-      }
+      return path; // /images/12345566
     } catch (e) {
-      console.log(e);
+      // console.log("Some Error", e.stack);
+      // console.log(e);
     }
   };
-  const combined = () => {
-    handleAddPost();
-    pickImage();
+  const combined = async () => {
+    let path = await pickImage();
+    await handleAddPost({
+      path,
+    });
   };
 
   return (
@@ -136,19 +145,44 @@ const NewPost = () => {
       <Text>NewPost</Text>
       <TextInput
         style={styles.input}
-        placeholder="Content"
-        onChangeText={(text) => setContent(text)}
+        placeholder="description"
+        onChangeText={(text) => setDescription(text)}
       />
+      <TextInput
+        style={styles.input}
+        placeholder="contents"
+        onChangeText={(text) => setContents(text)}
+      />
+      {image && (
+        <Image
+          source={{ uri: image }}
+          style={{ width: 30, height: 30 }}
+        ></Image>
+      )}
       <TouchableOpacity onPress={showImagePicker} style={[styles.button]}>
         <Text style={styles.buttonOutLineText}>Upload Photo</Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={handleAddContent} style={[styles.button]}>
+      <TouchableOpacity onPress={combined} style={[styles.button]}>
         <Text style={styles.buttonOutLineText}>Submit</Text>
       </TouchableOpacity>
     </View>
   );
 };
-
 export default NewPost;
-
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  input: {
+    backgroundColor: "white",
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+    borderRadius: 10,
+    marginTop: 5,
+  },
+  button: {
+    backgroundColor: "#0782F9",
+    width: "100%",
+    padding: 15,
+    borderRadius: 10,
+    alignItems: "center",
+    marginVertical: 15,
+  },
+});

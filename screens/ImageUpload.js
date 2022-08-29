@@ -14,82 +14,71 @@ import "react-native-get-random-values";
 import { v4 as uuidv4 } from "uuid";
 import uuid from "react-native-uuid";
 
-const ImageUpload = async () => {
-  useEffect(() => {
-    (async () => {
-      if (Platform.OS !== "web") {
-        const { status } =
-          await ImagePicker.requestMediaLibraryPermissionsAsync();
-        if (status !== "granted") {
-          alert("Sorry, we need camera roll permissions to make this work!");
-        }
+initializeApp(firebaseConfig);
+
+export default function ImageUpload() {
+  const pickImage = async () => {
+    try {
+      // console.log(uuidv4());
+
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.All,
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 1,
+      });
+
+      if (!result.cancelled) {
+        const path = `images/${new Date() + uuidv4()}`;
+        const storage = getStorage(); //the storage itself
+        // const ref_con = ref(storage, 'image.jpg'); //how the image will be addressed inside the storage
+        const ref_con = ref(storage, path); //how the image will be addressed inside the storage
+
+        //convert image to array of bytes  --substep
+        const img = await fetch(result.uri);
+        const bytes = await img.blob();
+        await uploadBytes(ref_con, bytes); //upload images
       }
-    })();
-  }, []);
-  try {
-    // console.log(uuidv4());
-
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    });
-
-    if (!result.cancelled) {
-      const path = `images/${new Date() + uuidv4()}`;
-      const storage = getStorage(); //the storage itself
-      // const ref_con = ref(storage, 'image.jpg'); //how the image will be addressed inside the storage
-      const ref_con = ref(storage, path); //how the image will be addressed inside the storage
-
-      //convert image to array of bytes  --substep
-      const img = await fetch(result.uri);
-      const bytes = await img.blob();
-      await uploadBytes(ref_con, bytes); //upload images
+    } catch (e) {
+      console.log(e);
     }
-  } catch (e) {
-    console.log(e);
-  }
+  };
 
-  // console.log("Image: " + response.uri);
-  // setSelectedImage({ uri: response.uri });
-  // onImagePicked({ uri: response.uri });
   return (
-    <View style={styles.container}>
-      <View style={styles.imageContainer}>
-        <Image source={path} style={styles.previewImage} />
-      </View>
-      <View styles={styles.button}>
-        <TouchableHighlight onPress={pickImageHandler}>
-          <Text>SELECT IMAGE</Text>
-        </TouchableHighlight>
-      </View>
+    <View
+      style={{
+        flex: 1,
+        backgroundColor: "#fff",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      <TouchableHighlight onPress={pickImage}>
+        <Text>select image</Text>
+      </TouchableHighlight>
     </View>
   );
-};
-
-const styles = StyleSheet.create({
-  container: {
-    width: "100%",
-    alignItems: "center",
-  },
-  imageContainer: {
-    borderWidth: 1,
-    borderColor: "black",
-    backgroundColor: "#eee",
-    width: "80%",
-    height: 150,
-  },
-  button: {
-    margin: 8,
-  },
-  previewImage: {
-    width: "100%",
-    height: "100%",
-  },
-});
-
-export default ImageUpload;
+}
+// const styles = StyleSheet.create({
+//   container: {
+//     width: "100%",
+//     alignItems: "center",
+//   },
+//   imageContainer: {
+//     borderWidth: 1,
+//     borderColor: "black",
+//     backgroundColor: "#eee",
+//     width: "80%",
+//     height: 150,
+//   },
+//   button: {
+//     margin: 8,
+//   },
+//   previewImage: {
+//     width: "100%",
+//     height: "100%",
+//   },
+// });
 
 // pickImageHandler = () => {
 //   ImagePicker.showImagePicker(
