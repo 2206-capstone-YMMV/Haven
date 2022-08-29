@@ -55,18 +55,21 @@ const  Profile = ({ navigation }) => {
     })
     return (
         <View >
+            <View style={{padding: 20}}/>
             <View>
+            <View style={styles.line}/>
               <View style={styles.container}>
                 <View style={styles.border}>
-                  <Text style={styles.input}>Hello, {profile.name}!</Text>
+                  <Text style={styles.info}>Hello, {profile.name}!</Text>
                 </View>
                 <View style={styles.border}>
-                  <Text style={styles.input}>Role: {profile.role}</Text>
+                  <Text style={styles.info}>Role: {profile.role}</Text>
                 </View>
                 <View style={styles.border}>
-                  <Text style={styles.input}>Email: {profile.email}</Text>
+                  <Text style={styles.info}>Email: {profile.email}</Text>
                 </View>
               </View>
+              <View style={styles.line}/>
               <View style={styles.buttonContainer}>
                 <TouchableOpacity onPress={() => navigation.navigate('EditProfile')}
                     style={styles.button}>
@@ -77,22 +80,25 @@ const  Profile = ({ navigation }) => {
                     <Text style={styles.buttonText}>Sign Out</Text>
                 </TouchableOpacity>
               </View>
+              <View style={styles.divider}/>
             </View>
-            <View>
-            <TextInput 
-                style={styles.textInput}
-                value={search}
-                placeholder='Search By Name'
-                underlineColorAndroid='transparent'
-                onChangeText={(text) => setSearch(text)}
-                />
+            <View style={styles.buttonContainer}>
                 <TouchableOpacity
                     onPress={() => navigation.navigate('Friends')}
                     style={[styles.button]}
                     >
                     <Text style={styles.buttonText}>Add/Remove Friend</Text>
                 </TouchableOpacity>
-                <Text >My Friends: </Text>
+                <TextInput 
+                style={styles.textInput}
+                value={search}
+                placeholder='Search By Name'
+                underlineColorAndroid='transparent'
+                onChangeText={(text) => setSearch(text)}
+                />
+            </View>
+            <View style={styles.line}/>
+                <Text style={styles.header}>My Friends</Text>
                 <FlatList 
                     data={filterData}
                     contentContainerStyle={{
@@ -100,7 +106,6 @@ const  Profile = ({ navigation }) => {
                     }}
                     renderItem={renderFriend}
                 />
-            </View>
     </View>
     )
 }
@@ -108,23 +113,34 @@ const  Profile = ({ navigation }) => {
 export default Profile
 
 const styles = StyleSheet.create({
-    input: {
-      backgroundColor: 'white',
+    line: {
+      borderWidth: 1,
+      margin: 5,
+      opacity: 0.1
+    },
+    divider: {
+      borderWidth: 1,
+      margin: 5,
+      opacity: 0.3
+    },
+    info: {
       paddingHorizontal: 5,
       paddingVertical: 5,
-      fontSize: 25,
+      fontSize: 25
     },
     border: {
-      borderColor: '#fff',
+      borderColor: 'white',
       borderWidth: 3,
       marginTop: 5,
       borderRadius: 10,
+      shadowColor: 'black',
+      shadowOffset: {width: 2, height: 6},
+      shadowRadius: 2,
+      shadowOpacity: 0.15
     },
     container: {
       margin: 5,
-      flexDirection: 'row',
-      flexWrap: 'wrap',
-      justifyContent: 'space-evenly'
+      alignItems: 'center'
     },
     buttonText: {
       fontSize: 20
@@ -140,17 +156,30 @@ const styles = StyleSheet.create({
     },
     buttonContainer: {
       flexDirection: 'row',
-      justifyContent: 'space-evenly'
+      justifyContent: 'space-evenly',
+      shadowColor: 'black',
+      shadowOffset: {width: 4, height: 4},
+      shadowRadius: 2,
+      shadowOpacity: 0.2
     },
     textInput: {
-      height: 50,
-      width: '80%',
+      height: 54,
+      width: '40%',
       alignSelf: 'center',
       borderWidth: 1,
       borderRadius: 5,
       paddingLeft: 20,
       margin: 5,
-      borderColor: '#009688',
+      borderColor: '#0782F9',
       backgroundColor: 'white'
     },
+    header: {
+      alignSelf: 'center',
+      fontSize: 25,
+      padding: 7,
+      backgroundColor: '#C0C0C0',
+      shadowOffset: {width: 4, height: 4},
+      shadowRadius: 2,
+      shadowOpacity: 0.2
+    }
   })

@@ -12,7 +12,6 @@ import ImageUpload2 from "./ImageUpload2";
 import ReportScreen from "./ReportScreen";
 const Tab = createBottomTabNavigator();
 
-
 export default function Home() {
   return (
     <Tab.Navigator
@@ -67,9 +66,9 @@ export default function Home() {
       })}
     >
       {/* <Tab.Screen name="Map" component={Map} /> */}
-      <Tab.Screen name="Profile" component={Profile} />
+      <Tab.Screen name="Profile" component={Profile} options={{ headerShown: false }}/>
       <Tab.Screen name="Posts" component={Posts} />
-      <Tab.Screen name="Messages" component={MessagesTab} />
+      <Tab.Screen name="Messages" component={MessagesTab} options={{ headerShown: false }}/>
       {/* <Tab.Screen name="ImageUpload2" component={ImageUpload2} /> */}
       <Tab.Screen name="ReportScreen" component={ReportScreen} />
     </Tab.Navigator>
