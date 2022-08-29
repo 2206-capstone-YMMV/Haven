@@ -55,37 +55,50 @@ const  Profile = ({ navigation }) => {
     })
     return (
         <View >
+            <View style={{padding: 20}}/>
             <View>
-                <Text style={styles.input}>Hello {profile.name}</Text>
-                <Text style={styles.input}>role: {profile.role}</Text>
-                <Text style={styles.input}>email: {profile.email}</Text>
+            <View style={styles.line}/>
+              <View style={styles.container}>
+                <View style={styles.border}>
+                  <Text style={styles.info}>Hello, {profile.name}!</Text>
+                </View>
+                <View style={styles.border}>
+                  <Text style={styles.info}>Role: {profile.role}</Text>
+                </View>
+                <View style={styles.border}>
+                  <Text style={styles.info}>Email: {profile.email}</Text>
+                </View>
+              </View>
+              <View style={styles.line}/>
+              <View style={styles.buttonContainer}>
                 <TouchableOpacity onPress={() => navigation.navigate('EditProfile')}
                     style={styles.button}>
-                    <Text>Edit Profile</Text>
+                    <Text style={styles.buttonText}>Edit Profile</Text>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={handleSignOut}
                     style={styles.button}>
-                    <Text>Sign Out</Text>
+                    <Text style={styles.buttonText}>Sign Out</Text>
                 </TouchableOpacity>
+              </View>
+              <View style={styles.divider}/>
             </View>
-            <View>
-            <TextInput 
+            <View style={styles.buttonContainer}>
+                <TouchableOpacity
+                    onPress={() => navigation.navigate('Friends')}
+                    style={[styles.button]}
+                    >
+                    <Text style={styles.buttonText}>Add/Remove Friend</Text>
+                </TouchableOpacity>
+                <TextInput 
                 style={styles.textInput}
                 value={search}
                 placeholder='Search By Name'
                 underlineColorAndroid='transparent'
                 onChangeText={(text) => setSearch(text)}
                 />
-                <MaterialCommunityIcons style={styles.iconStyle} name="backspace-outline"  size={23}onPress={() => {
-                    setSearch('');
-                }} /> 
-                <TouchableOpacity
-                    onPress={() => navigation.navigate('Friends')}
-                    style={[styles.button]}
-                    >
-                    <Text >Add/Remove Friend</Text>
-                </TouchableOpacity>
-                <Text >My Friends: </Text>
+            </View>
+            <View style={styles.line}/>
+                <Text style={styles.header}>My Friends</Text>
                 <FlatList 
                     data={filterData}
                     contentContainerStyle={{
@@ -93,7 +106,6 @@ const  Profile = ({ navigation }) => {
                     }}
                     renderItem={renderFriend}
                 />
-            </View>
     </View>
     )
 }
@@ -101,57 +113,73 @@ const  Profile = ({ navigation }) => {
 export default Profile
 
 const styles = StyleSheet.create({
-    textInput: {
-      height: 50,
+    line: {
       borderWidth: 1,
-      paddingLeft: 20,
       margin: 5,
-      borderColor: '#009688',
-      backgroundColor: 'white'
+      opacity: 0.1
+    },
+    divider: {
+      borderWidth: 1,
+      margin: 5,
+      opacity: 0.3
+    },
+    info: {
+      paddingHorizontal: 5,
+      paddingVertical: 5,
+      fontSize: 25
+    },
+    border: {
+      borderColor: 'white',
+      borderWidth: 3,
+      marginTop: 5,
+      borderRadius: 10,
+      shadowColor: 'black',
+      shadowOffset: {width: 2, height: 6},
+      shadowRadius: 2,
+      shadowOpacity: 0.15
     },
     container: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
+      margin: 5,
+      alignItems: 'center'
     },
-    inputContainer: {
-      width: '80%'
-    },
-    input: {
-      backgroundColor: 'white',
-      paddingHorizontal: 15,
-      paddingVertical: 10,
-      borderRadius: 10,
-      marginBottom: 5,
-    },
-    buttonContainer: {
-      width: '60%',
-      justifyContent: 'center',
-      alignItems: 'center',
-      marginTop: 40,
+    buttonText: {
+      fontSize: 20
     },
     button: {
       backgroundColor: '#0782F9',
-      width: '100%',
       padding: 15,
       borderRadius: 10,
       alignItems: 'center',
-      marginBottom: 5
-    },
-    buttonOutline: {
-      backgroundColor: 'white',
+      alignSelf: 'center',
       marginTop: 5,
+      margin: 5
+    },
+    buttonContainer: {
+      flexDirection: 'row',
+      justifyContent: 'space-evenly',
+      shadowColor: 'black',
+      shadowOffset: {width: 4, height: 4},
+      shadowRadius: 2,
+      shadowOpacity: 0.2
+    },
+    textInput: {
+      height: 54,
+      width: '40%',
+      alignSelf: 'center',
+      borderWidth: 1,
+      borderRadius: 5,
+      paddingLeft: 20,
+      margin: 5,
       borderColor: '#0782F9',
-      borderWidth: 2,
+      backgroundColor: 'white'
     },
-    buttonText: {
-      color: 'white',
-      fontWeight: '700',
-      fontSize: 16,
-    },
-    buttonOutlineText: {
-      color: '#0782F9',
-      fontWeight: '700',
-      fontSize: 16,
-    },
+    header: {
+      alignSelf: 'center',
+      fontSize: 25,
+      padding: 7,
+      backgroundColor: '#C0C0C0',
+      shadowOffset: {width: 4, height: 4},
+      shadowRadius: 2,
+      shadowOpacity: 0.2
+    }
   })
