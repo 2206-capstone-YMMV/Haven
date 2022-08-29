@@ -162,7 +162,7 @@ const NewPost = () => {
       {image && (
         <Image
           source={{ uri: image }}
-          style={{ width: 50, height: 50 }}
+          style={{ width: 400, height: 400 }}
         ></Image>
       )}
       <TouchableOpacity onPress={showImagePicker} style={[styles.button]}>
