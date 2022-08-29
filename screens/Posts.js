@@ -26,8 +26,6 @@ import firebaseConfig from "../firebaseConfig.tsx";
 import { initializeApp } from "firebase/app"; //validate yourself
 import { useNavigation } from "@react-navigation/core";
 
-// import Post from "./Post";
-
 initializeApp(firebaseConfig);
 
 const Posts = () => {
@@ -49,24 +47,24 @@ const Posts = () => {
     []
   );
   //hardcoded
-  useEffect(() => {
-    const func = async () => {
-      await getDownloadURL(
-        ref(
-          getStorage(),
-          "/images/Mon Aug 29 2022 09:00:36 GMT-0500 (CDT)b36c9c69-98f6-4bbf-9614-5ec469dfed05"
-        )
-      )
-        .then((x) => {
-          setUrl(x);
-        })
-        .catch((e) => console.log("Errors while downloading => ", e));
-    };
+  //   useEffect(() => {
+  //     const func = async () => {
+  //       await getDownloadURL(
+  //         ref(
+  //           getStorage(),
+  //           "/images/Mon Aug 29 2022 09:00:36 GMT-0500 (CDT)b36c9c69-98f6-4bbf-9614-5ec469dfed05"
+  //         )
+  //       )
+  //         .then((x) => {
+  //           setUrl(x);
+  //         })
+  //         .catch((e) => console.log("Errors while downloading => ", e));
+  //     };
 
-    if (url == undefined) {
-      func();
-    }
-  }, []);
+  //     if (url == undefined) {
+  //       func();
+  //     }
+  //   }, []);
   //   const storage = getStorage();
 
   //   const listRef = ref(storage, "images/");
@@ -80,16 +78,6 @@ const Posts = () => {
   //       });
   //     });
   //   }, []);
-
-  //   const func = async (img) => {
-  //     await getDownloadURL(ref(getStorage(), img))
-  //       .then((x) => {
-  //         // console.log(x);
-  //         return x;
-  //         // setUrl(x);
-  //       })
-  //       .catch((e) => console.log("Errors while downloading => ", e));
-  //   };
 
   const renderFriend = ({ item }) => {
     // console.log(posts[0].image);
@@ -112,10 +100,9 @@ const Posts = () => {
         <View>
           <Image
             style={{ width: 50, height: 50 }}
-            source={{ uri: url }}
+            source={{ uri: item.image }}
           ></Image>
 
-          <Text>{item.image}</Text>
           <Text style={{ fontSize: 22, fontWeight: "700" }}>
             {item.description}
           </Text>

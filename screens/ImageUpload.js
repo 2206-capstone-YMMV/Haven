@@ -18,6 +18,17 @@ initializeApp(firebaseConfig);
 
 export default function ImageUpload() {
   const pickImage = async () => {
+    useEffect(() => {
+      const func = async () => {
+        await getDownloadURL(ref(getStorage(), path)).then((x) => {
+          setUrl(x);
+        });
+      };
+
+      if (url == undefined) {
+        func();
+      }
+    }, []);
     try {
       // console.log(uuidv4());
 

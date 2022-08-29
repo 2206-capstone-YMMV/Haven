@@ -21,7 +21,7 @@ import * as Location from "expo-location";
 import { useNavigation } from "@react-navigation/core";
 import { auth } from "../firebase";
 import * as ImagePicker from "expo-image-picker";
-import { getStorage, ref, uploadBytes } from "firebase/storage"; //access the storage database
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage"; //access the storage database
 import "react-native-get-random-values";
 import { v4 as uuidv4 } from "uuid";
 import firebaseConfig from "../firebaseConfig.tsx";
@@ -36,6 +36,8 @@ const NewPost = () => {
   const [profile, setProfile] = useState({});
   const colRef = collection(db, "Post");
   const [image, setImage] = useState("");
+  const [url, setUrl] = useState();
+
   //const [pickedImagePath, setPickedImagePath] = useState("");
   useEffect(() => {
     (async () => {
@@ -69,7 +71,7 @@ const NewPost = () => {
     []
   );
 
-  const handleAddPost = async ({ path }) => {
+  const handleAddPost = async () => {
     await addDoc(colRef, {
       uid: auth.currentUser?.uid,
       username: profile.name,
@@ -78,7 +80,7 @@ const NewPost = () => {
       email: profile.email,
       createAt: serverTimestamp(),
       contents: contents,
-      image: path,
+      image: url,
       location: {
         latitude: lat,
         longitude: lon,
@@ -121,13 +123,17 @@ const NewPost = () => {
       //new Date()
       // const ref_con = ref(storage, 'image.jpg'); //how the image will be addressed inside the storage
       const ref_con = ref(storage, path); //how the image will be addressed inside the storage
-
+      const func = async () => {
+        await getDownloadURL(ref_con).then((x) => {
+          setUrl(x);
+        });
+      };
       //convert image to array of bytes  --substep
       const img = await fetch(image);
       const bytes = await img.blob();
       await uploadBytes(ref_con, bytes); //upload images
 
-      return path; // /images/12345566
+      func(); // /images/12345566
     } catch (e) {
       // console.log("Some Error", e.stack);
       // console.log(e);
@@ -156,7 +162,7 @@ const NewPost = () => {
       {image && (
         <Image
           source={{ uri: image }}
-          style={{ width: 30, height: 30 }}
+          style={{ width: 50, height: 50 }}
         ></Image>
       )}
       <TouchableOpacity onPress={showImagePicker} style={[styles.button]}>
