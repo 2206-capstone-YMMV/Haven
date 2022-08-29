@@ -8,7 +8,6 @@ import { collection, onSnapshot, query, where, updateDoc, doc} from 'firebase/fi
 const EditProfile = () => {
     const navigation = useNavigation()
 
-    const [email, setEmail] = useState('')
     const [name, setName] = useState('')
     const [role, setRole] = useState('')
     const [id, setId] = useState('')
@@ -19,7 +18,6 @@ const EditProfile = () => {
             onSnapshot(query(colRef, where('uid', '==', auth.currentUser?.uid)), (snapshot) => {
             console.log('Grabbing Profile data')
             let user = snapshot.docs[0].data()
-            setEmail(user.email)
             setName(user.name)
             setRole(user.role)
             setId(snapshot.docs[0].id)
@@ -27,15 +25,14 @@ const EditProfile = () => {
     ,[])
 
     const Edit = () => {
-        updateDoc(doc(db, 'users', id), {email, name, role})
+        updateDoc(doc(db, 'users', id), {name, role})
         .then(navigation.navigate('Profile'))
     }
 
   return (
     <View>
-        <TextInput style={styles.input} onChangeText={text => setName(text)} />
-        <TextInput style={styles.input} onChangeText={text => setEmail(text)} />
-        <TextInput style={styles.input} onChangeText={text => setRole(text)}/>
+        <TextInput style={styles.input} placeholder="Full Name" onChangeText={text => setName(text)} />
+        <TextInput style={styles.input} placeholder="Role" onChangeText={text => setRole(text)}/>
 
         <TouchableOpacity
             onPress={Edit}
