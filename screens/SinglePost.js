@@ -2,29 +2,36 @@ import { StyleSheet, Text, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import Input from "./Input";
-import { collection, onSnapshot, query, where } from "firebase/firestore";
-import { auth } from "../firebase";
+import {
+  collection,
+  getDocs,
+  onSnapshot,
+  query,
+  where,
+} from "firebase/firestore";
 import { db } from "../firebase";
 
 const SinglePost = (props) => {
+  console.log("you are in singlepost view");
   const element = props.route.params.item;
   const commentId = element.id;
-  // console.log("singlepost", props);
   const [comments, setComments] = useState([]);
 
-  useEffect(() =>
-    onSnapshot(
-      query(collection(db, "Comments"), where("commentId", "==", commentId)),
-      (snapshot) =>
-        setComments(
-          snapshot.docs
-            .map((comment) => {
-              console.log("grabbing comments");
-              return comment.data();
-            })
-            .sort((a, b) => a.timestamp - b.timestamp)
-        )
-    )
+  useEffect(
+    () =>
+      onSnapshot(
+        query(collection(db, "Comments"), where("commentId", "==", commentId)),
+        (snapshot) =>
+          setComments(
+            snapshot.docs
+              .map((comment) => {
+                console.log("grabbing comments");
+                return comment.data();
+              })
+              .sort((a, b) => a.timestamp - b.timestamp)
+          )
+      ),
+    []
   );
 
   return (
@@ -53,7 +60,7 @@ const mapState = (state) => {
 export default connect(mapState)(SinglePost);
 
 const styles = StyleSheet.create({
-  messageContainer: {
+  commentContainer: {
     alignSelf: "flex-start",
     alignItems: "left",
     paddingHorizontal: "10%",
