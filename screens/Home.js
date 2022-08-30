@@ -66,10 +66,14 @@ export default function Home() {
       })}
     >
       {/* <Tab.Screen name="Map" component={Map} /> */}
-      <Tab.Screen name="Profile" component={Profile} options={{ headerShown: false }}/>
+      <Tab.Screen
+        name="Profile"
+        component={Profile}
+        options={{ headerShown: false }}
+      />
       <Tab.Screen name="Posts" component={Posts} />
       <Tab.Screen name="Messages" component={MessagesTab} />
-      <Tab.Screen name="ReportScreen" component={ReportScreen} />
+      {/* <Tab.Screen name="ReportScreen" component={ReportScreen} /> */}
 
       <Tab.Screen name="Modal" component={Modal} />
     </Tab.Navigator>

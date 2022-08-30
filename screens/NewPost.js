@@ -83,11 +83,11 @@ const NewPost = () => {
       image: url,
       reports: {
         spam: 0,
-        inapropriate: 0,
+        inappropriate: 0,
         falseLocation: 0,
         outOfSupplies: 0,
         misinformation: 0,
-        harrasment: 0,
+        harassment: 0,
       },
       location: {
         latitude: lat,
@@ -183,7 +183,7 @@ const NewPost = () => {
   );
 };
 
-export default NewPost
+export default NewPost;
 
 const styles = StyleSheet.create({
   input: {

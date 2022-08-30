@@ -27,8 +27,6 @@ import firebaseConfig from "../firebaseConfig.tsx";
 import { initializeApp } from "firebase/app"; //validate yourself
 
 import { useNavigation } from "@react-navigation/core";
-import Ionicons from "@expo/vector-icons/Ionicons";
-import { MaterialIcons } from "@expo/vector-icons";
 
 initializeApp(firebaseConfig);
 import { get_Post } from "../redux";
@@ -101,19 +99,6 @@ const Posts = () => {
             style={{ width: 50, height: 50 }}
             source={{ uri: item.image }}
           ></Image>
-
-          <Text style={{ fontSize: 22, fontWeight: "700" }}>
-            {item.description}
-          </Text>
-          <Text style={{ fontSize: 18, opacity: 0.7 }}>
-            posted by: {item.username}
-          </Text>
-          <Text style={{ fontSize: 14, opacity: 0.8, color: "#0099cc" }}>
-            {item.contents}
-          </Text>
-          <Text onPress={() => like(item.id, item.likes)}>
-            Like Likes: {item.likes}
-          </Text>
 
           <TouchableOpacity
             onPress={() => navigation.navigate("SinglePost", { item })}
