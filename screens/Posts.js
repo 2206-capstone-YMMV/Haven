@@ -52,24 +52,24 @@ const Posts = () => {
     []
   );
 
-  useEffect(() => {
-    const func = async () => {
-      await getDownloadURL(
-        ref(
-          getStorage(),
-          "/images/Mon Aug 29 2022 09:00:36 GMT-0500 (CDT)b36c9c69-98f6-4bbf-9614-5ec469dfed05"
-        )
-      )
-        .then((x) => {
-          setUrl(x);
-        })
-        .catch((e) => console.log("Errors while downloading => ", e));
-    };
+  // useEffect(() => {
+  //   const func = async () => {
+  //     await getDownloadURL(
+  //       ref(
+  //         getStorage(),
+  //         url
+  //       )
+  //     )
+  //       .then((x) => {
+  //         setUrl(x);
+  //       })
+  //       .catch((e) => console.log("Errors while downloading => ", e));
+  //   };
 
-    if (url == undefined) {
-      func();
-    }
-  }, []);
+  //   if (url == undefined) {
+  //     func();
+  //   }
+  // }, []);
 
   useEffect(
     () =>
@@ -96,10 +96,9 @@ const Posts = () => {
       >
         <View>
           <Image
-            style={{ width: 50, height: 50 }}
+            style={{ width: 100, height: 100 }}
             source={{ uri: item.image }}
           ></Image>
-
           <TouchableOpacity
             onPress={() => navigation.navigate("SinglePost", { item })}
           >

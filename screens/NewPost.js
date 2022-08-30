@@ -131,20 +131,19 @@ const NewPost = () => {
       //new Date()
       // const ref_con = ref(storage, 'image.jpg'); //how the image will be addressed inside the storage
       const ref_con = ref(storage, path); //how the image will be addressed inside the storage
-      const func = async () => {
-        await getDownloadURL(ref_con).then((x) => {
-          setUrl(x);
-        });
-      };
+
       //convert image to array of bytes  --substep
       const img = await fetch(image);
       const bytes = await img.blob();
+      await getDownloadURL(ref_con).then((x) => {
+        setUrl(x);
+      });
       await uploadBytes(ref_con, bytes); //upload images
 
-      func(); // /images/12345566
+      // func(); // /images/12345566
     } catch (e) {
       // console.log("Some Error", e.stack);
-      // console.log(e);
+      console.log(e);
     }
   };
   const combined = async () => {
