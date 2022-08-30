@@ -25,16 +25,21 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 import { getStorage, ref, getDownloadURL, listAll } from "firebase/storage"; //access the storage database
 import firebaseConfig from "../firebaseConfig.tsx";
 import { initializeApp } from "firebase/app"; //validate yourself
+
 import { useNavigation } from "@react-navigation/core";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { MaterialIcons } from "@expo/vector-icons";
+
 initializeApp(firebaseConfig);
+import { get_Post } from "../redux";
+import { connect } from "react-redux";
 
 const Posts = () => {
   const colRef = collection(db, "Post");
   const [posts, setPosts] = useState([]);
   const [search, setSearch] = useState("");
   const [url, setUrl] = useState();
+
   const navigation = useNavigation();
 
   const filterData = posts.filter((post) => {
@@ -48,43 +53,35 @@ const Posts = () => {
       ),
     []
   );
-  //hardcoded
-  //   useEffect(() => {
-  //     const func = async () => {
-  //       await getDownloadURL(
-  //         ref(
-  //           getStorage(),
-  //           "/images/Mon Aug 29 2022 09:00:36 GMT-0500 (CDT)b36c9c69-98f6-4bbf-9614-5ec469dfed05"
-  //         )
-  //       )
-  //         .then((x) => {
-  //           setUrl(x);
-  //         })
-  //         .catch((e) => console.log("Errors while downloading => ", e));
-  //     };
 
-  //     if (url == undefined) {
-  //       func();
-  //     }
-  //   }, []);
-  //   const storage = getStorage();
+  useEffect(() => {
+    const func = async () => {
+      await getDownloadURL(
+        ref(
+          getStorage(),
+          "/images/Mon Aug 29 2022 09:00:36 GMT-0500 (CDT)b36c9c69-98f6-4bbf-9614-5ec469dfed05"
+        )
+      )
+        .then((x) => {
+          setUrl(x);
+        })
+        .catch((e) => console.log("Errors while downloading => ", e));
+    };
 
-  //   const listRef = ref(storage, "images/");
+    if (url == undefined) {
+      func();
+    }
+  }, []);
 
-  //   useEffect(() => {
-  //     listAll(listRef).then((response) => {
-  //       response.items.forEach((item) => {
-  //         getDownloadURL(item).then((url) => {
-  //           setImageUrls((prev) => [...prev, url]);
-  //         });
-  //       });
-  //     });
-  //   }, []);
+  useEffect(
+    () =>
+      onSnapshot(colRef, (snapshot) =>
+        setPosts(snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
+      ),
+    []
+  );
 
   const renderFriend = ({ item }) => {
-    // console.log(posts[0].image);
-    // console.log(item.image);
-
     return (
       <View
         style={{
@@ -117,9 +114,22 @@ const Posts = () => {
           <Text onPress={() => like(item.id, item.likes)}>
             Like Likes: {item.likes}
           </Text>
-          <TouchableOpacity onPress={() => navigation.navigate("ReportScreen")}>
-            <Ionicons name="flag-outline" size={30} color="black" />
-            <MaterialIcons name="report" size={40} color="black" />
+
+          <TouchableOpacity
+            onPress={() => navigation.navigate("SinglePost", { item })}
+          >
+            <Text style={{ fontSize: 22, fontWeight: "700" }}>
+              {item.description}
+            </Text>
+            <Text style={{ fontSize: 18, opacity: 0.7 }}>
+              posted by: {item.username}
+            </Text>
+            <Text style={{ fontSize: 14, opacity: 0.8, color: "#0099cc" }}>
+              {item.contents}
+            </Text>
+            <Text onPress={() => like(item.id, item.likes)}>
+              Like Likes: {item.likes}
+            </Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -127,7 +137,7 @@ const Posts = () => {
   };
 
   const like = (id, postLikes) => {
-    console.log("Updating likes");
+    // console.log("Updating likes");
     getDocs(
       query(
         collection(db, "Likes"),
@@ -195,8 +205,6 @@ const Posts = () => {
   );
 };
 
-export default Posts;
-
 const styles = StyleSheet.create({
   posts: {
     marginTop: 10,
@@ -223,4 +231,40 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
   },
+  line: {
+    borderWidth: 1,
+    margin: 5,
+    opacity: 0.1,
+  },
+  divider: {
+    borderWidth: 1,
+    margin: 5,
+    opacity: 0.3,
+  },
+  button: {
+    backgroundColor: "#0782F9",
+    padding: 15,
+    borderRadius: 10,
+    alignItems: "center",
+    alignSelf: "center",
+    marginTop: 5,
+    margin: 5,
+    overflow: "hidden",
+  },
+  shadow: {
+    shadowColor: "black",
+    shadowOffset: { width: 4, height: 4 },
+    shadowRadius: 1,
+    shadowOpacity: 0.2,
+  },
+  buttonContainer: {
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+  },
 });
+
+const mapDispatch = (dispatch) => ({
+  getPost: (post) => dispatch(get_Post(post)),
+});
+
+export default connect(null, mapDispatch)(Posts);

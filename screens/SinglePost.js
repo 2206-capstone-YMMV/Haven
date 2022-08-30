@@ -1,24 +1,80 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React, { useEffect, useState } from 'react'
-import { connect } from 'react-redux'
-
+import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import React, { useEffect, useState } from "react";
+import { connect } from "react-redux";
+import Input from "./Input";
+import {
+  collection,
+  getDocs,
+  onSnapshot,
+  query,
+  where,
+} from "firebase/firestore";
+import { db } from "../firebase";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import { MaterialIcons } from "@expo/vector-icons";
 const SinglePost = (props) => {
-  console.log('----------',props.userPost)
+  console.log("you are in singlepost view");
+  const element = props.route.params.item;
+  const commentId = element.id;
+  const [comments, setComments] = useState([]);
+
+  useEffect(
+    () =>
+      onSnapshot(
+        query(collection(db, "Comments"), where("commentId", "==", commentId)),
+        (snapshot) =>
+          setComments(
+            snapshot.docs
+              .map((comment) => {
+                console.log("grabbing comments");
+                return comment.data();
+              })
+              .sort((a, b) => a.timestamp - b.timestamp)
+          )
+      ),
+    []
+  );
+
   return (
     <View>
-      <Text>Post By: {props.userPost.post.username}</Text>
-      <Text>Description: {props.userPost.post.description}</Text>
-      <Text>Content: {props.userPost.post.contents}</Text>
+      <Text>Post By: {element.username}</Text>
+      <Text>Description: {element.description}</Text>
+      <Text>Content: {element.contents}</Text>
+      <Input commentId={element.id} />
+      <View style={styles.commentContainer}>
+        {comments.map((comment, idx) => (
+          <Text key={idx} style={styles.message}>
+            {comment.content}
+          </Text>
+        ))}
+      </View>
+      <TouchableOpacity onPress={() => navigation.navigate("ReportScreen")}>
+        <Ionicons name="flag-outline" size={30} color="black" />
+        <MaterialIcons name="report" size={40} color="black" />
+      </TouchableOpacity>
     </View>
-  )
-}
+  );
+};
 
 const mapState = (state) => {
   return {
-    userPost: state
-  }
-}
+    userPost: state,
+  };
+};
 
-export default connect(mapState)(SinglePost)
+export default connect(mapState)(SinglePost);
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+  commentContainer: {
+    alignSelf: "flex-start",
+    alignItems: "left",
+    paddingHorizontal: "10%",
+  },
+  message: {
+    backgroundColor: "white",
+    paddingVertical: 5,
+    paddingHorizontal: 5,
+    marginTop: 5,
+    borderRadius: 10,
+  },
+});

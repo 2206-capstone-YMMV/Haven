@@ -44,13 +44,21 @@ const MapScreen = (props) => {
   const [title, setTitle] = React.useState("");
   const [content, setContent] = React.useState("");
   const [open, setOpen] = React.useState(false);
+  const [gifOpen, setGifOpen] = React.useState(false)
   const [value, setValue] = React.useState(null);
+  const [gifValue, setGifValue] = React.useState(null)
   const [items, setItems] = React.useState([
     { label: "Food", value: "food" },
     { label: "Clothing", value: "clothing" },
     { label: "Shelter", value: "shelter" },
     { label: "Items", value: "items" },
   ]);
+  const gifs = []
+  for (let key in Gifs){
+    gifs.push({label: key, value: key})
+  }
+  const [gifItems, setGifItems] = React.useState(gifs)
+
   const colRef = collection(db, "Post");
   const locationCollectionRef = collection(db, "location");
 
@@ -95,6 +103,7 @@ const MapScreen = (props) => {
     func();
   }, []);
 
+
   const mapMarker = () => {
     return markers?.map((pin) => (
       <Marker
@@ -102,7 +111,11 @@ const MapScreen = (props) => {
         coordinate={{ latitude: pin.coords._lat, longitude: pin.coords._long }}
         title={pin.title}
         description={pin.content?.inputText}
-      />
+      >
+      {pin.gif ? (<Image 
+                  style={styles.pin}
+                  source={{uri: Gifs[pin.gif]}} />) : null}
+      </Marker>
     ));
   };
 
@@ -121,12 +134,13 @@ const MapScreen = (props) => {
     setIsVis(!isVis);
   };
 
-  const sendInput = async (title, inputText, value) => {
+  const sendInput = async (title, inputText, value, gif) => {
     console.log(title, inputText);
     await addDoc(locationCollectionRef, {
       content: { inputText },
       title,
       category: value,
+      gif,
       coords: new GeoPoint(location.coords.latitude, location.coords.longitude),
     });
     setMarked([...marked, location.coords]);
@@ -172,11 +186,20 @@ const MapScreen = (props) => {
                     setItems={setItems}
                     style={styles.dropdown}
                   />
+                  <DropDownPicker
+                    open={gifOpen}
+                    value={gifValue}
+                    items={gifItems}
+                    setOpen={setGifOpen}
+                    setValue={setGifValue}
+                    setItems={setGifItems}
+                    style={styles.dropdown}
+                  />
                 </View>
                 <View>
                   <Button
                     title="Submit"
-                    onPress={() => sendInput(title, content, value)}
+                    onPress={() => sendInput(title, content, value, gifValue)}
                   />
                   <Button title="Hide" onPress={() => setIsVis(!isVis)} />
                 </View>
@@ -193,9 +216,12 @@ const MapScreen = (props) => {
                 longitudeDelta: 0.0421,
               }}
             >
+
               <Marker coordinate={{ latitude: lat + 0.01, longitude: lon }}>
                 <Image style={styles.pin} source={{ uri: Gifs.fishing }} />
               </Marker>
+
+
               {/* loads marker on current location */}
               {!marked
                 ? null
@@ -213,26 +239,27 @@ const MapScreen = (props) => {
               {mapMarker()}
 
               {post
-                ? post.map((x, index) => (
+                ? post.map((item, index) => (
                     <Marker
-                      keyExtractor={x.email}
-                      coordinate={x.location}
-                      title={x.username}
-                      description={x.description}
+                      keyExtractor={item.email}
+                      coordinate={item.location}
+                      title={item.username}
+                      description={item.description}
                       key={index}
                     >
                       <MaterialCommunityIcons
-                        name={x.role === "Student" ? "heart" : "account"}
-                        color={x.role === "Student" ? "red" : "blue"}
+                        name={item.role === "Student" ? "heart" : "account"}
+                        color={item.role === "Student" ? "red" : "blue"}
                         size={25}
-                        onPress={() => props.getPost(x)}
                       />
                       <Callout tooltip style={styles.box}>
                         <View>
                           <View style={styles.bubble}>
-                            <Text>{x.description}</Text>
+                            <Text>{item.description}</Text>
                             <TouchableOpacity
-                              onPress={() => navigation.navigate("SinglePost")}
+                              onPress={() =>
+                                navigation.navigate("SinglePost", { item })
+                              }
                             >
                               <Text style={styles.buttonOutLineText}>
                                 View Detail
