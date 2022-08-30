@@ -81,6 +81,14 @@ const NewPost = () => {
       createAt: serverTimestamp(),
       contents: contents,
       image: url,
+      reports: {
+        spam: 0,
+        inapropriate: 0,
+        falseLocation: 0,
+        outOfSupplies: 0,
+        misinformation: 0,
+        harrasment: 0,
+      },
       location: {
         latitude: lat,
         longitude: lon,

@@ -15,21 +15,16 @@ const ReportScreen = () => (
       <Text style={styles.title}>False Location</Text>
     </TouchableOpacity>
     <TouchableOpacity>
-      <Text style={styles.title}>Sharing Personal Information</Text>
-    </TouchableOpacity>
-    <TouchableOpacity>
       <Text style={styles.title}>Spam</Text>
     </TouchableOpacity>
     <TouchableOpacity>
-      <Text style={styles.title}>Prohibited Transaction</Text>
+      <Text style={styles.title}>Misinformation</Text>
+    </TouchableOpacity>
+    <TouchableOpacity>
+      <Text style={styles.title}>Out of Supplies</Text>
     </TouchableOpacity>
     <TouchableOpacity>
       <Text style={styles.title}>Harassment </Text>
-    </TouchableOpacity>
-
-    <TextInput style={styles.title} placeholder="Other.."></TextInput>
-    <TouchableOpacity style={styles.submit}>
-      <Text>Submit </Text>
     </TouchableOpacity>
   </View>
 );
@@ -41,24 +36,21 @@ const styles = StyleSheet.create({
     backgroundColor: "#eaeaea",
   },
   title: {
+    margin: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    flexWrap: "wrap",
     marginTop: 16,
     paddingVertical: 8,
     borderWidth: 4,
     borderColor: "#20232a",
-    borderRadius: 6,
-    backgroundColor: "#61dafb",
-    color: "#20232a",
-    textAlign: "center",
-    fontSize: 30,
-    fontWeight: "bold",
-  },
-  submit: {
-    marginTop: 16,
-    paddingVertical: 8,
-    borderWidth: 4,
-    borderColor: "#20232a",
-    borderRadius: 6,
-    backgroundColor: "#61dafb",
+    borderRadius: 1,
+    backgroundColor: "#42ADF0",
     color: "#20232a",
     textAlign: "center",
     fontSize: 30,

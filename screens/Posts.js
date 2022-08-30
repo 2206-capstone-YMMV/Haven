@@ -7,6 +7,7 @@ import {
   TextInput,
   TouchableOpacity,
   Image,
+  Modal,
 } from "react-native";
 import { auth, db } from "../firebase";
 import {
@@ -25,7 +26,8 @@ import { getStorage, ref, getDownloadURL, listAll } from "firebase/storage"; //a
 import firebaseConfig from "../firebaseConfig.tsx";
 import { initializeApp } from "firebase/app"; //validate yourself
 import { useNavigation } from "@react-navigation/core";
-
+import Ionicons from "@expo/vector-icons/Ionicons";
+import { MaterialIcons } from "@expo/vector-icons";
 initializeApp(firebaseConfig);
 
 const Posts = () => {
@@ -115,6 +117,10 @@ const Posts = () => {
           <Text onPress={() => like(item.id, item.likes)}>
             Like Likes: {item.likes}
           </Text>
+          <TouchableOpacity onPress={() => navigation.navigate("ReportScreen")}>
+            <Ionicons name="flag-outline" size={30} color="black" />
+            <MaterialIcons name="report" size={40} color="black" />
+          </TouchableOpacity>
         </View>
       </View>
     );
