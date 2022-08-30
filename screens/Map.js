@@ -14,8 +14,11 @@ import {
 } from "react-native";
 import * as Location from "expo-location";
 import { db } from "../firebase";
+import { auth } from "../firebase";
 import {
   collection,
+  query,
+  where,
   doc,
   addDoc,
   deleteDoc,
@@ -68,7 +71,7 @@ const MapScreen = (props) => {
     {label: "Is Location", value: false}
   ])
   const [date, setDate] = React.useState(new Date())
-  const [deleteEvent, setDeleteEvent] = React.useState([])
+  const [user, setUser] = React.useState(null)
 
   const colRef = collection(db, "Post");
   const locationCollectionRef = collection(db, "location");
@@ -100,16 +103,18 @@ const MapScreen = (props) => {
     []
   );
 
-  // if (deleteEvent.length > 0){
-  //   deleteEvent.forEach(item => {
-      
-  //   })
-  // }
-
   React.useEffect(
     () =>
       onSnapshot(colRef, (snapshot) =>
         setPost(snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
+      ),
+    []
+  );
+  
+  React.useEffect(
+    () =>
+      onSnapshot(collection(db, "users"), where("uid", "==", auth.currentUser?.uid), (snapshot) =>
+        console.log(snapshot.docs[0].data().role, snapshot.docs[0].id)
       ),
     []
   );
@@ -213,7 +218,8 @@ const MapScreen = (props) => {
                     setItems={setGifItems}
                     style={styles.dropdown}
                   />
-                  <DropDownPicker
+                  {user === 'helper' ? 
+                  (<DropDownPicker
                     open={eventOpen}
                     value={eventValue}
                     items={eventItems}
@@ -221,7 +227,8 @@ const MapScreen = (props) => {
                     setValue={setEventValue}
                     setItems={setEventItems}
                     style={styles.dropdown}
-                  />
+                  />)
+                  : null}
                   {eventValue ?
                     (<RNDateTimePicker value={date} onChange={settingDate} mode="datetime" minimumDate={Date.now()}/>): null
                   }   
