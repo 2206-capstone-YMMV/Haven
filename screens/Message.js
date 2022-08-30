@@ -6,6 +6,8 @@ import {
   KeyboardAvoidingView,
   TextInput,
   TouchableOpacity,
+  FlatList,
+  ScrollView,
 } from "react-native";
 import { auth } from "../firebase";
 import { db } from "../firebase";
@@ -19,7 +21,6 @@ import {
 } from "firebase/firestore";
 
 export default function Message({ route }) {
-  console.log("messages", route);
   const { conversationId } = route.params;
   const [conversation, setConversation] = useState([]);
   const [message, setMessage] = useState("");
@@ -50,7 +51,7 @@ export default function Message({ route }) {
       query(collection(db, "users"), where("uid", "==", auth.currentUser?.uid))
     ).then((user) => {
       console.log("Grabbing Username"),
-        setDisplayName(user.docs[0].data().name);
+        setDisplayName(user.docs[0].data());
     });
   }
 
@@ -58,7 +59,8 @@ export default function Message({ route }) {
     addDoc(collection(db, "Messages"), {
       conversationId,
       timestamp: Date.now(),
-      content: displayName + ": " + message,
+      messenger: displayName,
+      content: message,
     })
       .then(() => {
         setMessage("");
@@ -67,15 +69,24 @@ export default function Message({ route }) {
   };
 
   return (
-    <KeyboardAvoidingView
-      style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
+    <KeyboardAvoidingView behavior="padding"
+      style={{ flex: 1, alignItems: "center", justifyContent: "space-between" }}
+      keyboardVerticalOffset={100}
     >
+    <ScrollView>
       <View style={styles.messageContainer}>
-        {conversation.map((convo, index) => (
-          <Text key={index} style={styles.message}>
-            {convo.content}
-          </Text>
-        ))}
+        {conversation.map((convo, index) => {
+          if(convo.messenger.uid !== auth.currentUser.uid){
+            return (<Text key={index} style={styles.message}>
+              {convo.messenger.name + ': ' + convo.content}
+            </Text>)
+          }
+          else{
+            return (<Text key={index} style={[styles.message, styles.user]}>
+              {'You: ' + convo.content}
+            </Text>)
+          }
+          })}
       </View>
       <View style={styles.inputContainer}>
         <TextInput
@@ -83,27 +94,25 @@ export default function Message({ route }) {
           value={message}
           onChangeText={(text) => setMessage(text)}
           style={styles.input}
-        />
-      </View>
-      <View style={styles.buttonContainer}>
+          multiline={true}
+          blurOnSubmit={true}
+        ></TextInput>
         <TouchableOpacity onPress={handleSend} style={styles.button}>
           <Text style={styles.buttonText}>Send</Text>
         </TouchableOpacity>
+        
       </View>
+      </ScrollView>
     </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
   messageContainer: {
     alignSelf: "flex-start",
     alignItems: "left",
     paddingHorizontal: "10%",
+    width: '100%'
   },
   message: {
     backgroundColor: "white",
@@ -111,43 +120,36 @@ const styles = StyleSheet.create({
     paddingHorizontal: 5,
     marginTop: 5,
     borderRadius: 10,
+    overflow: 'hidden'
+  },
+  user: {
+    alignSelf: 'flex-end'
   },
   inputContainer: {
+    alignSelf: "center",
     width: "80%",
-  },
-  input: {
     backgroundColor: "white",
     paddingHorizontal: 15,
     paddingVertical: 10,
     borderRadius: 10,
-    marginTop: 5,
+    flexDirection: "row",
+    marginTop: 10,
+    marginBottom: 10
+  },
+  input: {
+    width: "80%"
   },
   buttonContainer: {
-    width: "60%",
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 40,
+    width: "20%",
   },
   button: {
+    padding: 5,
     backgroundColor: "#0782F9",
-    width: "100%",
-    padding: 15,
     borderRadius: 10,
     alignItems: "center",
   },
-  buttonOutline: {
-    backgroundColor: "white",
-    marginTop: 5,
-    borderColor: "#0782F9",
-    borderWidth: 2,
-  },
   buttonText: {
     color: "white",
-    fontWeight: "700",
-    fontSize: 16,
-  },
-  buttonOutlineText: {
-    color: "#0782F9",
     fontWeight: "700",
     fontSize: 16,
   },
