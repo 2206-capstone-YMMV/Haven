@@ -18,6 +18,7 @@ import {
   collection,
   doc,
   addDoc,
+  deleteDoc,
   GeoPoint,
   onSnapshot,
 } from "firebase/firestore";
@@ -26,8 +27,10 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 import { connect } from "react-redux";
 import { get_Post } from "../redux";
 import DropDownPicker from "react-native-dropdown-picker";
+import DateTimePicker from '@react-native-community/datetimepicker'
 
 import Gifs from "../gifs/gifs";
+import RNDateTimePicker from "@react-native-community/datetimepicker";
 
 const { width, height } = Dimensions.get("window");
 const CARD_HEIGHT = 220;
@@ -45,8 +48,10 @@ const MapScreen = (props) => {
   const [content, setContent] = React.useState("");
   const [open, setOpen] = React.useState(false);
   const [gifOpen, setGifOpen] = React.useState(false)
+  const [eventOpen, setEventOpen] = React.useState(false)
   const [value, setValue] = React.useState(null);
   const [gifValue, setGifValue] = React.useState(null)
+  const [eventValue, setEventValue] = React.useState(false)
   const [items, setItems] = React.useState([
     { label: "Food", value: "food" },
     { label: "Clothing", value: "clothing" },
@@ -58,6 +63,12 @@ const MapScreen = (props) => {
     gifs.push({label: key, value: key})
   }
   const [gifItems, setGifItems] = React.useState(gifs)
+  const [eventItems, setEventItems] = React.useState([
+    {label: "Is Event", value: true},
+    {label: "Is Location", value: false}
+  ])
+  const [date, setDate] = React.useState(new Date())
+  const [deleteEvent, setDeleteEvent] = React.useState([])
 
   const colRef = collection(db, "Post");
   const locationCollectionRef = collection(db, "location");
@@ -77,10 +88,23 @@ const MapScreen = (props) => {
   React.useEffect(
     () =>
       onSnapshot(locationCollectionRef, (snapshot) =>
-        setMarkers(snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
+        setMarkers(snapshot.docs.map((docu) => {
+        let date = docu.data().date
+        if (date && date.seconds < (Date.now() / 1000)){ //Events timer are stored in seconds, while Date.now is milliseconds
+          console.log("deleting event")
+          deleteDoc(doc(db, 'location', docu.id))
+        }
+        return ({ ...docu.data(), id: docu.id })
+      }))
       ),
     []
   );
+
+  // if (deleteEvent.length > 0){
+  //   deleteEvent.forEach(item => {
+      
+  //   })
+  // }
 
   React.useEffect(
     () =>
@@ -89,20 +113,6 @@ const MapScreen = (props) => {
       ),
     []
   );
-
-  React.useEffect(() => {
-    const func = async () => {
-      console.log("Grabbing gifs");
-      const storage = getStorage();
-      const reference = ref(storage, "/Gifs/soup.gif");
-      await getDownloadURL(reference).then((img) => {
-        console.log(img);
-        setSoup(img);
-      });
-    };
-    func();
-  }, []);
-
 
   const mapMarker = () => {
     return markers?.map((pin) => (
@@ -134,18 +144,26 @@ const MapScreen = (props) => {
     setIsVis(!isVis);
   };
 
-  const sendInput = async (title, inputText, value, gif) => {
+  const sendInput = async (title, inputText, value, gif, date) => {
     console.log(title, inputText);
+    if (!eventValue){
+      date = null
+    }
     await addDoc(locationCollectionRef, {
       content: { inputText },
       title,
       category: value,
       gif,
+      date,
       coords: new GeoPoint(location.coords.latitude, location.coords.longitude),
     });
     setMarked([...marked, location.coords]);
     setIsVis(!isVis);
   };
+
+  const settingDate = (datepicker,selectedDate) => {
+    setDate(selectedDate)
+  }
 
   return (
     <>
@@ -195,11 +213,23 @@ const MapScreen = (props) => {
                     setItems={setGifItems}
                     style={styles.dropdown}
                   />
+                  <DropDownPicker
+                    open={eventOpen}
+                    value={eventValue}
+                    items={eventItems}
+                    setOpen={setEventOpen}
+                    setValue={setEventValue}
+                    setItems={setEventItems}
+                    style={styles.dropdown}
+                  />
+                  {eventValue ?
+                    (<RNDateTimePicker value={date} onChange={settingDate} mode="datetime" minimumDate={Date.now()}/>): null
+                  }   
                 </View>
                 <View>
                   <Button
                     title="Submit"
-                    onPress={() => sendInput(title, content, value, gifValue)}
+                    onPress={() => sendInput(title, content, value, gifValue, date)}
                   />
                   <Button title="Hide" onPress={() => setIsVis(!isVis)} />
                 </View>
@@ -216,12 +246,6 @@ const MapScreen = (props) => {
                 longitudeDelta: 0.0421,
               }}
             >
-
-              <Marker coordinate={{ latitude: lat + 0.01, longitude: lon }}>
-                <Image style={styles.pin} source={{ uri: Gifs.fishing }} />
-              </Marker>
-
-
               {/* loads marker on current location */}
               {!marked
                 ? null
