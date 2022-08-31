@@ -30,11 +30,15 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { MaterialIcons } from "@expo/vector-icons";
 initializeApp(firebaseConfig);
 
+import { connect } from "react-redux";
+
 const Posts = () => {
   const colRef = collection(db, "Post");
   const [posts, setPosts] = useState([]);
   const [search, setSearch] = useState("");
+
   const [url, setUrl] = useState();
+
   const navigation = useNavigation();
 
   const filterData = posts.filter((post) => {
@@ -48,43 +52,9 @@ const Posts = () => {
       ),
     []
   );
-  //hardcoded
-  //   useEffect(() => {
-  //     const func = async () => {
-  //       await getDownloadURL(
-  //         ref(
-  //           getStorage(),
-  //           "/images/Mon Aug 29 2022 09:00:36 GMT-0500 (CDT)b36c9c69-98f6-4bbf-9614-5ec469dfed05"
-  //         )
-  //       )
-  //         .then((x) => {
-  //           setUrl(x);
-  //         })
-  //         .catch((e) => console.log("Errors while downloading => ", e));
-  //     };
-
-  //     if (url == undefined) {
-  //       func();
-  //     }
-  //   }, []);
-  //   const storage = getStorage();
-
-  //   const listRef = ref(storage, "images/");
-
-  //   useEffect(() => {
-  //     listAll(listRef).then((response) => {
-  //       response.items.forEach((item) => {
-  //         getDownloadURL(item).then((url) => {
-  //           setImageUrls((prev) => [...prev, url]);
-  //         });
-  //       });
-  //     });
-  //   }, []);
 
   const renderFriend = ({ item }) => {
-    // console.log(posts[0].image);
-    // console.log(item.image);
-
+    console.log("this is an item", item);
     return (
       <View
         style={{
@@ -122,6 +92,24 @@ const Posts = () => {
             <MaterialIcons name="report" size={40} color="black" />
           </TouchableOpacity>
         </View>
+        <TouchableOpacity
+          onPress={() => navigation.navigate("SinglePost", { item })}
+        >
+          <View>
+            <Text style={{ fontSize: 22, fontWeight: "700" }}>
+              {item.description}
+            </Text>
+            <Text style={{ fontSize: 18, opacity: 0.7 }}>
+              posted by: {item.username}
+            </Text>
+            <Text style={{ fontSize: 14, opacity: 0.8, color: "#0099cc" }}>
+              {item.contents}{" "}
+            </Text>
+            <Text onPress={() => like(item.id, item.likes)}>
+              Like Likes: {item.likes}
+            </Text>
+          </View>
+        </TouchableOpacity>
       </View>
     );
   };
@@ -195,8 +183,6 @@ const Posts = () => {
   );
 };
 
-export default Posts;
-
 const styles = StyleSheet.create({
   posts: {
     marginTop: 10,
@@ -224,3 +210,9 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
 });
+
+const mapDispatch = (dispatch) => ({
+  getPost: (post) => dispatch(get_Post(post)),
+});
+
+export default connect(null, mapDispatch)(Posts);
