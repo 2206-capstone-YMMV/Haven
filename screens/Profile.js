@@ -57,6 +57,7 @@ const  Profile = ({ navigation }) => {
         <View >
             <View style={{padding: 20}}/>
             <View>
+<<<<<<< HEAD
             <View style={styles.line}/>
               <View style={styles.container}>
                 <View style={styles.border}>
@@ -70,6 +71,19 @@ const  Profile = ({ navigation }) => {
                 </View>
               </View>
               <View style={styles.line}/>
+=======
+              <View style={styles.container}>
+                <View style={styles.border}>
+                  <Text style={styles.input}>Hello, {profile.name}!</Text>
+                </View>
+                <View style={styles.border}>
+                  <Text style={styles.input}>Role: {profile.role}</Text>
+                </View>
+                <View style={styles.border}>
+                  <Text style={styles.input}>Email: {profile.email}</Text>
+                </View>
+              </View>
+>>>>>>> 9425280 (started styling profile page)
               <View style={styles.buttonContainer}>
                 <TouchableOpacity onPress={() => navigation.navigate('EditProfile')}
                     style={styles.button}>
@@ -80,7 +94,10 @@ const  Profile = ({ navigation }) => {
                     <Text style={styles.buttonText}>Sign Out</Text>
                 </TouchableOpacity>
               </View>
+<<<<<<< HEAD
               <View style={styles.divider}/>
+=======
+>>>>>>> 9425280 (started styling profile page)
             </View>
             <View style={styles.buttonContainer}>
                 <TouchableOpacity
@@ -96,9 +113,19 @@ const  Profile = ({ navigation }) => {
                 underlineColorAndroid='transparent'
                 onChangeText={(text) => setSearch(text)}
                 />
+<<<<<<< HEAD
             </View>
             <View style={styles.line}/>
                 <Text style={styles.header}>My Friends</Text>
+=======
+                <TouchableOpacity
+                    onPress={() => navigation.navigate('Friends')}
+                    style={[styles.button]}
+                    >
+                    <Text style={styles.buttonText}>Add/Remove Friend</Text>
+                </TouchableOpacity>
+                <Text >My Friends: </Text>
+>>>>>>> 9425280 (started styling profile page)
                 <FlatList 
                     data={filterData}
                     contentContainerStyle={{
@@ -113,8 +140,52 @@ const  Profile = ({ navigation }) => {
 export default Profile
 
 const styles = StyleSheet.create({
+<<<<<<< HEAD
     line: {
       borderWidth: 1,
+=======
+    input: {
+      backgroundColor: 'white',
+      paddingHorizontal: 5,
+      paddingVertical: 5,
+      fontSize: 25,
+    },
+    border: {
+      borderColor: '#fff',
+      borderWidth: 3,
+      marginTop: 5,
+      borderRadius: 10,
+    },
+    container: {
+      margin: 5,
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      justifyContent: 'space-evenly'
+    },
+    buttonText: {
+      fontSize: 20
+    },
+    button: {
+      backgroundColor: '#0782F9',
+      padding: 15,
+      borderRadius: 10,
+      alignItems: 'center',
+      alignSelf: 'center',
+      marginTop: 5,
+      margin: 5
+    },
+    buttonContainer: {
+      flexDirection: 'row',
+      justifyContent: 'space-evenly'
+    },
+    textInput: {
+      height: 50,
+      width: '80%',
+      alignSelf: 'center',
+      borderWidth: 1,
+      borderRadius: 5,
+      paddingLeft: 20,
+>>>>>>> 9425280 (started styling profile page)
       margin: 5,
       opacity: 0.1
     },
@@ -138,6 +209,7 @@ const styles = StyleSheet.create({
       shadowRadius: 2,
       shadowOpacity: 0.15
     },
+<<<<<<< HEAD
     container: {
       margin: 5,
       alignItems: 'center'
@@ -182,4 +254,6 @@ const styles = StyleSheet.create({
       shadowRadius: 2,
       shadowOpacity: 0.2
     }
+=======
+>>>>>>> 9425280 (started styling profile page)
   })
