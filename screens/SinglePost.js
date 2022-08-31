@@ -33,6 +33,8 @@ const SinglePost = (props) => {
       ),
     []
   );
+            
+
 
   return (
     <View>
@@ -47,6 +49,7 @@ const SinglePost = (props) => {
           </Text>
         ))}
       </View>
+
     </View>
   );
 };

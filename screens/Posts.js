@@ -32,10 +32,13 @@ initializeApp(firebaseConfig);
 import { get_Post } from "../redux";
 import { connect } from "react-redux";
 
+import { connect } from "react-redux";
+
 const Posts = () => {
   const colRef = collection(db, "Post");
   const [posts, setPosts] = useState([]);
   const [search, setSearch] = useState("");
+
   const [url, setUrl] = useState();
 
   const navigation = useNavigation();
@@ -102,6 +105,24 @@ const Posts = () => {
             <MaterialIcons name="report" size={40} color="black" />
           </TouchableOpacity>
         </View>
+        <TouchableOpacity
+          onPress={() => navigation.navigate("SinglePost", { item })}
+        >
+          <View>
+            <Text style={{ fontSize: 22, fontWeight: "700" }}>
+              {item.description}
+            </Text>
+            <Text style={{ fontSize: 18, opacity: 0.7 }}>
+              posted by: {item.username}
+            </Text>
+            <Text style={{ fontSize: 14, opacity: 0.8, color: "#0099cc" }}>
+              {item.contents}{" "}
+            </Text>
+            <Text onPress={() => like(item.id, item.likes)}>
+              Like Likes: {item.likes}
+            </Text>
+          </View>
+        </TouchableOpacity>
       </View>
     );
   };
