@@ -73,6 +73,9 @@ const NewPost = () => {
   );
 
   const handleAddPost = async (pathUrl) => {
+    if (url == null) {
+      setUrl(null);
+    }
     await addDoc(colRef, {
       uid: auth.currentUser?.uid,
       username: profile.name,
@@ -100,7 +103,35 @@ const NewPost = () => {
 
     navigation.navigate("Home");
   };
+
+  //to pick image and display image
+  // const showImagePicker = async () => {
+  //   const permissionResult =
+  //     await ImagePicker.requestMediaLibraryPermissionsAsync();
+  //   if (permissionResult.granted === false) {
+  //     alert("You've refused to allow this appp to access your photos!");
+  //     return;
+  //   }
+
+  //   const result = await ImagePicker.launchImageLibraryAsync({
+  //     mediaTypes: ImagePicker.MediaTypeOptions.All,
+  //     allowsEditing: true,
+  //     aspect: [4, 3],
+  //     quality: 0,
+  //   });
+
+  //   let imageUrl =
+  //     Platform.OS === "ios" ? result.uri.replace("file://", "") : result.uri;
+  //   if (!result.cancelled) {
+  //     setImage(imageUrl);
+  //   }
+  // };
+
+  //real deal sent to firebase
   const pickImage = async () => {
+    if (url == null) {
+      setUrl(null);
+    }
     const result = await ImagePicker.launchCameraAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
