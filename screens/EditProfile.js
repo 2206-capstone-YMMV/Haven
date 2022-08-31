@@ -1,15 +1,21 @@
-import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { auth } from '../firebase'
 import { useNavigation } from '@react-navigation/core'
 import { db } from '../firebase'
 import { collection, onSnapshot, query, where, updateDoc, doc} from 'firebase/firestore' 
+import DropDownPicker from "react-native-dropdown-picker";
 
 const EditProfile = () => {
     const navigation = useNavigation()
 
     const [name, setName] = useState('')
-    const [role, setRole] = useState('')
+    const [open, setOpen] = useState(false);
+    const [role, setRole] = useState("");
+    const [items, setItems] = useState([
+      { label: "User", value: "user" },
+      { label: "Helper", value: "helper" },
+    ]);
     const [id, setId] = useState('')
     const colRef = collection(db, 'users')
 
@@ -29,23 +35,41 @@ const EditProfile = () => {
         .then(navigation.navigate('Profile'))
     }
 
+    const editAlert = () => {
+      Alert.alert(
+        `Is this edit ok?`,
+        `Name: ${name}, Role: ${role}`,
+        [
+          {
+            text: "Submit",
+            onPress: () => Edit()
+          },
+          {
+            text: "Cancel",
+            style: "cancel"
+          }
+        ]
+      )
+    }
+
   return (
     <View style={styles.container}>
 
         <TextInput style={styles.input} placeholder="Full Name" onChangeText={text => setName(text)} />
-        <TextInput style={styles.input} placeholder="Role" onChangeText={text => setRole(text)}/>
+        <DropDownPicker
+        open={open}
+        value={role}
+        items={items}
+        setOpen={setOpen}
+        setValue={setRole}
+        setItems={setItems}
+      />
 
         <TouchableOpacity
-            onPress={Edit}
+            onPress={editAlert}
             style={[styles.button]}
         >
             <Text style={styles.buttonOutLineText}>Edit Profile</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-            onPress={Edit}
-            style={[styles.button]}
-        >
-            <Text style={styles.buttonOutLineText}>Back</Text>
         </TouchableOpacity>
     </View>
   )

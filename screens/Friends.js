@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, FlatList, TouchableOpacity,TextInput, Image } from 'react-native'
+import { StyleSheet, Text, View, FlatList, TouchableOpacity,TextInput, Image, Alert } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { db } from '../firebase'
 import { auth } from '../firebase'
@@ -57,6 +57,40 @@ const Friends = () => {
         isFriend = false
     }
 
+    const addFriendAlert = (item) => {
+        Alert.alert(
+          item.name,
+          `Add this person as a friend?`,
+          [
+            {
+              text: "Add",
+              onPress: () => handleAddFriend(item)
+            },
+            {
+              text: "Cancel",
+              style: "cancel"
+            }
+          ]
+        )
+      }
+
+    const removeFriendAlert = (item) => {
+        Alert.alert(
+          item.name,
+          `Remove this person from your friends list?`,
+          [
+            {
+              text: "Remove",
+              onPress: () => removeFriend(item)
+            },
+            {
+              text: "Cancel",
+              style: "cancel"
+            }
+          ]
+        )
+      }
+
     const renderFriend = (({item}) => {
         return (
             <View style={{flexDirection: 'row', padding: 20, marginBottom: 20, backgroundColor:'white', borderRadius: 12,
@@ -73,11 +107,11 @@ const Friends = () => {
                 }
                 })}
                 {isFriend === false ?  <TouchableOpacity
-                  onPress={() => handleAddFriend(item)}
+                  onPress={() => addFriendAlert(item)}
                   >
                   <Text >Add Friend</Text>
                 </TouchableOpacity> : <TouchableOpacity
-                  onPress={() => removeFriend(item)}
+                  onPress={() => removeFriendAlert(item)}
                   >
                   <Text >remove friend</Text>
                 </TouchableOpacity> 

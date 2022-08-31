@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Text, View, FlatList, TextInput, StyleSheet, TouchableOpacity, Image} from "react-native";
+import { Text, View, FlatList, TextInput, StyleSheet, TouchableOpacity, Image, Alert} from "react-native";
 import { signOut } from 'firebase/auth'
 import { auth } from '../firebase'
 import { db } from '../firebase'
@@ -22,7 +22,6 @@ const  Profile = ({ navigation }) => {
             navigation.navigate('Login')
         })
     }
-
 
     useEffect(
         () => 
@@ -53,6 +52,24 @@ const  Profile = ({ navigation }) => {
         </View>
         )
     })
+
+    const signOutAlert = () => {
+      Alert.alert(
+        `Sign Out`,
+        `Are you sure you want to sign out?`,
+        [
+          {
+            text: "Sign Out",
+            onPress: () => handleSignOut()
+          },
+          {
+            text: "Cancel",
+            style: "cancel"
+          }
+        ]
+      )
+    }
+
     return (
         <View >
             <View style={{padding: 20}}/>
@@ -75,7 +92,7 @@ const  Profile = ({ navigation }) => {
                     style={styles.button}>
                     <Text style={styles.buttonText}>Edit Profile</Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={handleSignOut}
+                <TouchableOpacity onPress={signOutAlert}
                     style={styles.button}>
                     <Text style={styles.buttonText}>Sign Out</Text>
                 </TouchableOpacity>

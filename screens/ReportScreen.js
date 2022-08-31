@@ -1,35 +1,89 @@
-import React from "react";
-import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
-const ReportScreen = () => (
-  <View style={styles.container}>
-    <Text style={styles.title}>Inappropriate</Text>
-    <Text style={styles.title}>False Location</Text>
-    <Text style={styles.title}>Sharing Personal Information</Text>
-    <Text style={styles.title}>Spam</Text>
-    <Text style={styles.title}>Prohibited Transaction</Text>
-    <Text style={styles.title}>Harassment </Text>
-    <Text style={styles.title}>Other </Text>
-  </View>
-);
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  Image,
+  Modal,
+  Pressable,
+} from "react-native";
+import React, { useEffect, useState } from "react";
+import Input from "./Input";
+import {
+  collection,
+  getDocs,
+  doc,
+  onSnapshot,
+  updateDoc,
+  query,
+  increment,
+  where,
+} from "firebase/firestore";
+import { db, auth } from "../firebase";
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 24,
-    backgroundColor: "#eaeaea",
-  },
-  title: {
-    marginTop: 16,
-    paddingVertical: 8,
-    borderWidth: 4,
-    borderColor: "#20232a",
-    borderRadius: 6,
-    backgroundColor: "#61dafb",
-    color: "#20232a",
-    textAlign: "center",
-    fontSize: 30,
-    fontWeight: "bold",
-  },
-});
+import Ionicons from "@expo/vector-icons/Ionicons";
 
-export default ReportScreen;
+export const inappropriate = (id, inappropriate) => {
+  getDocs(
+    query(
+      collection(db, "Post"),
+      where("postId", "==", id),
+      where("uid", "==", auth.currentUser.uid)
+    )
+  ).then(
+    updateDoc(doc(db, "Post", id), { "reports.inappropriate": increment(1) })
+  );
+};
+export const falseLocation = (id, falseLocation) => {
+  getDocs(
+    query(
+      collection(db, "Post"),
+      where("postId", "==", id),
+      where("uid", "==", auth.currentUser.uid)
+    )
+  ).then(
+    updateDoc(doc(db, "Post", id), { "reports.falseLocation": increment(1) })
+  );
+};
+export const spam = (id, spam) => {
+  getDocs(
+    query(
+      collection(db, "Post"),
+      where("postId", "==", id),
+      where("uid", "==", auth.currentUser.uid)
+    )
+  ).then(updateDoc(doc(db, "Post", id), { "reports.spam": increment(1) }));
+};
+export const misinformation = (id, spam) => {
+  getDocs(
+    query(
+      collection(db, "Post"),
+      where("postId", "==", id),
+      where("uid", "==", auth.currentUser.uid)
+    )
+  ).then(
+    updateDoc(doc(db, "Post", id), { "reports.misinformation": increment(1) })
+  );
+};
+export const harassment = (id, spam) => {
+  getDocs(
+    query(
+      collection(db, "Post"),
+      where("postId", "==", id),
+      where("uid", "==", auth.currentUser.uid)
+    )
+  ).then(
+    updateDoc(doc(db, "Post", id), { "reports.harassment": increment(1) })
+  );
+};
+export const outOfSupplies = (id, spam) => {
+  getDocs(
+    query(
+      collection(db, "Post"),
+      where("postId", "==", id),
+      where("uid", "==", auth.currentUser.uid)
+    )
+  ).then(
+    updateDoc(doc(db, "Post", id), { "reports.outOfSupplies": increment(1) })
+  );
+};

@@ -1,1 +1,46 @@
-{"ast":null,"code":"import _slicedToArray from \"@babel/runtime/helpers/slicedToArray\";\nimport React, { useEffect, useState } from 'react';\nimport Text from \"react-native-web/dist/exports/Text\";\nimport View from \"react-native-web/dist/exports/View\";\nimport { auth } from \"../firebase\";\nimport { db } from \"../firebase\";\nimport { collection, onSnapshot, query, where } from 'firebase/firestore';\nimport { jsx as _jsx } from \"react/jsx-runtime\";\nexport default function Message(_ref) {\n  var route = _ref.route;\n  console.log(route.params);\n\n  var _useState = useState({}),\n      _useState2 = _slicedToArray(_useState, 2),\n      conversation = _useState2[0],\n      setConversation = _useState2[1];\n\n  useEffect(function () {\n    return onSnapshot(query(collection(db, 'Messages'), where('ConversationId', '==', ConversationId)), function (snapshot) {\n      return setConversation(snapshot.docs.map(function (convo) {\n        return convo.data();\n      }));\n    });\n  }, []);\n  var convos = [];\n\n  if (Array.isArray(conversation)) {\n    convos = conversation;\n  }\n\n  return _jsx(View, {\n    style: {\n      flex: 1,\n      alignItems: 'center',\n      justifyContent: 'center'\n    },\n    children: convos.map(function (convo, index) {\n      return _jsx(Text, {\n        children: convo.content\n      }, index);\n    })\n  });\n}","map":{"version":3,"names":["React","useEffect","useState","auth","db","collection","onSnapshot","query","where","Message","route","console","log","params","conversation","setConversation","ConversationId","snapshot","docs","map","convo","data","convos","Array","isArray","flex","alignItems","justifyContent","index","content"],"sources":["C:/Users/16476/Documents/GitHub/Haven/screens/Message.js"],"sourcesContent":["import React, { useEffect, useState } from 'react'\r\nimport { Text, View } from \"react-native\";\r\nimport { auth } from '../firebase'\r\nimport { db } from '../firebase'\r\nimport { collection, onSnapshot, query, where } from 'firebase/firestore' \r\n\r\nexport default function Message({ route }) {\r\n    console.log(route.params)\r\n    const [conversation, setConversation] = useState({})\r\n    useEffect(\r\n        () => \r\n            onSnapshot(query(collection(db, 'Messages'), where('ConversationId', '==', ConversationId)), (snapshot) =>\r\n            setConversation(snapshot.docs.map(convo => {\r\n                return convo.data()\r\n            }))\r\n            )\r\n    ,[])\r\n    let convos = []\r\n    if (Array.isArray(conversation)){ //conversation is initially an empty object, would break the map function\r\n        convos = conversation \r\n    }\r\n    return (\r\n        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center'}}>\r\n            {convos.map((convo,index) => <Text key={index}>{convo.content}</Text>)}\r\n        </View>\r\n    )\r\n}"],"mappings":";AAAA,OAAOA,KAAP,IAAgBC,SAAhB,EAA2BC,QAA3B,QAA2C,OAA3C;;;AAEA,SAASC,IAAT;AACA,SAASC,EAAT;AACA,SAASC,UAAT,EAAqBC,UAArB,EAAiCC,KAAjC,EAAwCC,KAAxC,QAAqD,oBAArD;;AAEA,eAAe,SAASC,OAAT,OAA4B;EAAA,IAATC,KAAS,QAATA,KAAS;EACvCC,OAAO,CAACC,GAAR,CAAYF,KAAK,CAACG,MAAlB;;EACA,gBAAwCX,QAAQ,CAAC,EAAD,CAAhD;EAAA;EAAA,IAAOY,YAAP;EAAA,IAAqBC,eAArB;;EACAd,SAAS,CACL;IAAA,OACIK,UAAU,CAACC,KAAK,CAACF,UAAU,CAACD,EAAD,EAAK,UAAL,CAAX,EAA6BI,KAAK,CAAC,gBAAD,EAAmB,IAAnB,EAAyBQ,cAAzB,CAAlC,CAAN,EAAmF,UAACC,QAAD;MAAA,OAC7FF,eAAe,CAACE,QAAQ,CAACC,IAAT,CAAcC,GAAd,CAAkB,UAAAC,KAAK,EAAI;QACvC,OAAOA,KAAK,CAACC,IAAN,EAAP;MACH,CAFe,CAAD,CAD8E;IAAA,CAAnF,CADd;EAAA,CADK,EAOR,EAPQ,CAAT;EAQA,IAAIC,MAAM,GAAG,EAAb;;EACA,IAAIC,KAAK,CAACC,OAAN,CAAcV,YAAd,CAAJ,EAAgC;IAC5BQ,MAAM,GAAGR,YAAT;EACH;;EACD,OACI,KAAC,IAAD;IAAM,KAAK,EAAE;MAAEW,IAAI,EAAE,CAAR;MAAWC,UAAU,EAAE,QAAvB;MAAiCC,cAAc,EAAE;IAAjD,CAAb;IAAA,UACKL,MAAM,CAACH,GAAP,CAAW,UAACC,KAAD,EAAOQ,KAAP;MAAA,OAAiB,KAAC,IAAD;QAAA,UAAmBR,KAAK,CAACS;MAAzB,GAAWD,KAAX,CAAjB;IAAA,CAAX;EADL,EADJ;AAKH"},"metadata":{},"sourceType":"module"}
+{
+  "ast": null,
+  "code": "import _slicedToArray from \"@babel/runtime/helpers/slicedToArray\";\nimport React, { useEffect, useState } from 'react';\nimport Text from \"react-native-web/dist/exports/Text\";\nimport View from \"react-native-web/dist/exports/View\";\nimport { auth } from \"../firebase\";\nimport { db } from \"../firebase\";\nimport { collection, onSnapshot, query, where } from 'firebase/firestore';\nimport { jsx as _jsx } from \"react/jsx-runtime\";\nexport default function Message(_ref) {\n  var route = _ref.route;\n  console.log(route.params);\n\n  var _useState = useState({}),\n      _useState2 = _slicedToArray(_useState, 2),\n      conversation = _useState2[0],\n      setConversation = _useState2[1];\n\n  useEffect(function () {\n    return onSnapshot(query(collection(db, 'Messages'), where('ConversationId', '==', ConversationId)), function (snapshot) {\n      return setConversation(snapshot.docs.map(function (convo) {\n        return convo.data();\n      }));\n    });\n  }, []);\n  var convos = [];\n\n  if (Array.isArray(conversation)) {\n    convos = conversation;\n  }\n\n  return _jsx(View, {\n    style: {\n      flex: 1,\n      alignItems: 'center',\n      justifyContent: 'center'\n    },\n    children: convos.map(function (convo, index) {\n      return _jsx(Text, {\n        children: convo.content\n      }, index);\n    })\n  });\n}",
+  "map": {
+    "version": 3,
+    "names": [
+      "React",
+      "useEffect",
+      "useState",
+      "auth",
+      "db",
+      "collection",
+      "onSnapshot",
+      "query",
+      "where",
+      "Message",
+      "route",
+      "console",
+      "log",
+      "params",
+      "conversation",
+      "setConversation",
+      "ConversationId",
+      "snapshot",
+      "docs",
+      "map",
+      "convo",
+      "data",
+      "convos",
+      "Array",
+      "isArray",
+      "flex",
+      "alignItems",
+      "justifyContent",
+      "index",
+      "content"
+    ],
+    "sources": ["C:/Users/16476/Documents/GitHub/Haven/screens/Message.js"],
+    "sourcesContent": [
+      "import React, { useEffect, useState } from 'react'\r\nimport { Text, View } from \"react-native\";\r\nimport { auth } from '../firebase'\r\nimport { db } from '../firebase'\r\nimport { collection, onSnapshot, query, where } from 'firebase/firestore' \r\n\r\nexport default function Message({ route }) {\r\n    console.log(route.params)\r\n    const [conversation, setConversation] = useState({})\r\n    useEffect(\r\n        () => \r\n            onSnapshot(query(collection(db, 'Messages'), where('ConversationId', '==', ConversationId)), (snapshot) =>\r\n            setConversation(snapshot.docs.map(convo => {\r\n                return convo.data()\r\n            }))\r\n            )\r\n    ,[])\r\n    let convos = []\r\n    if (Array.isArray(conversation)){ //conversation is initially an empty object, would break the map function\r\n        convos = conversation \r\n    }\r\n    return (\r\n        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center'}}>\r\n            {convos.map((convo,index) => <Text key={index}>{convo.content}</Text>)}\r\n        </View>\r\n    )\r\n}"
+    ],
+    "mappings": ";AAAA,OAAOA,KAAP,IAAgBC,SAAhB,EAA2BC,QAA3B,QAA2C,OAA3C;;;AAEA,SAASC,IAAT;AACA,SAASC,EAAT;AACA,SAASC,UAAT,EAAqBC,UAArB,EAAiCC,KAAjC,EAAwCC,KAAxC,QAAqD,oBAArD;;AAEA,eAAe,SAASC,OAAT,OAA4B;EAAA,IAATC,KAAS,QAATA,KAAS;EACvCC,OAAO,CAACC,GAAR,CAAYF,KAAK,CAACG,MAAlB;;EACA,gBAAwCX,QAAQ,CAAC,EAAD,CAAhD;EAAA;EAAA,IAAOY,YAAP;EAAA,IAAqBC,eAArB;;EACAd,SAAS,CACL;IAAA,OACIK,UAAU,CAACC,KAAK,CAACF,UAAU,CAACD,EAAD,EAAK,UAAL,CAAX,EAA6BI,KAAK,CAAC,gBAAD,EAAmB,IAAnB,EAAyBQ,cAAzB,CAAlC,CAAN,EAAmF,UAACC,QAAD;MAAA,OAC7FF,eAAe,CAACE,QAAQ,CAACC,IAAT,CAAcC,GAAd,CAAkB,UAAAC,KAAK,EAAI;QACvC,OAAOA,KAAK,CAACC,IAAN,EAAP;MACH,CAFe,CAAD,CAD8E;IAAA,CAAnF,CADd;EAAA,CADK,EAOR,EAPQ,CAAT;EAQA,IAAIC,MAAM,GAAG,EAAb;;EACA,IAAIC,KAAK,CAACC,OAAN,CAAcV,YAAd,CAAJ,EAAgC;IAC5BQ,MAAM,GAAGR,YAAT;EACH;;EACD,OACI,KAAC,IAAD;IAAM,KAAK,EAAE;MAAEW,IAAI,EAAE,CAAR;MAAWC,UAAU,EAAE,QAAvB;MAAiCC,cAAc,EAAE;IAAjD,CAAb;IAAA,UACKL,MAAM,CAACH,GAAP,CAAW,UAACC,KAAD,EAAOQ,KAAP;MAAA,OAAiB,KAAC,IAAD;QAAA,UAAmBR,KAAK,CAACS;MAAzB,GAAWD,KAAX,CAAjB;IAAA,CAAX;EADL,EADJ;AAKH"
+  },
+  "metadata": {},
+  "sourceType": "module"
+}
