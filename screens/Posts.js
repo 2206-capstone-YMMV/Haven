@@ -25,8 +25,6 @@ import { getStorage, ref, getDownloadURL, listAll } from "firebase/storage"; //a
 import firebaseConfig from "../firebaseConfig.tsx";
 import { initializeApp } from "firebase/app"; //validate yourself
 
-import { useNavigation } from "@react-navigation/core";
-
 initializeApp(firebaseConfig);
 
 import { useNavigation } from "@react-navigation/core";
