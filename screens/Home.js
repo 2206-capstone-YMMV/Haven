@@ -11,6 +11,7 @@ import MessagesTab from "./MessagesTab";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 
 import ReportScreen from "./ReportScreen";
+import Report from "./Report";
 const Tab = createBottomTabNavigator();
 
 export default function Home() {
@@ -72,6 +73,7 @@ export default function Home() {
       <Tab.Screen name="Messages" component={MessagesTab} />
       {/* <Tab.Screen name="ImageUpload2" component={ImageUpload2} /> */}
       <Tab.Screen name="ReportScreen" component={ReportScreen} />
+      <Tab.Screen name="Report" component={Report} />
     </Tab.Navigator>
   );
     }
