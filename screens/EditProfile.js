@@ -30,7 +30,8 @@ const EditProfile = () => {
     }
 
   return (
-    <View>
+    <View style={styles.container}>
+
         <TextInput style={styles.input} placeholder="Full Name" onChangeText={text => setName(text)} />
         <TextInput style={styles.input} placeholder="Role" onChangeText={text => setRole(text)}/>
 
@@ -47,14 +48,6 @@ const EditProfile = () => {
 export default EditProfile
 
 const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
-    inputContainer: {
-      width: '80%'
-    },
     input: {
       backgroundColor: 'white',
       paddingHorizontal: 15,
@@ -62,18 +55,13 @@ const styles = StyleSheet.create({
       borderRadius: 10,
       marginTop: 5,
     },
-    buttonContainer: {
-      width: '60%',
-      justifyContent: 'center',
-      alignItems: 'center',
-      marginTop: 40,
-    },
     button: {
       backgroundColor: '#0782F9',
       width: '100%',
       padding: 15,
       borderRadius: 10,
       alignItems: 'center',
+      marginTop: 5
     },
     buttonOutline: {
       backgroundColor: 'white',
@@ -81,14 +69,7 @@ const styles = StyleSheet.create({
       borderColor: '#0782F9',
       borderWidth: 2,
     },
-    buttonText: {
-      color: 'white',
-      fontWeight: '700',
-      fontSize: 16,
-    },
-    buttonOutlineText: {
-      color: '#0782F9',
-      fontWeight: '700',
-      fontSize: 16,
-    },
+    container: {
+      paddingTop: '80%'
+    }
   })
