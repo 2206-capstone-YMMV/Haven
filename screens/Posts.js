@@ -24,6 +24,9 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 import { getStorage, ref, getDownloadURL, listAll } from "firebase/storage"; //access the storage database
 import firebaseConfig from "../firebaseConfig.tsx";
 import { initializeApp } from "firebase/app"; //validate yourself
+
+import { useNavigation } from "@react-navigation/core";
+
 initializeApp(firebaseConfig);
 import { useNavigation } from "@react-navigation/core";
 import { get_Post } from "../redux";

@@ -86,21 +86,3 @@ export const outOfSupplies = (id, spam) => {
     updateDoc(doc(db, "Post", id), { "reports.outOfSupplies": increment(1) })
   );
 };
-// export const spam = (id, spam) => {
-//   getDocs(
-//     query(
-//       collection(db, "Post"),
-//       where("postId", "==", id),
-//       where("uid", "==", auth.currentUser.uid)
-//     )
-//   ).then(updateDoc(doc(db, "Post", id), { "reports.spam": increment(1) }));
-// };
-// export const spam = (id, spam) => {
-//   getDocs(
-//     query(
-//       collection(db, "Post"),
-//       where("postId", "==", id),
-//       where("uid", "==", auth.currentUser.uid)
-//     )
-//   ).then(updateDoc(doc(db, "Post", id), { "reports.spam": increment(1) }));
-// };
