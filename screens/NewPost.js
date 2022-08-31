@@ -192,6 +192,7 @@ const NewPost = () => {
 
 export default NewPost;
 
+
 const styles = StyleSheet.create({
   input: {
     backgroundColor: "white",
@@ -209,3 +210,4 @@ const styles = StyleSheet.create({
     marginVertical: 15,
   },
 });
+
