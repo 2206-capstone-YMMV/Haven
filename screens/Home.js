@@ -13,7 +13,6 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 import ReportScreen from "./ReportScreen";
 const Tab = createBottomTabNavigator();
 
-
 export default function Home() {
   return (
     <Tab.Navigator
