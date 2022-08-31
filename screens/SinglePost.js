@@ -132,10 +132,18 @@ const SinglePost = (props) => {
         style={{ width: 400, height: 400 }}
         source={{ uri: element.image }}
       ></Image>
+
       <Text>Post By: {element.username}</Text>
       <Text>Description: {element.description}</Text>
+      {/* {element.role === "admin" ? (
+        <Text>{JSON.stringify(element.reports)}</Text>
+      ) : (
+        ""
+      )} */}
       <Text>Content: {element.contents}</Text>
+
       <Input commentId={element.id} />
+
       <View style={styles.commentContainer}>
         {comments.map((comment, idx) => (
           <Text key={idx} style={styles.message}>
