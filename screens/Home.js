@@ -66,7 +66,7 @@ export default function Home() {
       })}
     >
 
-      {/* <Tab.Screen name="Map" component={Map} /> */}
+    <Tab.Screen name="Map" component={Map} />
       <Tab.Screen
         name="Profile"
         component={Profile}

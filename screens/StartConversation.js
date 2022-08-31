@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { StyleSheet, Text, View, TextInput, ScrollView } from "react-native";
+import { StyleSheet, Text, View, TextInput, ScrollView, Alert } from "react-native";
 import { auth } from '../firebase'
 import { db } from '../firebase'
 import { collection, onSnapshot, query, where, addDoc } from 'firebase/firestore' 
@@ -40,6 +40,23 @@ export default function MessagesTab({ navigation, route }) {
         .then(navigation.navigate('Messages'))
         .catch(error => alert(error.message))
     }
+
+    const newConversationAlert = (person) => {
+        Alert.alert(
+          `New Conversation`,
+          `Start a conversation with ${person.name}`,
+          [
+            {
+              text: "Create",
+              onPress: () => newConversation(person)
+            },
+            {
+              text: "Cancel",
+              style: "cancel"
+            }
+          ]
+        )
+      }
     
     return (
         <LinearGradient colors={["#8c5aa5", "#f2e797"]} style={{padding: 5, flex: 1, alignItems: 'center'}}>
@@ -57,7 +74,7 @@ export default function MessagesTab({ navigation, route }) {
                     return <Text key={index} style={[styles.person, styles.helper]} onPress={() => newConversation(person)}>{person.name}</Text>
                 }
                 else{
-                    return <Text key={index} style={styles.person} onPress={() => newConversation(person)}>{person.name}</Text>
+                    return <Text key={index} style={styles.person} onPress={() => newConversationAlert(person)}>{person.name}</Text>
                 }})}
             </ScrollView>
         </LinearGradient>
