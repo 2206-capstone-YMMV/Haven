@@ -18,6 +18,7 @@ import {
   addDoc,
   getDocs,
 } from "firebase/firestore";
+import { LinearGradient } from 'expo-linear-gradient';
 
 export default function Message({ route }) {
   const { conversationId } = route.params;
@@ -68,10 +69,12 @@ export default function Message({ route }) {
   };
 
   return (
+    
     <KeyboardAvoidingView behavior="padding"
-      style={{ flex: 1, alignItems: "center", justifyContent: "space-between" }}
+      style={{ flex: 1, alignItems: "center", justifyContent: "space-between"}}
       keyboardVerticalOffset={100}
     >
+    <LinearGradient colors={["#8c5aa5", "#f2e797"]} style={{width: "100%", height: "100%"}}>
     <ScrollView>
       <View style={styles.messageContainer}>
         {conversation.map((convo, index) => {
@@ -102,7 +105,9 @@ export default function Message({ route }) {
         
       </View>
       </ScrollView>
+      </LinearGradient>
     </KeyboardAvoidingView>
+    
   );
 }
 

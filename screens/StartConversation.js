@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, TextInput, ScrollView } from "react-native";
 import { auth } from '../firebase'
 import { db } from '../firebase'
 import { collection, onSnapshot, query, where, addDoc } from 'firebase/firestore' 
+import { LinearGradient } from 'expo-linear-gradient';
 
 export default function MessagesTab({ navigation, route }) {
     
@@ -42,7 +43,7 @@ export default function MessagesTab({ navigation, route }) {
     }
     
     return (
-        <View style={{ flex: 1, alignItems: 'center'}}>
+        <LinearGradient colors={["#8c5aa5", "#f2e797"]} style={{padding: 5, flex: 1, alignItems: 'center'}}>
             <Text style={styles.header}>New Conversation</Text>
             <TextInput 
                 style={styles.textInput}
@@ -52,9 +53,15 @@ export default function MessagesTab({ navigation, route }) {
                 onChangeText={(text) => setSearch(text)}
             />
             <ScrollView contentContainerStyle={styles.list}>
-                {filteredPeople.map((person,index) => <Text key={index} style={styles.person} onPress={() => newConversation(person)}>{person.name}</Text>)}
+                {filteredPeople.map((person,index) => {
+                if (person.role === 'helper'){
+                    return <Text key={index} style={[styles.person, styles.helper]} onPress={() => newConversation(person)}>{person.name}</Text>
+                }
+                else{
+                    return <Text key={index} style={styles.person} onPress={() => newConversation(person)}>{person.name}</Text>
+                }})}
             </ScrollView>
-        </View>
+        </LinearGradient>
     )
 }
 
@@ -73,10 +80,13 @@ const styles = StyleSheet.create({
         padding: 20,
         margin: 10,
         borderRadius: 10,
-        borderColor: "black",
+        borderColor: "navy",
         borderWidth: 5,
         overflow: "hidden",
         fontSize: 20,
+    },
+    helper: {
+        borderColor: "black"
     },
     textInput: {
         width: '70%',
