@@ -24,8 +24,9 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 import { getStorage, ref, getDownloadURL, listAll } from "firebase/storage"; //access the storage database
 import firebaseConfig from "../firebaseConfig.tsx";
 import { initializeApp } from "firebase/app"; //validate yourself
-initializeApp(firebaseConfig);
 import { useNavigation } from "@react-navigation/core";
+
+initializeApp(firebaseConfig);
 import { get_Post } from "../redux";
 import { connect } from "react-redux";
 
@@ -48,25 +49,6 @@ const Posts = () => {
       ),
     []
   );
-
-  useEffect(() => {
-    const func = async () => {
-      await getDownloadURL(
-        ref(
-          getStorage(),
-          "/images/Mon Aug 29 2022 09:00:36 GMT-0500 (CDT)b36c9c69-98f6-4bbf-9614-5ec469dfed05"
-        )
-      )
-        .then((x) => {
-          setUrl(x);
-        })
-        .catch((e) => console.log("Errors while downloading => ", e));
-    };
-
-    if (url == undefined) {
-      func();
-    }
-  }, []);
 
   useEffect(
     () =>
@@ -95,27 +77,24 @@ const Posts = () => {
         <View>
           <Image
             style={{ width: 50, height: 50 }}
-            source={{ uri: url }}
+            source={{ uri: item.image }}
           ></Image>
-
-          <Text>{item.image}</Text>
 
           <TouchableOpacity
             onPress={() => navigation.navigate("SinglePost", { item })}
-          >
-            <Text style={{ fontSize: 22, fontWeight: "700" }}>
-              {item.description}
-            </Text>
-            <Text style={{ fontSize: 18, opacity: 0.7 }}>
-              posted by: {item.username}
-            </Text>
-            <Text style={{ fontSize: 14, opacity: 0.8, color: "#0099cc" }}>
-              {item.contents}
-            </Text>
-            <Text onPress={() => like(item.id, item.likes)}>
-              Like Likes: {item.likes}
-            </Text>
-          </TouchableOpacity>
+          ></TouchableOpacity>
+          <Text style={{ fontSize: 22, fontWeight: "700" }}>
+            {item.description}
+          </Text>
+          <Text style={{ fontSize: 18, opacity: 0.7 }}>
+            posted by: {item.username}
+          </Text>
+          <Text style={{ fontSize: 14, opacity: 0.8, color: "#0099cc" }}>
+            {item.contents}
+          </Text>
+          <Text onPress={() => like(item.id, item.likes)}>
+            Like Likes: {item.likes}
+          </Text>
         </View>
       </View>
     );
@@ -217,36 +196,35 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   line: {
-        borderWidth: 1,
-        margin: 5,
-        opacity: 0.1
-    },
+    borderWidth: 1,
+    margin: 5,
+    opacity: 0.1,
+  },
   divider: {
-        borderWidth: 1,
-        margin: 5,
-        opacity: 0.3
-    },
+    borderWidth: 1,
+    margin: 5,
+    opacity: 0.3,
+  },
   button: {
-        backgroundColor: '#0782F9',
-        padding: 15,
-        borderRadius: 10,
-        alignItems: 'center',
-        alignSelf: 'center',
-        marginTop: 5,
-        margin: 5,
-        overflow: 'hidden',
-    },
+    backgroundColor: "#0782F9",
+    padding: 15,
+    borderRadius: 10,
+    alignItems: "center",
+    alignSelf: "center",
+    marginTop: 5,
+    margin: 5,
+    overflow: "hidden",
+  },
   shadow: {
-        shadowColor: 'black',
-        shadowOffset: {width: 4, height: 4},
-        shadowRadius: 1,
-        shadowOpacity: 0.2
-    },
+    shadowColor: "black",
+    shadowOffset: { width: 4, height: 4 },
+    shadowRadius: 1,
+    shadowOpacity: 0.2,
+  },
   buttonContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-evenly',
-        
-    },
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+  },
 });
 
 const mapDispatch = (dispatch) => ({
