@@ -21,12 +21,13 @@ import * as Location from "expo-location";
 import { useNavigation } from "@react-navigation/core";
 import { auth } from "../firebase";
 import * as ImagePicker from "expo-image-picker";
-import { getStorage, ref, uploadBytes } from "firebase/storage"; //access the storage database
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage"; //access the storage database
 import "react-native-get-random-values";
 import { v4 as uuidv4 } from "uuid";
 import firebaseConfig from "../firebaseConfig.tsx";
 import { initializeApp } from "firebase/app"; //validate yourself
 
+initializeApp(firebaseConfig);
 const NewPost = () => {
   const navigation = useNavigation();
   const [location, setLocation] = useState("");
@@ -36,6 +37,8 @@ const NewPost = () => {
   const [profile, setProfile] = useState({});
   const colRef = collection(db, "Post");
   const [image, setImage] = useState("");
+  const [url, setUrl] = useState();
+
   //const [pickedImagePath, setPickedImagePath] = useState("");
   useEffect(() => {
     (async () => {
@@ -69,7 +72,7 @@ const NewPost = () => {
     []
   );
 
-  const handleAddPost = async ({ path }) => {
+  const handleAddPost = async (pathUrl) => {
     await addDoc(colRef, {
       uid: auth.currentUser?.uid,
       username: profile.name,
@@ -78,7 +81,15 @@ const NewPost = () => {
       email: profile.email,
       createAt: serverTimestamp(),
       contents: contents,
-      image: path,
+      image: url,
+      reports: {
+        spam: 0,
+        inappropriate: 0,
+        falseLocation: 0,
+        outOfSupplies: 0,
+        misinformation: 0,
+        harassment: 0,
+      },
       location: {
         latitude: lat,
         longitude: lon,
@@ -89,54 +100,39 @@ const NewPost = () => {
 
     navigation.navigate("Home");
   };
-
-  //to pick image and display image
-  const showImagePicker = async () => {
-    const permissionResult =
-      await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (permissionResult.granted === false) {
-      alert("You've refused to allow this appp to access your photos!");
-      return;
-    }
-
-    const result = await ImagePicker.launchImageLibraryAsync({
+  const pickImage = async () => {
+    const result = await ImagePicker.launchCameraAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
       aspect: [4, 3],
-      quality: 1,
+      quality: 0,
     });
-
     let imageUrl =
       Platform.OS === "ios" ? result.uri.replace("file://", "") : result.uri;
     if (!result.cancelled) {
       setImage(imageUrl);
     }
-  };
-
-  //real deal sent to firebase
-  const pickImage = async () => {
     try {
-      const storage = getStorage(); //the storage itself
+      const storage = getStorage();
       const path = `images/${new Date() + uuidv4()}`;
-      //new Date()
-      // const ref_con = ref(storage, 'image.jpg'); //how the image will be addressed inside the storage
-      const ref_con = ref(storage, path); //how the image will be addressed inside the storage
-
-      //convert image to array of bytes  --substep
-      const img = await fetch(image);
+      const ref_con = ref(storage, path);
+      const func = async () => {
+        await getDownloadURL(ref_con).then((x) => {
+          setUrl(x);
+        });
+      };
+      const img = await fetch(result.uri);
       const bytes = await img.blob();
-      await uploadBytes(ref_con, bytes); //upload images
-
-      return path; // /images/12345566
+      await uploadBytes(ref_con, bytes);
+      func(); // /images/12345566
     } catch (e) {
-      // console.log("Some Error", e.stack);
-      // console.log(e);
+      console.log(e);
     }
   };
   const combined = async () => {
-    let path = await pickImage();
+    let pathUrl = await pickImage();
     await handleAddPost({
-      path,
+      pathUrl,
     });
   };
 
@@ -156,13 +152,13 @@ const NewPost = () => {
       {image && (
         <Image
           source={{ uri: image }}
-          style={{ width: 30, height: 30 }}
+          style={{ width: 300, height: 300 }}
         ></Image>
       )}
-      <TouchableOpacity onPress={showImagePicker} style={[styles.button]}>
-        <Text style={styles.buttonOutLineText}>Upload Photo</Text>
+      <TouchableOpacity onPress={pickImage} style={[styles.button]}>
+        <Text style={styles.buttonOutLineText}>Take Photo</Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={combined} style={[styles.button]}>
+      <TouchableOpacity onPress={handleAddPost} style={[styles.button]}>
         <Text style={styles.buttonOutLineText}>Submit</Text>
       </TouchableOpacity>
     </View>

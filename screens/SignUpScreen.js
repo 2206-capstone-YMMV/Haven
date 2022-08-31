@@ -10,7 +10,6 @@ import {
   KeyboardAvoidingView,
   Button,
 } from "react-native";
-import { useFonts } from "expo-font";
 import React, { useState } from "react";
 import { auth } from "../firebase";
 import { useNavigation } from "@react-navigation/core";
@@ -18,7 +17,8 @@ import { db } from "../firebase";
 import { collection, addDoc } from "firebase/firestore";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import DropDownPicker from "react-native-dropdown-picker";
-import App from "../App";
+import { useFonts } from "expo-font";
+import * as SplashScreen from "expo-splash-screen";
 
 const SignUpScreen = () => {
   const navigation = useNavigation();

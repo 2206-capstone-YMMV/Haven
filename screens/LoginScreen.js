@@ -9,15 +9,16 @@ import {
   ImageBackground,
   ScrollView,
 } from "react-native";
-import { useFonts } from "expo-font";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { auth } from "../firebase";
 import { signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
+import { useFonts } from "expo-font";
+import * as SplashScreen from "expo-splash-screen";
 
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
+  const [dataLoad, setDataLoad] = useState(false);
   const [fontsLoaded] = useFonts({
     "signika-bold": require("../fonts/SignikaNegative-Bold.ttf"),
     "signika-light": require("../fonts/SignikaNegative-Light.ttf"),
@@ -27,12 +28,12 @@ const LoginScreen = ({ navigation }) => {
   });
 
   useEffect(() => {
-    const unsbuscribe = onAuthStateChanged(auth, (user) => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         navigation.navigate("Home");
       }
     });
-    return unsbuscribe;
+    return unsubscribe;
   }, []);
 
   const handleSignIn = () => {
