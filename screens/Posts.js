@@ -7,7 +7,6 @@ import {
   TextInput,
   TouchableOpacity,
   Image,
-  Modal,
 } from "react-native";
 import { auth, db } from "../firebase";
 import {
@@ -25,20 +24,16 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 import { getStorage, ref, getDownloadURL, listAll } from "firebase/storage"; //access the storage database
 import firebaseConfig from "../firebaseConfig.tsx";
 import { initializeApp } from "firebase/app"; //validate yourself
-import { useNavigation } from "@react-navigation/core";
-import Ionicons from "@expo/vector-icons/Ionicons";
-import { MaterialIcons } from "@expo/vector-icons";
 initializeApp(firebaseConfig);
-import { get_Post } from "../redux";
-import { connect } from "react-redux";
 
+import { useNavigation } from "@react-navigation/core";
+import { get_Post } from "../redux";
 import { connect } from "react-redux";
 
 const Posts = () => {
   const colRef = collection(db, "Post");
   const [posts, setPosts] = useState([]);
   const [search, setSearch] = useState("");
-
   const [url, setUrl] = useState();
 
   const navigation = useNavigation();
@@ -55,13 +50,6 @@ const Posts = () => {
     []
   );
 
-  useEffect(
-    () =>
-      onSnapshot(colRef, (snapshot) =>
-        setPosts(snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
-      ),
-    []
-  );
 
   const renderFriend = ({ item }) => {
     console.log("this is an item", item);
@@ -104,31 +92,10 @@ const Posts = () => {
             <Ionicons name="flag-outline" size={30} color="black" />
             <MaterialIcons name="report" size={40} color="black" />
           </TouchableOpacity>
-        </View>
-        <TouchableOpacity
-          onPress={() => navigation.navigate("SinglePost", { item })}
-        >
-          <View>
-            <Text style={{ fontSize: 22, fontWeight: "700" }}>
-              {item.description}
-            </Text>
-            <Text style={{ fontSize: 18, opacity: 0.7 }}>
-              posted by: {item.username}
-            </Text>
-            <Text style={{ fontSize: 14, opacity: 0.8, color: "#0099cc" }}>
-              {item.contents}{" "}
-            </Text>
-            <Text onPress={() => like(item.id, item.likes)}>
-              Like Likes: {item.likes}
-            </Text>
-          </View>
-        </TouchableOpacity>
-      </View>
-    );
+        </View> </View>
+        );
   };
-
   const like = (id, postLikes) => {
-    console.log("Updating likes");
     getDocs(
       query(
         collection(db, "Likes"),
