@@ -129,6 +129,9 @@ const NewPost = () => {
 
   //real deal sent to firebase
   const pickImage = async () => {
+    if (url == null) {
+      setUrl(null);
+    }
     const result = await ImagePicker.launchCameraAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
@@ -194,7 +197,6 @@ const NewPost = () => {
 };
 
 export default NewPost;
-
 
 const styles = StyleSheet.create({
   input: {

@@ -24,7 +24,7 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 import { getStorage, ref, getDownloadURL, listAll } from "firebase/storage"; //access the storage database
 import firebaseConfig from "../firebaseConfig.tsx";
 import { initializeApp } from "firebase/app"; //validate yourself
-
+import Ionicons from "@expo/vector-icons/Ionicons";
 initializeApp(firebaseConfig);
 
 import { useNavigation } from "@react-navigation/core";
@@ -60,7 +60,6 @@ const Posts = () => {
   );
 
   const renderFriend = ({ item }) => {
-    // console.log("this is an item", item);
     return (
       <View
         style={{
@@ -84,25 +83,23 @@ const Posts = () => {
           )}
           <TouchableOpacity
             onPress={() => navigation.navigate("SinglePost", { item })}
-          ></TouchableOpacity>
-          <Text style={{ fontSize: 22, fontWeight: "700" }}>
-            {item.description}
-          </Text>
-          <Text style={{ fontSize: 18, opacity: 0.7 }}>
-            posted by: {item.username}
-          </Text>
-          <Text style={{ fontSize: 14, opacity: 0.8, color: "#0099cc" }}>
-            {item.contents}
-          </Text>
-          <Text onPress={() => like(item.id, item.likes)}>
-            Like Likes: {item.likes}
-          </Text>
-          <TouchableOpacity onPress={() => navigation.navigate("ReportScreen")}>
-            <Ionicons name="flag-outline" size={30} color="black" />
-            <MaterialIcons name="report" size={40} color="black" />
+          >
+            <Text style={{ fontSize: 22, fontWeight: "700" }}>
+              {item.description}
+            </Text>
+            <Text style={{ fontSize: 18, opacity: 0.7 }}>
+              posted by: {item.username}
+            </Text>
+            <Text style={{ fontSize: 14, opacity: 0.8, color: "#0099cc" }}>
+              {item.contents}
+            </Text>
+            <Text onPress={() => like(item.id, item.likes)}>
+              Like Likes: {item.likes}
+            </Text>
           </TouchableOpacity>
-        </View> </View>
-        );
+        </View>
+      </View>
+    );
   };
   const like = (id, postLikes) => {
     getDocs(

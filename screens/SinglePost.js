@@ -46,7 +46,7 @@ const SinglePost = (props) => {
           setComments(
             snapshot.docs
               .map((comment) => {
-                console.log("grabbing comments");
+                // console.log("grabbing comments");
                 return comment.data();
               })
               .sort((a, b) => a.timestamp - b.timestamp)
@@ -54,8 +54,6 @@ const SinglePost = (props) => {
       ),
     []
   );
-            
-
 
   return (
     <View>
@@ -129,11 +127,12 @@ const SinglePost = (props) => {
           </View>
         </View>
       </Modal>
-
-      <Image
-        style={{ width: 400, height: 400 }}
-        source={{ uri: element.image }}
-      ></Image>
+      {element.image !== null && (
+        <Image
+          style={{ width: 100, height: 100 }}
+          source={{ uri: element.image }}
+        ></Image>
+      )}
 
       <Text>Post By: {element.username}</Text>
       <Text>Description: {element.description}</Text>
