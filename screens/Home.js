@@ -8,10 +8,9 @@ import Profile from "./Profile";
 import Posts from "./Posts";
 import MessagesTab from "./MessagesTab";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-import ReportScreen from "./ReportScreen";
-import Modal from "./Modal";
-const Tab = createBottomTabNavigator();
 
+import ReportScreen from "./ReportScreen";
+const Tab = createBottomTabNavigator();
 
 export default function Home() {
   return (
@@ -66,13 +65,14 @@ export default function Home() {
         },
       })}
     >
-      {/* <Tab.Screen name="Map" component={Map} /> */}
-      <Tab.Screen name="Profile" component={Profile} />
+      <Tab.Screen name="Map" component={Map} />
+      <Tab.Screen
+        name="Profile"
+        component={Profile}
+        options={{ headerShown: false }}
+      />
       <Tab.Screen name="Posts" component={Posts} />
       <Tab.Screen name="Messages" component={MessagesTab} />
-      <Tab.Screen name="ReportScreen" component={ReportScreen} />
-
-      <Tab.Screen name="Modal" component={Modal} />
     </Tab.Navigator>
   );
 }
