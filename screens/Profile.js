@@ -58,6 +58,7 @@ const  Profile = ({ navigation }) => {
             <View style={{padding: 20}}/>
             <View>
 <<<<<<< HEAD
+<<<<<<< HEAD
             <View style={styles.line}/>
               <View style={styles.container}>
                 <View style={styles.border}>
@@ -72,18 +73,25 @@ const  Profile = ({ navigation }) => {
               </View>
               <View style={styles.line}/>
 =======
+=======
+            <View style={styles.line}/>
+>>>>>>> c8725a3 (Updated Profile styling)
               <View style={styles.container}>
                 <View style={styles.border}>
-                  <Text style={styles.input}>Hello, {profile.name}!</Text>
+                  <Text style={styles.info}>Hello, {profile.name}!</Text>
                 </View>
                 <View style={styles.border}>
-                  <Text style={styles.input}>Role: {profile.role}</Text>
+                  <Text style={styles.info}>Role: {profile.role}</Text>
                 </View>
                 <View style={styles.border}>
-                  <Text style={styles.input}>Email: {profile.email}</Text>
+                  <Text style={styles.info}>Email: {profile.email}</Text>
                 </View>
               </View>
+<<<<<<< HEAD
 >>>>>>> 9425280 (started styling profile page)
+=======
+              <View style={styles.line}/>
+>>>>>>> c8725a3 (Updated Profile styling)
               <View style={styles.buttonContainer}>
                 <TouchableOpacity onPress={() => navigation.navigate('EditProfile')}
                     style={styles.button}>
@@ -94,6 +102,7 @@ const  Profile = ({ navigation }) => {
                     <Text style={styles.buttonText}>Sign Out</Text>
                 </TouchableOpacity>
               </View>
+<<<<<<< HEAD
 <<<<<<< HEAD
               <View style={styles.divider}/>
 =======
@@ -118,14 +127,32 @@ const  Profile = ({ navigation }) => {
             <View style={styles.line}/>
                 <Text style={styles.header}>My Friends</Text>
 =======
+=======
+              <View style={styles.divider}/>
+            </View>
+            <View style={styles.buttonContainer}>
+>>>>>>> c8725a3 (Updated Profile styling)
                 <TouchableOpacity
                     onPress={() => navigation.navigate('Friends')}
                     style={[styles.button]}
                     >
                     <Text style={styles.buttonText}>Add/Remove Friend</Text>
                 </TouchableOpacity>
+<<<<<<< HEAD
                 <Text >My Friends: </Text>
 >>>>>>> 9425280 (started styling profile page)
+=======
+                <TextInput 
+                style={styles.textInput}
+                value={search}
+                placeholder='Search By Name'
+                underlineColorAndroid='transparent'
+                onChangeText={(text) => setSearch(text)}
+                />
+            </View>
+            <View style={styles.line}/>
+                <Text style={styles.header}>My Friends</Text>
+>>>>>>> c8725a3 (Updated Profile styling)
                 <FlatList 
                     data={filterData}
                     contentContainerStyle={{
@@ -141,26 +168,42 @@ export default Profile
 
 const styles = StyleSheet.create({
 <<<<<<< HEAD
+<<<<<<< HEAD
     line: {
       borderWidth: 1,
 =======
     input: {
       backgroundColor: 'white',
+=======
+    line: {
+      borderWidth: 1,
+      margin: 5,
+      opacity: 0.1
+    },
+    divider: {
+      borderWidth: 1,
+      margin: 5,
+      opacity: 0.3
+    },
+    info: {
+>>>>>>> c8725a3 (Updated Profile styling)
       paddingHorizontal: 5,
       paddingVertical: 5,
-      fontSize: 25,
+      fontSize: 25
     },
     border: {
-      borderColor: '#fff',
+      borderColor: 'white',
       borderWidth: 3,
       marginTop: 5,
       borderRadius: 10,
+      shadowColor: 'black',
+      shadowOffset: {width: 2, height: 6},
+      shadowRadius: 2,
+      shadowOpacity: 0.15
     },
     container: {
       margin: 5,
-      flexDirection: 'row',
-      flexWrap: 'wrap',
-      justifyContent: 'space-evenly'
+      alignItems: 'center'
     },
     buttonText: {
       fontSize: 20
@@ -176,17 +219,22 @@ const styles = StyleSheet.create({
     },
     buttonContainer: {
       flexDirection: 'row',
-      justifyContent: 'space-evenly'
+      justifyContent: 'space-evenly',
+      shadowColor: 'black',
+      shadowOffset: {width: 4, height: 4},
+      shadowRadius: 2,
+      shadowOpacity: 0.2
     },
     textInput: {
-      height: 50,
-      width: '80%',
+      height: 54,
+      width: '40%',
       alignSelf: 'center',
       borderWidth: 1,
       borderRadius: 5,
       paddingLeft: 20,
 >>>>>>> 9425280 (started styling profile page)
       margin: 5,
+<<<<<<< HEAD
       opacity: 0.1
     },
     divider: {
@@ -242,6 +290,8 @@ const styles = StyleSheet.create({
       borderRadius: 5,
       paddingLeft: 20,
       margin: 5,
+=======
+>>>>>>> c8725a3 (Updated Profile styling)
       borderColor: '#0782F9',
       backgroundColor: 'white'
     },
@@ -254,6 +304,9 @@ const styles = StyleSheet.create({
       shadowRadius: 2,
       shadowOpacity: 0.2
     }
+<<<<<<< HEAD
 =======
 >>>>>>> 9425280 (started styling profile page)
+=======
+>>>>>>> c8725a3 (Updated Profile styling)
   })
