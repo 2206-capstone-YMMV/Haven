@@ -90,5 +90,4 @@ const styles = StyleSheet.create({
     fontFamily: "Avenir",
     textAlign: "center",
     fontSize: 15,
-  },
-});
+  },})

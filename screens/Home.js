@@ -3,12 +3,13 @@ import { NavigationContainer } from "@react-navigation/native";
 import { Text } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
+
 import Map from "./Map";
 import Profile from "./Profile";
 import Posts from "./Posts";
 import MessagesTab from "./MessagesTab";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-import ImageUpload2 from "./ImageUpload2";
+
 import ReportScreen from "./ReportScreen";
 const Tab = createBottomTabNavigator();
 
@@ -73,4 +74,6 @@ export default function Home() {
       <Tab.Screen name="ReportScreen" component={ReportScreen} />
     </Tab.Navigator>
   );
-}
+    }
+
+

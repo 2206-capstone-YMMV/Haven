@@ -5,7 +5,7 @@ import { auth } from '../firebase'
 import { collection, onSnapshot, query, where, addDoc, deleteDoc, doc } from 'firebase/firestore' 
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { useNavigation } from '@react-navigation/core'
-
+import tw from 'tailwind-react-native-classnames';
 
 const Friends = () => {
     const navigation = useNavigation()
@@ -105,6 +105,7 @@ const Friends = () => {
                     setSearch('');
                 }} /> 
             </View>
+            <View style={tw`pb-52`}>
             <FlatList 
                 data={filterData}
                 contentContainerStyle={{
@@ -112,6 +113,7 @@ const Friends = () => {
                 }}
                 renderItem={renderFriend}
             />
+            </View>
     </View>
   )
 }

@@ -23,13 +23,12 @@ export default function MessagesTab({ navigation, route }) {
             if (talking.length === 0){ //if no conversations have been started only exclude the current user. not-in needs none empty array
                 talking.push(auth.currentUser.uid)
             }
-            console.log('Starting New Conversation')
+        
 
     useEffect(
         () => 
             onSnapshot(query(collection(db, 'users'), where('uid', 'not-in', talking)), (snapshot) =>
             setPeople(snapshot.docs.map(user => {
-                console.log('hi')
                 return user.data()
             }))),
           [])

@@ -13,7 +13,7 @@ export default function MessagesTab({ navigation }) {
         () => 
             onSnapshot(query(collection(db, 'Conversations'), where('user', '==', auth.currentUser?.uid)), (snapshot) =>
             setConversations(snapshot.docs.map(convo => {
-                console.log('Grabbing conversations')
+              
                 return convo.data()
             }))
             )
@@ -30,7 +30,7 @@ export default function MessagesTab({ navigation }) {
             getDocs(query(collection(db, 'users'), where('uid', 'in', otherUsersId)))
             .then(users =>
             setOtherUsers(users.docs.map(user => {
-                console.log('Grabbing Friends')
+              
                 return user.data()
             })))
         }

@@ -4,15 +4,17 @@ import { db } from '../firebase'
 import { auth } from '../firebase'
 import { collection, onSnapshot, query, where, deleteDoc, doc } from 'firebase/firestore' 
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
-
-
-
+import { connect } from "react-redux";
+import { get_Post } from "../redux";
+import tw from 'tailwind-react-native-classnames';
+import UpdatePost from './UpdatePost';
 const MyPosts = () => {
     const [posts, setPosts] = useState([])
     const [search, setSearch] = useState('')
     const filterData = posts.filter((post) => {
         return post.description.indexOf(search) >= 0
     })
+
 
     useEffect(  
         () => 
@@ -33,12 +35,14 @@ const MyPosts = () => {
             }}>
             <View>
                 <Text>Description: {item.description}</Text>
-                <Text>Contents: {item.contents}</Text>
+                <Text style={tw`mb-5`}>Contents: {item.contents}</Text>
+                <UpdatePost data={item}/>
                 <TouchableOpacity
+                style={tw`bg-red-500  w-24 mt-5 border-solid rounded-full`}
                   onPress={() => delectPost(item)}
                   >
-                  <Text >Delete Post</Text>
-                </TouchableOpacity> 
+                  <Text style={tw`text-center text-white `}>Delete Post</Text>
+                </TouchableOpacity >
             </View>
         </View>
         )
@@ -58,7 +62,7 @@ const MyPosts = () => {
                     setSearch('');
                 }} /> 
             </View>
-            <View>
+            <View style={tw`pb-52`}>
                 <FlatList 
                     data={filterData}
                     contentContainerStyle={{
@@ -68,10 +72,16 @@ const MyPosts = () => {
                 />
             </View>
     </View>
+
   )
 }
 
-export default MyPosts
+const mapDispatchToProps = (dispatch) => ({
+  getPost: (post) => dispatch(get_Post(post)),
+});
+
+
+export default connect(null, mapDispatchToProps)(MyPosts);
 
 const styles = StyleSheet.create({
     posts: {
@@ -100,4 +110,15 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "space-between",
       },
+      input: {
+        backgroundColor: 'white',
+        paddingHorizontal: 15,
+        paddingVertical: 10,
+        borderRadius: 10,
+        marginTop: 5,
+      },
 })
+
+
+
+

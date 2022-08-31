@@ -11,7 +11,7 @@ import LoginScreen from "./screens/LoginScreen";
 import SignUpScreen from "./screens/SignUpScreen";
 import Message from "./screens/Message";
 import StartConversation from "./screens/StartConversation";
-import Friends from "./screens/Fridens";
+import Friends from "./screens/Friends";
 import NewPost from "./screens/NewPost";
 import SinglePost from "./screens/SinglePost";
 import MyPosts from "./screens/MyPosts";
