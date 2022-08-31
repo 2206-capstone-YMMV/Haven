@@ -78,7 +78,7 @@ const Posts = () => {
   );
 
   const renderFriend = ({ item }) => {
-    console.log("this is an item", item);
+    // console.log("this is an item", item);
     return (
       <View
         style={{
@@ -94,10 +94,12 @@ const Posts = () => {
         }}
       >
         <View>
-          <Image
-            style={{ width: 100, height: 100 }}
-            source={{ uri: item.image }}
-          ></Image>
+          {item.image !== null && (
+            <Image
+              style={{ width: 100, height: 100 }}
+              source={{ uri: item.image }}
+            ></Image>
+          )}
           <TouchableOpacity
             onPress={() => navigation.navigate("SinglePost", { item })}
           >

@@ -73,6 +73,9 @@ const NewPost = () => {
   );
 
   const handleAddPost = async (pathUrl) => {
+    if (url == null) {
+      setUrl(null);
+    }
     await addDoc(colRef, {
       uid: auth.currentUser?.uid,
       username: profile.name,
