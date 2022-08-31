@@ -27,6 +27,7 @@ import { v4 as uuidv4 } from "uuid";
 import firebaseConfig from "../firebaseConfig.tsx";
 import { initializeApp } from "firebase/app"; //validate yourself
 
+initializeApp(firebaseConfig);
 const NewPost = () => {
   const navigation = useNavigation();
   const [location, setLocation] = useState("");
@@ -71,7 +72,7 @@ const NewPost = () => {
     []
   );
 
-  const handleAddPost = async () => {
+  const handleAddPost = async (pathUrl) => {
     await addDoc(colRef, {
       uid: auth.currentUser?.uid,
       username: profile.name,
@@ -101,55 +102,62 @@ const NewPost = () => {
   };
 
   //to pick image and display image
-  const showImagePicker = async () => {
-    const permissionResult =
-      await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (permissionResult.granted === false) {
-      alert("You've refused to allow this appp to access your photos!");
-      return;
-    }
+  // const showImagePicker = async () => {
+  //   const permissionResult =
+  //     await ImagePicker.requestMediaLibraryPermissionsAsync();
+  //   if (permissionResult.granted === false) {
+  //     alert("You've refused to allow this appp to access your photos!");
+  //     return;
+  //   }
 
-    const result = await ImagePicker.launchImageLibraryAsync({
+  //   const result = await ImagePicker.launchImageLibraryAsync({
+  //     mediaTypes: ImagePicker.MediaTypeOptions.All,
+  //     allowsEditing: true,
+  //     aspect: [4, 3],
+  //     quality: 0,
+  //   });
+
+  //   let imageUrl =
+  //     Platform.OS === "ios" ? result.uri.replace("file://", "") : result.uri;
+  //   if (!result.cancelled) {
+  //     setImage(imageUrl);
+  //   }
+  // };
+
+  //real deal sent to firebase
+  const pickImage = async () => {
+    const result = await ImagePicker.launchCameraAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
       aspect: [4, 3],
-      quality: 1,
+      quality: 0,
     });
-
     let imageUrl =
       Platform.OS === "ios" ? result.uri.replace("file://", "") : result.uri;
     if (!result.cancelled) {
       setImage(imageUrl);
     }
-  };
-
-  //real deal sent to firebase
-  const pickImage = async () => {
     try {
-      const storage = getStorage(); //the storage itself
+      const storage = getStorage();
       const path = `images/${new Date() + uuidv4()}`;
-      //new Date()
-      // const ref_con = ref(storage, 'image.jpg'); //how the image will be addressed inside the storage
-      const ref_con = ref(storage, path); //how the image will be addressed inside the storage
-
-      //convert image to array of bytes  --substep
-      const img = await fetch(image);
+      const ref_con = ref(storage, path);
+      const func = async () => {
+        await getDownloadURL(ref_con).then((x) => {
+          setUrl(x);
+        });
+      };
+      const img = await fetch(result.uri);
       const bytes = await img.blob();
-      await getDownloadURL(ref_con).then((x) => {
-        setUrl(x);
-      });
-      await uploadBytes(ref_con, bytes); //upload images
-
-      // func(); // /images/12345566
+      await uploadBytes(ref_con, bytes);
+      func(); // /images/12345566
     } catch (e) {
-      // console.log("Some Error", e.stack);
       console.log(e);
     }
   };
   const combined = async () => {
-    let path = await pickImage();
+    let pathUrl = await pickImage();
     await handleAddPost({
-      path,
+      pathUrl,
     });
   };
 
@@ -169,13 +177,13 @@ const NewPost = () => {
       {image && (
         <Image
           source={{ uri: image }}
-          style={{ width: 400, height: 400 }}
+          style={{ width: 300, height: 300 }}
         ></Image>
       )}
-      <TouchableOpacity onPress={showImagePicker} style={[styles.button]}>
-        <Text style={styles.buttonOutLineText}>Upload Photo</Text>
+      <TouchableOpacity onPress={pickImage} style={[styles.button]}>
+        <Text style={styles.buttonOutLineText}>Take Photo</Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={combined} style={[styles.button]}>
+      <TouchableOpacity onPress={handleAddPost} style={[styles.button]}>
         <Text style={styles.buttonOutLineText}>Submit</Text>
       </TouchableOpacity>
     </View>
