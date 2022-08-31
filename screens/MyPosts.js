@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Text, View, FlatList, StyleSheet, TextInput, TouchableOpacity } from "react-native";
+import { Text, View, FlatList, StyleSheet, TextInput, TouchableOpacity, Alert } from "react-native";
 import { db } from '../firebase'
 import { auth } from '../firebase'
 import { collection, onSnapshot, query, where, deleteDoc, doc } from 'firebase/firestore' 
@@ -23,8 +23,25 @@ const MyPosts = () => {
         )
       ,[])
       
-      const delectPost = (post) => {
+      const deletePost = (post) => {
         deleteDoc(doc(db, 'Post', post.id))
+      }
+
+      const deleteAlert = (item) => {
+        Alert.alert(
+          `DELETION`,
+          `Are you sure you want to delete ${item.description}`,
+          [
+            {
+              text: "Delete",
+              onPress: () => deletePost(item)
+            },
+            {
+              text: "Cancel",
+              style: "cancel"
+            }
+          ]
+        )
       }
       
 
@@ -39,7 +56,7 @@ const MyPosts = () => {
                 <UpdatePost data={item}/>
                 <TouchableOpacity
                 style={tw`bg-red-500  w-24 mt-5 border-solid rounded-full`}
-                  onPress={() => delectPost(item)}
+                  onPress={() => deleteAlert(item)}
                   >
                   <Text style={tw`text-center text-white `}>Delete Post</Text>
                 </TouchableOpacity >
