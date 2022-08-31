@@ -259,20 +259,17 @@ const MapScreen = (props) => {
                     underlineColorAndroid='transparent'
                     onChangeText={(text) => setSearch(text)}
                     />
-                    <MaterialCommunityIcons style={styles.iconStyle} name="backspace-outline"  size={23}onPress={() => {
-                        setSearch('');
-                    }} /> 
           </View>
         {!location ? (
           <Text style={{ textAlign: "center" }}>{text}</Text>
         ) : (
           <View style={styles.container}>
 
-                 <View style={styles.searchWrapperStyle}>
+          <View style={styles.searchWrapperStyle}>
             <SelectDropdown 
               data={dropDownData}
               defaultValue='markers'
-              style={styles.textInput}
+              style={styles.filter}
               onSelect={(selectedItem) => {
                 setDropDownValue(selectedItem)
               }}
@@ -280,6 +277,7 @@ const MapScreen = (props) => {
               <SelectDropdown 
               data={distanceVlaue}
               defaultValue='All'
+              style={styles.filter}
               onSelect={(selectedItem) => {
                 setDistanceDropValue(selectedItem)
               }}
@@ -296,7 +294,7 @@ const MapScreen = (props) => {
                 }}
               >
                 <Text style={styles.formLabel}> Location Form </Text>
-                <View>
+                <View zIndex={10}>
                   <TextInput
                     onChangeText={(text) => setTitle(text)}
                     placeholder="Enter Title"
@@ -306,6 +304,7 @@ const MapScreen = (props) => {
                     onChangeText={(text) => setContent(text)}
                     placeholder="Content"
                     multiline
+                    blurOnSubmit={true}
                     numberOfLines={4}
                     style={{ ...styles.inputStyle, height: 80 }}
                   />
@@ -317,6 +316,8 @@ const MapScreen = (props) => {
                     setValue={setValue}
                     setItems={setItems}
                     style={styles.dropdown}
+                    stickyHeader={true}
+                    zIndex={10}
                   />
                   <DropDownPicker
                     open={gifOpen}
@@ -326,8 +327,9 @@ const MapScreen = (props) => {
                     setValue={setGifValue}
                     setItems={setGifItems}
                     style={styles.dropdown}
+                    stickyHeader={true}
+                    zIndex={9}
                   />
-
 
                   {user === 'Helper' ? 
 
@@ -345,7 +347,7 @@ const MapScreen = (props) => {
                     (<RNDateTimePicker value={date} onChange={settingDate} mode="datetime" minimumDate={Date.now()}/>): null
                   }   
                 </View>
-                <View>
+                <View zIndex={9}>
                   <Button
                     title="Submit"
                     onPress={() => sendInput(title, content, value, gifValue, date)}
@@ -609,7 +611,9 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: "#DCDCDC",
   },
-
+  filter: {
+    backgroundColor: "black"
+  },
   searchWrapperStyle: {
     flexDirection: "row",
     justifyContent: "space-between",
