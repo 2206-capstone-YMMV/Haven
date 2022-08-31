@@ -169,7 +169,7 @@ const NewPost = () => {
   );
 };
 
-export default NewPost
+export default NewPost;
 
 const styles = StyleSheet.create({
   input: {
