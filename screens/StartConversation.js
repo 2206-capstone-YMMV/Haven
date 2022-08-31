@@ -1,12 +1,18 @@
 import React, { useEffect, useState } from 'react'
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, TextInput, ScrollView } from "react-native";
 import { auth } from '../firebase'
 import { db } from '../firebase'
 import { collection, onSnapshot, query, where, addDoc } from 'firebase/firestore' 
+import { LinearGradient } from 'expo-linear-gradient';
 
 export default function MessagesTab({ navigation, route }) {
     
     const [people, setPeople] = useState([])
+    const [search, setSearch] = useState('')
+
+    const filteredPeople = people.filter((user) => {
+        return user.name.indexOf(search) >= 0
+    })
 
     let { conversations } = route.params
             let talking = []
@@ -37,23 +43,60 @@ export default function MessagesTab({ navigation, route }) {
     }
     
     return (
-        <View style={{ flex: 1, alignItems: 'center'}}>
-            <Text style={styles.header}>Start a new conversation with</Text>
-            {people.map((person,index) => <Text key={index} style={styles.person} onPress={() => newConversation(person)}>{person.name}</Text>)}
-        </View>
+        <LinearGradient colors={["#8c5aa5", "#f2e797"]} style={{padding: 5, flex: 1, alignItems: 'center'}}>
+            <Text style={styles.header}>New Conversation</Text>
+            <TextInput 
+                style={styles.textInput}
+                value={search}
+                placeholder='Search By Name'
+                underlineColorAndroid='transparent'
+                onChangeText={(text) => setSearch(text)}
+            />
+            <ScrollView contentContainerStyle={styles.list}>
+                {filteredPeople.map((person,index) => {
+                if (person.role === 'helper'){
+                    return <Text key={index} style={[styles.person, styles.helper]} onPress={() => newConversation(person)}>{person.name}</Text>
+                }
+                else{
+                    return <Text key={index} style={styles.person} onPress={() => newConversation(person)}>{person.name}</Text>
+                }})}
+            </ScrollView>
+        </LinearGradient>
     )
 }
 
 
 const styles = StyleSheet.create({
     header: {
-        fontSize: '20%'
+        fontSize: '50%'
+    },
+    list: {
+        flexDirection: "row",
+        flexWrap: "wrap",
+        justifyContent: "center"
     },
     person: {
         backgroundColor: 'white',
-        paddingVertical: 5,
-        paddingHorizontal: 5,
-        marginTop: 5,
-        borderRadius: 10
-    }
+        padding: 20,
+        margin: 10,
+        borderRadius: 10,
+        borderColor: "navy",
+        borderWidth: 5,
+        overflow: "hidden",
+        fontSize: 20,
+    },
+    helper: {
+        borderColor: "black"
+    },
+    textInput: {
+        width: '70%',
+        borderWidth: 1,
+        paddingLeft: 20,
+        margin: 5,
+        fontSize: 16,
+        paddingVertical: 8,
+        marginBottom: 30,
+        borderColor: '#009688',
+        backgroundColor: 'white',
+      },
 })
