@@ -24,9 +24,8 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 import { getStorage, ref, getDownloadURL, listAll } from "firebase/storage"; //access the storage database
 import firebaseConfig from "../firebaseConfig.tsx";
 import { initializeApp } from "firebase/app"; //validate yourself
-import Ionicons from "@expo/vector-icons/Ionicons";
-initializeApp(firebaseConfig);
 
+initializeApp(firebaseConfig);
 import { useNavigation } from "@react-navigation/core";
 import { get_Post } from "../redux";
 import { connect } from "react-redux";
@@ -51,6 +50,25 @@ const Posts = () => {
     []
   );
 
+  // useEffect(() => {
+  //   const func = async () => {
+  //     await getDownloadURL(
+  //       ref(
+  //         getStorage(),
+  //         url
+  //       )
+  //     )
+  //       .then((x) => {
+  //         setUrl(x);
+  //       })
+  //       .catch((e) => console.log("Errors while downloading => ", e));
+  //   };
+
+  //   if (url == undefined) {
+  //     func();
+  //   }
+  // }, []);
+
   useEffect(
     () =>
       onSnapshot(colRef, (snapshot) =>
@@ -60,6 +78,7 @@ const Posts = () => {
   );
 
   const renderFriend = ({ item }) => {
+    // console.log("this is an item", item);
     return (
       <View
         style={{
@@ -101,7 +120,9 @@ const Posts = () => {
       </View>
     );
   };
+
   const like = (id, postLikes) => {
+    console.log("Updating likes");
     getDocs(
       query(
         collection(db, "Likes"),

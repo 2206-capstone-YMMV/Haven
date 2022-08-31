@@ -21,6 +21,8 @@ import {
 } from "firebase/firestore";
 import { db, auth } from "../firebase";
 
+import Ionicons from "@expo/vector-icons/Ionicons";
+
 export const inappropriate = (id, inappropriate) => {
   getDocs(
     query(

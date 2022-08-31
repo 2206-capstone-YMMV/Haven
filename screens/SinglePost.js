@@ -46,7 +46,8 @@ const SinglePost = (props) => {
           setComments(
             snapshot.docs
               .map((comment) => {
-                // console.log("grabbing comments");
+                 console.log("grabbing comments");
+
                 return comment.data();
               })
               .sort((a, b) => a.timestamp - b.timestamp)
