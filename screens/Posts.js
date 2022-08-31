@@ -53,6 +53,13 @@ const Posts = () => {
     []
   );
 
+  useEffect(
+    () =>
+      onSnapshot(colRef, (snapshot) =>
+        setPosts(snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
+      ),
+    []
+  );
 
   const renderFriend = ({ item }) => {
     console.log("this is an item", item);
@@ -72,10 +79,9 @@ const Posts = () => {
       >
         <View>
           <Image
-            style={{ width: 50, height: 50 }}
+            style={{ width: 100, height: 100 }}
             source={{ uri: item.image }}
           ></Image>
-
           <TouchableOpacity
             onPress={() => navigation.navigate("SinglePost", { item })}
           ></TouchableOpacity>
