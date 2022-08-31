@@ -37,7 +37,7 @@ const NewPost = () => {
   const [profile, setProfile] = useState({});
   const colRef = collection(db, "Post");
   const [image, setImage] = useState("");
-  const [url, setUrl] = useState();
+  const [url, setUrl] = useState('');
 
   //const [pickedImagePath, setPickedImagePath] = useState("");
   useEffect(() => {
@@ -73,9 +73,6 @@ const NewPost = () => {
   );
 
   const handleAddPost = async (pathUrl) => {
-    if (url == null) {
-      setUrl(null);
-    }
     await addDoc(colRef, {
       uid: auth.currentUser?.uid,
       username: profile.name,
@@ -85,6 +82,7 @@ const NewPost = () => {
       createAt: serverTimestamp(),
       contents: contents,
       image: url,
+      likes: 0,
       reports: {
         spam: 0,
         inappropriate: 0,
