@@ -7,6 +7,7 @@ import {
   TextInput,
   TouchableOpacity,
   Image,
+  Dimensions,
 } from "react-native";
 import { auth, db } from "../firebase";
 import {
@@ -24,22 +25,35 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 import { getStorage, ref, getDownloadURL, listAll } from "firebase/storage"; //access the storage database
 import firebaseConfig from "../firebaseConfig.tsx";
 import { initializeApp } from "firebase/app"; //validate yourself
+import Entypo from "react-native-vector-icons/Entypo";
+import SearchBar from "react-native-dynamic-search-bar";
+import { useFonts } from "expo-font";
 
 initializeApp(firebaseConfig);
 import { useNavigation } from "@react-navigation/core";
 import { get_Post } from "../redux";
 import { connect } from "react-redux";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const Posts = () => {
   const colRef = collection(db, "Post");
   const [posts, setPosts] = useState([]);
   const [search, setSearch] = useState("");
   const [url, setUrl] = useState();
+  const date = new Date();
 
   const navigation = useNavigation();
 
   const filterData = posts.filter((post) => {
     return post.description.indexOf(search) >= 0;
+  });
+
+  const [fontsLoaded] = useFonts({
+    "signika-bold": require("../fonts/SignikaNegative-Bold.ttf"),
+    "signika-light": require("../fonts/SignikaNegative-Light.ttf"),
+    "signika-medium": require("../fonts/SignikaNegative-Medium.ttf"),
+    "signika-regular": require("../fonts/SignikaNegative-Regular.ttf"),
+    "signika-semi": require("../fonts/SignikaNegative-SemiBold.ttf"),
   });
 
   useEffect(
@@ -50,25 +64,6 @@ const Posts = () => {
     []
   );
 
-  // useEffect(() => {
-  //   const func = async () => {
-  //     await getDownloadURL(
-  //       ref(
-  //         getStorage(),
-  //         url
-  //       )
-  //     )
-  //       .then((x) => {
-  //         setUrl(x);
-  //       })
-  //       .catch((e) => console.log("Errors while downloading => ", e));
-  //   };
-
-  //   if (url == undefined) {
-  //     func();
-  //   }
-  // }, []);
-
   useEffect(
     () =>
       onSnapshot(colRef, (snapshot) =>
@@ -78,46 +73,88 @@ const Posts = () => {
   );
 
   const renderFriend = ({ item }) => {
-    // console.log("this is an item", item);
+    let milliDate = item.createAt.seconds;
+    let unix = Math.floor(date.getTime() / 1000);
+    let diff = (unix - milliDate) / 3600;
+    let timeDisplay;
+
+    if (diff < 1) {
+      timeDisplay = Math.ceil(diff * 60) + "m";
+    } else {
+      timeDisplay = Math.ceil(diff) + "h";
+    }
+
     return (
-      <View
-        style={{
-          flexDirection: "row",
-          padding: 20,
-          marginBottom: 20,
-          backgroundColor: "white",
-          borderRadius: 12,
-          shadowColor: "#000",
-          shadowOffset: { width: 0, height: 10 },
-          shadowOpacity: 0.3,
-          shadowRadius: 20,
-        }}
+      <TouchableOpacity
+        onPress={() => navigation.navigate("SinglePost", { item })}
       >
-        <View>
-          {item.image !== null && (
-            <Image
-              style={{ width: 100, height: 100 }}
-              source={{ uri: item.image }}
-            ></Image>
-          )}
-          <TouchableOpacity
-            onPress={() => navigation.navigate("SinglePost", { item })}
-          >
-            <Text style={{ fontSize: 22, fontWeight: "700" }}>
-              {item.description}
-            </Text>
-            <Text style={{ fontSize: 18, opacity: 0.7 }}>
-              posted by: {item.username}
-            </Text>
-            <Text style={{ fontSize: 14, opacity: 0.8, color: "#0099cc" }}>
-              {item.contents}
-            </Text>
-            <Text onPress={() => like(item.id, item.likes)}>
-              Like Likes: {item.likes}
-            </Text>
-          </TouchableOpacity>
+        <View style={styles.container}>
+          <View style={styles.innerContainer}>
+            <View style={styles.photoContainer}>
+              <View style={styles.innerPhotoContainer}>
+                {item.image ? (
+                  <Image
+                    style={styles.photo}
+                    source={{ uri: item.image }}
+                  ></Image>
+                ) : (
+                  <Entypo name={"image"} style={styles.photo} size={60} />
+                )}
+              </View>
+            </View>
+
+            <View style={styles.info}>
+              <View style={styles.userDetails}>
+                <Text style={styles.textTitle}>{item.description}</Text>
+                <Text
+                  style={{
+                    ...styles.textContent,
+                    fontFamily: "signika-semi",
+                  }}
+                >
+                  by: {item.username} • {timeDisplay}
+                </Text>
+              </View>
+              <View style={styles.textContentContainer}>
+                <Text style={styles.textContent}>{item.contents}</Text>
+              </View>
+
+              <View style={styles.actionsContainer}>
+                <TouchableOpacity
+                  style={styles.likeButton}
+                  size={15}
+                  name="heart"
+                  onPress={() => like(item.id, item.likes)}
+                >
+                  {item.likes > 0 ? (
+                    <Entypo
+                      name={"heart"}
+                      size={18}
+                      style={{ marginLeft: 4 }}
+                      color={item.likes > 0 ? "red" : "black"}
+                    />
+                  ) : (
+                    <Entypo
+                      name={"heart-outlined"}
+                      size={18}
+                      style={{ marginLeft: 4 }}
+                      color={item.likes > 0 ? "red" : "black"}
+                    />
+                  )}
+                  <Text
+                    style={[
+                      styles.likeButtonIcon,
+                      { display: item.likes > 0 ? "block" : "none" },
+                    ]}
+                  >
+                    {item.likes}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
         </View>
-      </View>
+      </TouchableOpacity>
     );
   };
 
@@ -145,52 +182,113 @@ const Posts = () => {
   };
 
   return (
-    <View>
-      <View>
-        <Text
-          onPress={() => navigation.navigate("NewPost")}
-          style={{ fontSize: 26, fontWeight: "bold" }}
-        >
-          New Posts
-        </Text>
-        <Text
-          onPress={() => navigation.navigate("MyPosts")}
-          style={{ fontSize: 26, fontWeight: "bold" }}
-        >
-          My Posts
-        </Text>
-      </View>
-      <View>
-        <View style={styles.searchWrapperStyle}>
-          <TextInput
-            style={styles.textInput}
+    <>
+      <MaterialCommunityIcons
+        name="plus-circle"
+        size={50}
+        style={styles.addButton}
+        onPress={() => navigation.navigate("NewPost")}
+      />
+      <View style={{ marginTop: 50, backgroundColor: "#fff" }}>
+        <View>
+          <SearchBar
+            style={styles.formField}
             value={search}
-            placeholder="Search By description"
+            fontColor="#fff"
+            // placeholder="Search by description..."
             underlineColorAndroid="transparent"
             onChangeText={(text) => setSearch(text)}
           />
-          <MaterialCommunityIcons
-            style={styles.iconStyle}
-            name="backspace-outline"
-            size={23}
-            onPress={() => {
-              setSearch("");
-            }}
-          />
+          <FlatList data={filterData} renderItem={renderFriend} />
         </View>
-        <FlatList
-          data={filterData}
-          contentContainerStyle={{
-            padding: 15,
-          }}
-          renderItem={renderFriend}
-        />
       </View>
-    </View>
+    </>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    borderBottomColor: "#ECECEC",
+    borderBottomWidth: 0.5,
+    flexDirection: "column",
+    backgroundColor: "#fff",
+  },
+  innerContainer: {
+    flex: 1,
+    borderColor: "green",
+    flexDirection: "row",
+    borderWidth: 0,
+    height: "auto",
+  },
+  photoContainer: {
+    flex: 0.23,
+    borderColor: "yellow",
+    flexDirection: "column",
+    borderWidth: 0,
+  },
+  innerPhotoContainer: { height: 100, alignItems: "center" },
+  photo: {
+    width: 70,
+    height: 70,
+    borderRadius: 10,
+    left: 2,
+    marginTop: 10,
+  },
+  info: {
+    flex: 0.77,
+    borderColor: "yellow",
+    flexDirection: "column",
+    borderWidth: 0,
+    marginTop: 5,
+  },
+  userDetails: {
+    flex: 1,
+    borderColor: "blue",
+    borderWidth: 0,
+    marginTop: 5,
+  },
+  textTitle: { color: "black", fontWeight: "bold", fontFamily: "signika-bold" },
+  textContentContainer: { flex: 1, borderColor: "grey", borderWidth: 0 },
+  textContent: {
+    color: "black",
+    paddingRight: 10,
+    fontFamily: "signika-light",
+  },
+  actionsContainer: {
+    flex: 1,
+    borderColor: "blue",
+    borderWidth: 0,
+    marginTop: 5,
+    flexDirection: "row",
+    paddingBottom: 5,
+  },
+  likeButton: {
+    padding: 5,
+    flex: 0.25,
+    alignItems: "center",
+    flexDirection: "row",
+    borderColor: "red",
+    borderWidth: 0,
+    color: "black",
+  },
+  likeButtonIcon: {
+    position: "absolute",
+    left: 27,
+    marginLeft: 3,
+  },
+  addButton: {
+    position: "absolute",
+    color: "#ECECEC",
+    flex: 1,
+    zIndex: 100,
+    bottom: 80,
+    left: 20,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 7 },
+    shadowOpacity: 0.5,
+    shadowRadius: 4,
+  },
   posts: {
     marginTop: 10,
     marginBottom: 30,
@@ -212,39 +310,15 @@ const styles = StyleSheet.create({
     marginTop: 12,
     marginHorizontal: 8,
   },
-  searchWrapperStyle: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-  line: {
-    borderWidth: 1,
-    margin: 5,
-    opacity: 0.1,
-  },
-  divider: {
-    borderWidth: 1,
-    margin: 5,
-    opacity: 0.3,
-  },
-  button: {
-    backgroundColor: "#0782F9",
-    padding: 15,
-    borderRadius: 10,
-    alignItems: "center",
-    alignSelf: "center",
-    marginTop: 5,
-    margin: 5,
-    overflow: "hidden",
-  },
-  shadow: {
-    shadowColor: "black",
-    shadowOffset: { width: 4, height: 4 },
-    shadowRadius: 1,
-    shadowOpacity: 0.2,
-  },
-  buttonContainer: {
-    flexDirection: "row",
-    justifyContent: "space-evenly",
+  formField: {
+    padding: 12,
+    paddingLeft: 20,
+    paddingRight: 20,
+    borderRadius: 20,
+    fontSize: 18,
+    height: 50,
+    marginBottom: 15,
+    color: "#ECECEC",
   },
 });
 
