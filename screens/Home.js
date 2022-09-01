@@ -76,6 +76,7 @@ export default function Home() {
         name="Posts"
         component={Posts}
         options={{
+          headerShown: false,
           tabBarIcon: ({ focused }) => (
             <View
               style={{

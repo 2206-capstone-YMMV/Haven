@@ -94,11 +94,7 @@ const Posts = () => {
                     source={{ uri: item.image }}
                   ></Image>
                 ) : (
-                  <Entypo
-                    name={"folder-images"}
-                    style={styles.photo}
-                    size={60}
-                  />
+                  <Entypo name={"image"} style={styles.photo} size={60} />
                 )}
               </View>
             </View>
@@ -114,7 +110,7 @@ const Posts = () => {
                 <Text style={styles.textContent}>{item.contents}</Text>
               </View>
 
-              <View style={styles.tweetActionsContainer}>
+              <View style={styles.actionsContainer}>
                 <TouchableOpacity
                   style={styles.likeButton}
                   size={15}
@@ -177,14 +173,12 @@ const Posts = () => {
   };
 
   return (
-    <View>
+    <View style={{ marginTop: 50 }}>
+      <TouchableOpacity
+        onPress={() => navigation.navigate("NewPost")}
+        style={styles.addButton}
+      />
       <View>
-        <Text
-          onPress={() => navigation.navigate("NewPost")}
-          style={{ fontSize: 26, fontWeight: "bold" }}
-        >
-          New Posts
-        </Text>
         <Text
           onPress={() => navigation.navigate("MyPosts")}
           style={{ fontSize: 26, fontWeight: "bold" }}
@@ -243,13 +237,14 @@ const styles = StyleSheet.create({
     height: 70,
     borderRadius: 10,
     left: 2,
-    margin: 10,
+    marginTop: 10,
   },
   info: {
     flex: 0.77,
     borderColor: "yellow",
     flexDirection: "column",
     borderWidth: 0,
+    marginTop: 5,
   },
   userDetails: {
     flex: 1,
@@ -260,7 +255,7 @@ const styles = StyleSheet.create({
   textTitle: { color: "black", fontWeight: "bold" },
   textContentContainer: { flex: 1, borderColor: "grey", borderWidth: 0 },
   textContent: { color: "black", paddingRight: 10 },
-  tweetActionsContainer: {
+  actionsContainer: {
     flex: 1,
     borderColor: "blue",
     borderWidth: 0,
@@ -281,6 +276,17 @@ const styles = StyleSheet.create({
     position: "absolute",
     left: 27,
     marginLeft: 3,
+  },
+  addButton: {
+    position: "absolute",
+    flex: 1,
+    zIndex: 100,
+    width: 100,
+    height: 100,
+    borderRadius: 40,
+    backgroundColor: "orange",
+    top: 150,
+    right: 10,
   },
   posts: {
     marginTop: 10,
