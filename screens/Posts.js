@@ -40,6 +40,7 @@ const Posts = () => {
   const [posts, setPosts] = useState([]);
   const [search, setSearch] = useState("");
   const [url, setUrl] = useState();
+  const date = new Date();
 
   const navigation = useNavigation();
 
@@ -72,7 +73,17 @@ const Posts = () => {
   );
 
   const renderFriend = ({ item }) => {
-    // console.log("this is an item", item);
+    let milliDate = item.createAt.seconds;
+    let unix = Math.floor(date.getTime() / 1000);
+    let diff = (unix - milliDate) / 3600;
+    let timeDisplay;
+
+    if (diff < 1) {
+      timeDisplay = Math.ceil(diff * 60) + "m";
+    } else {
+      timeDisplay = Math.ceil(diff) + "h";
+    }
+
     return (
       <TouchableOpacity
         onPress={() => navigation.navigate("SinglePost", { item })}
@@ -101,7 +112,7 @@ const Posts = () => {
                     fontFamily: "signika-semi",
                   }}
                 >
-                  posted by: {item.username}
+                  by: {item.username} • {timeDisplay}
                 </Text>
               </View>
               <View style={styles.textContentContainer}>
