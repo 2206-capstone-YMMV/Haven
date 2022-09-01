@@ -77,7 +77,7 @@ const SignUpScreen = () => {
           </View>
         </ImageBackground>
         <View style={styles.bottomView}>
-          <View style={{ padding: 40 }}>
+          <View style={{ padding: 40, zIndex: 10 }}>
             <Text
               style={{
                 color: "#4632A1",
