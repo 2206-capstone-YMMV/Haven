@@ -120,7 +120,9 @@ const MapScreen = (props) => {
   React.useEffect(
     () =>
       onSnapshot(collection(db, "users"), where("uid", "==", auth.currentUser?.uid), (snapshot) =>
-        console.log(snapshot.docs[0].data().role, snapshot.docs[0].id)
+      {
+        setUser(snapshot.docs[0].data().role)
+      }
       ),
     []
   );

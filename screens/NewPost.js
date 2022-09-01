@@ -37,7 +37,7 @@ const NewPost = () => {
   const [profile, setProfile] = useState({});
   const colRef = collection(db, "Post");
   const [image, setImage] = useState("");
-  const [url, setUrl] = useState('');
+  const [url, setUrl] = useState(null);
 
   //const [pickedImagePath, setPickedImagePath] = useState("");
   useEffect(() => {
@@ -60,6 +60,7 @@ const NewPost = () => {
     lat = location.coords.latitude;
     lon = location.coords.longitude;
   }
+
   useEffect(
     () =>
       onSnapshot(
@@ -127,9 +128,6 @@ const NewPost = () => {
 
   //real deal sent to firebase
   const pickImage = async () => {
-    if (url == null) {
-      setUrl(null);
-    }
     const result = await ImagePicker.launchCameraAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
