@@ -26,6 +26,7 @@ import "react-native-get-random-values";
 import { v4 as uuidv4 } from "uuid";
 import firebaseConfig from "../firebaseConfig.tsx";
 import { initializeApp } from "firebase/app"; //validate yourself
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 
 initializeApp(firebaseConfig);
 const NewPost = () => {
@@ -167,14 +168,16 @@ const NewPost = () => {
     <View>
       <TextInput
         style={styles.input}
-        placeholder="description"
+        placeholder="Title"
         onChangeText={(text) => setDescription(text)}
       />
       <TextInput
-        style={styles.input}
-        placeholder="contents"
+        style={{ ...styles.input, height: "40%" }}
+        placeholder="Content"
         onChangeText={(text) => setContents(text)}
-        multiline={true}
+        multiline
+        blurOnSubmit={true}
+        numberOfLines={4}
       />
       {image && (
         <Image
@@ -183,10 +186,10 @@ const NewPost = () => {
         ></Image>
       )}
       <TouchableOpacity onPress={pickImage} style={[styles.button]}>
-        <Text style={styles.buttonOutLineText}>Take Photo</Text>
+        <MaterialCommunityIcons name="camera" style={{fontSize: "60%"}}/>
       </TouchableOpacity>
       <TouchableOpacity onPress={handleAddPost} style={[styles.button]}>
-        <Text style={styles.buttonOutLineText}>Submit</Text>
+        <Text style={{fontSize: "30%"}}>Submit</Text>
       </TouchableOpacity>
     </View>
   );
@@ -200,13 +203,16 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     paddingVertical: 10,
     borderRadius: 10,
-    marginTop: 5,
+    overflow: "hidden",
+    margin: 20,
+    fontSize: 20
   },
   button: {
     backgroundColor: "#0782F9",
-    width: "100%",
+    width: "50%",
     padding: 15,
     borderRadius: 10,
+    alignSelf: "center",
     alignItems: "center",
     marginVertical: 15,
   },

@@ -80,8 +80,6 @@ const MapScreen = (props) => {
   const [date, setDate] = React.useState(new Date())
   const [user, setUser] = React.useState(null)
 
-  console.log(user)
-
   const colRef = collection(db, "Post");
   const locationCollectionRef = collection(db, "location");
 
@@ -294,7 +292,6 @@ const MapScreen = (props) => {
                     placeholder="Content"
                     multiline
                     blurOnSubmit={true}
-                    numberOfLines={4}
                     style={{ ...styles.inputStyle, height: 80 }}
                   />
                   <DropDownPicker
