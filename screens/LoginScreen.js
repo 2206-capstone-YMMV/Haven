@@ -18,7 +18,7 @@ import * as SplashScreen from "expo-splash-screen";
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [dataLoad, setDataLoad] = useState(false);
+
   const [fontsLoaded] = useFonts({
     "signika-bold": require("../fonts/SignikaNegative-Bold.ttf"),
     "signika-light": require("../fonts/SignikaNegative-Light.ttf"),

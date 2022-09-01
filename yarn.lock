@@ -10174,6 +10174,13 @@
   dependencies:
     "prop-types" "^15.7.2"
 
+"react-native-animated-splash-screen@^2.0.5":
+  "integrity" "sha512-VTZmcYHQq8lxtVtiXQFJKGSSftewI+F3hgLY0ONBA2g3GP/jIgLJHoShup4HBLeA0Q2mjvyNT39JpfTDcLKtHQ=="
+  "resolved" "https://registry.npmjs.org/react-native-animated-splash-screen/-/react-native-animated-splash-screen-2.0.5.tgz"
+  "version" "2.0.5"
+  dependencies:
+    "prop-types" "^15.7.2"
+
 "react-native-async-storage@^0.0.1":
   "integrity" "sha512-EwOIpNfwMiELMnS7HDzgyX2xO4TALK95O473Z6Kai5Il5j/03yTTErwMtvoYnA0OKUHd1R54ptmbbMukUH03Xg=="
   "resolved" "https://registry.npmjs.org/react-native-async-storage/-/react-native-async-storage-0.0.1.tgz"

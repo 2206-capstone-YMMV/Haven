@@ -89,7 +89,10 @@ const SignUpScreen = () => {
             </Text>
             <Text style={{ fontFamily: "signika-light" }}>
               Already have an account?
-              <Text style={{ color: "red", fontFamily: "signika-regular" }}>
+              <Text
+                onPress={() => navigation.navigate("Login")}
+                style={{ color: "red", fontFamily: "signika-regular" }}
+              >
                 {" "}
                 Sign in now
               </Text>
