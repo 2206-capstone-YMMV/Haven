@@ -30,10 +30,6 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 import { connect } from "react-redux";
 import { get_Post } from "../redux";
 import DropDownPicker from "react-native-dropdown-picker";
-import DateTimePicker from '@react-native-community/datetimepicker'
-
-
-import SelectDropdown from 'react-native-select-dropdown'
 import Gifs from "../gifs/gifs";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
 import getDistance from 'geolib/es/getDistance'
@@ -53,16 +49,16 @@ const MapScreen = (props) => {
   const [isVis, setIsVis] = React.useState(false);
   const [title, setTitle] = React.useState("");
   const [content, setContent] = React.useState("");
+  const [search, setSearch] = React.useState('')
+
   const [open, setOpen] = React.useState(false);
   const [gifOpen, setGifOpen] = React.useState(false)
   const [eventOpen, setEventOpen] = React.useState(false)
   const [value, setValue] = React.useState(null);
   const [gifValue, setGifValue] = React.useState(null)
   const [eventValue, setEventValue] = React.useState(false)
-
-  const [search, setSearch] = React.useState('')
   const [dropDownValue, setDropDownValue] = React.useState('markers')
-  const [distanceDropValue, setDistanceDropValue] = React.useState('All')
+  const [distanceValue, setDistanceValue] = React.useState('All')
 
   const [items, setItems] = React.useState([
     { label: "Food", value: "food" },
@@ -79,14 +75,12 @@ const MapScreen = (props) => {
     {label: "Is Event", value: true},
     {label: "Is Location", value: false}
   ])
+
   const [date, setDate] = React.useState(new Date())
   const [user, setUser] = React.useState(null)
 
   const colRef = collection(db, "Post");
   const locationCollectionRef = collection(db, "location");
-
-  const dropDownData = ['markers', 'posts']
-  const distanceVlaue = ['10', '500', 'All']
 
   React.useEffect(() => {
     (async () => {
@@ -248,42 +242,34 @@ const MapScreen = (props) => {
       return po.description.indexOf(search) >= 0
     })
 
+  const dropDownSwitch = () => {
+    if (dropDownValue === 'markers'){
+      setDropDownValue('posts')
+    }
+    else{
+      setDropDownValue('markers')
+    }
+  }
+
+  const distanceSwitch = () => {
+    if (distanceValue === 'All'){
+      setDistanceValue('10')
+    }
+    else if (distanceValue === '10'){
+      setDistanceValue('500')
+    }
+    else{
+      setDistanceValue('All')
+    }
+  }
+
   return (
     <>
       <View>
-          <View style={styles.searchWrapperStyle}>
-            <TextInput 
-                    style={styles.textInput}
-                    value={search}
-                    placeholder='Search By Content'
-                    underlineColorAndroid='transparent'
-                    onChangeText={(text) => setSearch(text)}
-                    />
-          </View>
         {!location ? (
           <Text style={{ textAlign: "center" }}>{text}</Text>
         ) : (
           <View style={styles.container}>
-
-          <View style={styles.searchWrapperStyle}>
-            <SelectDropdown 
-              data={dropDownData}
-              defaultValue='markers'
-              style={styles.filter}
-              onSelect={(selectedItem) => {
-                setDropDownValue(selectedItem)
-              }}
-            />
-              <SelectDropdown 
-              data={distanceVlaue}
-              defaultValue='All'
-              style={styles.filter}
-              onSelect={(selectedItem) => {
-                setDistanceDropValue(selectedItem)
-              }}
-            />
-          </View>
-
             <Modal visible={isVis}>
               <View
                 style={{
@@ -380,7 +366,7 @@ const MapScreen = (props) => {
                     />
                   ))}
 
-{Number(distanceDropValue ) == 10 && dropDownValue == 'markers'? marker10().map((pin) => (
+{Number(distanceValue ) == 10 && dropDownValue == 'markers'? marker10().map((pin) => (
           <Marker
           key={pin.id}
           coordinate={{ latitude: pin.coords._lat, longitude: pin.coords._long }}
@@ -392,7 +378,7 @@ const MapScreen = (props) => {
                     source={{uri: Gifs[pin.gif]}} />) : null}
         </Marker>
               )) : ''}
-              {Number(distanceDropValue ) == 500 && dropDownValue == 'markers'? marker500().map((pin) => (
+              {Number(distanceValue ) == 500 && dropDownValue == 'markers'? marker500().map((pin) => (
       <Marker
         key={pin.id}
         coordinate={{ latitude: pin.coords._lat, longitude: pin.coords._long }}
@@ -404,11 +390,11 @@ const MapScreen = (props) => {
                   source={{uri: Gifs[pin.gif]}} />) : null}
       </Marker>
               )) : ''}
-                {distanceDropValue  == 'All' && dropDownValue == 'markers'? mapMarkerAll() : ''}
+                {distanceValue  == 'All' && dropDownValue == 'markers'? mapMarkerAll() : ''}
 
 
 
-                 {Number(distanceDropValue) == 10 && dropDownValue === 'posts'? post10().map((item, index) => (
+                 {Number(distanceValue) == 10 && dropDownValue === 'posts'? post10().map((item, index) => (
 
                     <Marker
                       keyExtractor={item.email}
@@ -446,7 +432,7 @@ const MapScreen = (props) => {
                       </Callout>
                     </Marker>
                   )) : ''}
-                  {Number(distanceDropValue) == 500 && dropDownValue === 'posts'? post500().map((item, index) => (
+                  {Number(distanceValue) == 500 && dropDownValue === 'posts'? post500().map((item, index) => (
                     <Marker
                       keyExtractor={item.email}
                       coordinate={item.location}
@@ -478,7 +464,7 @@ const MapScreen = (props) => {
                       </Callout>
                     </Marker>
                   )) : ''}
-                   {distanceDropValue == 'All' && dropDownValue === 'posts'? filterPostsData.map((item, index) => (
+                   {distanceValue == 'All' && dropDownValue === 'posts'? filterPostsData.map((item, index) => (
                     <Marker
                       keyExtractor={item.email}
                       coordinate={item.location}
@@ -512,11 +498,21 @@ const MapScreen = (props) => {
                     </Marker>
 
                   )) : ''}
-
-              <TouchableOpacity
+              <View style={styles.searchWrapperStyle}>
+                <TextInput 
+                        style={styles.textInput}
+                        value={search}
+                        placeholder='Search By Content'
+                        underlineColorAndroid='transparent'
+                        onChangeText={(text) => setSearch(text)}
+                        />
+              </View>
+              <Text style={[styles.filter]} onPress={() => dropDownSwitch()}>{dropDownValue}</Text>
+              <Text style={[styles.filter, styles.distance]} onPress={() => distanceSwitch()}>{distanceValue}</Text>
+              <Text
                 style={styles.Btn}
                 onPress={() => setIsVis(!isVis)}
-              ></TouchableOpacity>
+              >Add</Text>
             </MapView>
           </View>
         )}
@@ -554,16 +550,16 @@ const styles = StyleSheet.create({
   Btn: {
     position: "absolute",
     zIndex: 10,
-    width: 40,
-    height: 40,
     justifyContent: "center",
     alignItems: "center",
     padding: 10,
-    borderRadius: 40,
-    backgroundColor: "orange",
+    borderRadius: 20,
+    overflow: "hidden",
+    borderWidth: 2,
+    backgroundColor: "white",
     alignSelf: "flex-end",
     marginTop: -5,
-    top: 10,
+    top: 65,
     right: 10,
   },
   viewWrap: {
@@ -573,7 +569,6 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0,0,0,0.2)",
   },
   textInput: {
-
     height: 50,
     borderWidth: 1,
     paddingLeft: 20,
@@ -585,7 +580,8 @@ const styles = StyleSheet.create({
     marginBottom: 30,
     borderColor: '#009688',
     backgroundColor: 'white',
-
+    borderRadius: 10,
+    overflow: "hidden"
   },
   screen: {
     flex: 1,
@@ -611,12 +607,22 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: "#DCDCDC",
   },
-  filter: {
-    backgroundColor: "black"
-  },
   searchWrapperStyle: {
     flexDirection: "row",
     justifyContent: "space-between",
+  },
+  filter: {
+    position: "absolute",
+    top: 60,
+    backgroundColor: "white",
+    padding: 10,
+    borderRadius: 20,
+    overflow: "hidden",
+    borderWidth: 2,
+    left: 10
+  },
+  distance: {
+    left: 100
   },
   iconStyle: {
     marginTop: 12,
