@@ -27,6 +27,7 @@ import { v4 as uuidv4 } from "uuid";
 import firebaseConfig from "../firebaseConfig.tsx";
 import { initializeApp } from "firebase/app"; //validate yourself
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import { useFonts } from "expo-font";
 
 initializeApp(firebaseConfig);
 const NewPost = () => {
@@ -39,6 +40,14 @@ const NewPost = () => {
   const colRef = collection(db, "Post");
   const [image, setImage] = useState("");
   const [url, setUrl] = useState(null);
+
+  const [fontsLoaded] = useFonts({
+    "signika-bold": require("../fonts/SignikaNegative-Bold.ttf"),
+    "signika-light": require("../fonts/SignikaNegative-Light.ttf"),
+    "signika-medium": require("../fonts/SignikaNegative-Medium.ttf"),
+    "signika-regular": require("../fonts/SignikaNegative-Regular.ttf"),
+    "signika-semi": require("../fonts/SignikaNegative-SemiBold.ttf"),
+  });
 
   //const [pickedImagePath, setPickedImagePath] = useState("");
   useEffect(() => {
@@ -167,7 +176,7 @@ const NewPost = () => {
   return (
     <View>
       <TextInput
-        style={styles.input}
+        style={{...styles.input, fontFamily: 'signika-semi'}}
         placeholder="Title"
         onChangeText={(text) => setDescription(text)}
       />
@@ -189,7 +198,7 @@ const NewPost = () => {
         <MaterialCommunityIcons name="camera" style={{fontSize: "60%"}}/>
       </TouchableOpacity>
       <TouchableOpacity onPress={handleAddPost} style={[styles.button]}>
-        <Text style={{fontSize: "30%"}}>Submit</Text>
+        <Text style={{fontSize: "40%", fontFamily: "signika-bold"}}>Submit</Text>
       </TouchableOpacity>
     </View>
   );
@@ -205,15 +214,16 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     overflow: "hidden",
     margin: 20,
-    fontSize: 20
+    fontSize: 20,
+    fontFamily: "signika-medium"
   },
   button: {
     backgroundColor: "#0782F9",
     width: "50%",
-    padding: 15,
+    padding: 20,
     borderRadius: 10,
     alignSelf: "center",
     alignItems: "center",
-    marginVertical: 15,
+    marginTop: 55,
   },
 });
