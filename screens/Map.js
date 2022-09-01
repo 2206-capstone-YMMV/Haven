@@ -22,6 +22,7 @@ import {
   doc,
   addDoc,
   deleteDoc,
+  getDocs,
   GeoPoint,
   onSnapshot,
 } from "firebase/firestore";
@@ -79,6 +80,8 @@ const MapScreen = (props) => {
   const [date, setDate] = React.useState(new Date())
   const [user, setUser] = React.useState(null)
 
+  console.log(user)
+
   const colRef = collection(db, "Post");
   const locationCollectionRef = collection(db, "location");
 
@@ -116,15 +119,15 @@ const MapScreen = (props) => {
       ),
     []
   );
-  
-  React.useEffect(
-    () =>
-      onSnapshot(collection(db, "users"), where("uid", "==", auth.currentUser?.uid), (snapshot) =>
-        console.log(snapshot.docs[0].data().role, snapshot.docs[0].id)
-      ),
-    []
-  );
 
+  if (!user) {
+    getDocs(
+      query(collection(db, "users"), where("uid", "==", auth.currentUser?.uid))
+    ).then((user) => {
+      console.log("Grabbing Username"),
+        setUser(user.docs[0].data().role);
+    });
+  }
 
   const mapMarkerAll = () => {
     return filterMarkersData?.map((pin) => (
@@ -317,7 +320,7 @@ const MapScreen = (props) => {
                     zIndex={9}
                   />
 
-                  {user === 'Helper' ? 
+                  {user === 'helper' ? 
 
                   (<DropDownPicker
                     open={eventOpen}
