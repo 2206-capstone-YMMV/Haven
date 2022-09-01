@@ -64,7 +64,7 @@ const SignUpScreen = () => {
 
   return (
     <KeyboardAvoidingView
-      style={{ backgroundColor: "#fff" }}
+      style={{ backgroundColor: "#fff", height: "100%" }}
       behavior="padding"
     >
       <ScrollView style={{ backgroundColor: "#fff" }}>
