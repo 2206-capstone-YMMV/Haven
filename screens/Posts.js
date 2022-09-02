@@ -73,7 +73,7 @@ const Posts = () => {
   );
 
   const renderFriend = ({ item }) => {
-    let milliDate = item.createAt.seconds;
+    let milliDate = item.createAt?.seconds;
     let unix = Math.floor(date.getTime() / 1000);
     let diff = (unix - milliDate) / 3600;
     let timeDisplay;
@@ -199,7 +199,9 @@ const Posts = () => {
             underlineColorAndroid="transparent"
             onChangeText={(text) => setSearch(text)}
           />
-          <FlatList data={filterData} renderItem={renderFriend} />
+          <View style={{ paddingBottom: 280 }}>
+            <FlatList data={filterData} renderItem={renderFriend} />
+          </View>
         </View>
       </View>
     </>

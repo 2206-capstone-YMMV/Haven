@@ -3,11 +3,10 @@ import { Text, View, FlatList, TextInput, StyleSheet, Button, TouchableOpacity, 
 import { auth } from '../firebase'
 import { db } from '../firebase'
 import { collection, onSnapshot, query, where } from 'firebase/firestore' 
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import tw from 'tailwind-react-native-classnames'
 import InfoText from '../components/infoText';
 import { Avatar, ListItem } from 'react-native-elements'
-import { Feather, Entypo } from "@expo/vector-icons"
+import { Feather } from "@expo/vector-icons"
 import { useNavigation } from "@react-navigation/core";
 
 const FriendsView = () => {

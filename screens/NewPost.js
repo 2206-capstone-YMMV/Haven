@@ -26,6 +26,9 @@ import "react-native-get-random-values";
 import { v4 as uuidv4 } from "uuid";
 import firebaseConfig from "../firebaseConfig.tsx";
 import { initializeApp } from "firebase/app"; //validate yourself
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import { useFonts } from "expo-font";
+import { LinearGradient } from 'expo-linear-gradient';
 
 initializeApp(firebaseConfig);
 const NewPost = () => {
@@ -37,7 +40,15 @@ const NewPost = () => {
   const [profile, setProfile] = useState({});
   const colRef = collection(db, "Post");
   const [image, setImage] = useState("");
-  const [url, setUrl] = useState('');
+  const [url, setUrl] = useState(null);
+
+  const [fontsLoaded] = useFonts({
+    "signika-bold": require("../fonts/SignikaNegative-Bold.ttf"),
+    "signika-light": require("../fonts/SignikaNegative-Light.ttf"),
+    "signika-medium": require("../fonts/SignikaNegative-Medium.ttf"),
+    "signika-regular": require("../fonts/SignikaNegative-Regular.ttf"),
+    "signika-semi": require("../fonts/SignikaNegative-SemiBold.ttf"),
+  });
 
   //const [pickedImagePath, setPickedImagePath] = useState("");
   useEffect(() => {
@@ -60,6 +71,7 @@ const NewPost = () => {
     lat = location.coords.latitude;
     lon = location.coords.longitude;
   }
+
   useEffect(
     () =>
       onSnapshot(
@@ -102,34 +114,7 @@ const NewPost = () => {
     navigation.navigate("Home");
   };
 
-  //to pick image and display image
-  // const showImagePicker = async () => {
-  //   const permissionResult =
-  //     await ImagePicker.requestMediaLibraryPermissionsAsync();
-  //   if (permissionResult.granted === false) {
-  //     alert("You've refused to allow this appp to access your photos!");
-  //     return;
-  //   }
-
-  //   const result = await ImagePicker.launchImageLibraryAsync({
-  //     mediaTypes: ImagePicker.MediaTypeOptions.All,
-  //     allowsEditing: true,
-  //     aspect: [4, 3],
-  //     quality: 0,
-  //   });
-
-  //   let imageUrl =
-  //     Platform.OS === "ios" ? result.uri.replace("file://", "") : result.uri;
-  //   if (!result.cancelled) {
-  //     setImage(imageUrl);
-  //   }
-  // };
-
-  //real deal sent to firebase
   const pickImage = async () => {
-    if (url == null) {
-      setUrl(null);
-    }
     const result = await ImagePicker.launchCameraAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
@@ -166,17 +151,19 @@ const NewPost = () => {
   };
 
   return (
-    <View>
+    <LinearGradient colors={["#7c41be", "#7d768a"]} style={{width: "100%", height: "100%"}}>
       <TextInput
-        style={styles.input}
-        placeholder="description"
+        style={{...styles.input, fontFamily: 'signika-semi'}}
+        placeholder="Title"
         onChangeText={(text) => setDescription(text)}
       />
       <TextInput
-        style={styles.input}
-        placeholder="contents"
+        style={{ ...styles.input, height: "40%" }}
+        placeholder="Content"
         onChangeText={(text) => setContents(text)}
-        multiline={true}
+        multiline
+        blurOnSubmit={true}
+        numberOfLines={4}
       />
       {image && (
         <Image
@@ -185,12 +172,12 @@ const NewPost = () => {
         ></Image>
       )}
       <TouchableOpacity onPress={pickImage} style={[styles.button]}>
-        <Text style={styles.buttonOutLineText}>Take Photo</Text>
+        <MaterialCommunityIcons name="camera" style={{fontSize: "60%"}}/>
       </TouchableOpacity>
       <TouchableOpacity onPress={handleAddPost} style={[styles.button]}>
-        <Text style={styles.buttonOutLineText}>Submit</Text>
+        <Text style={{fontSize: "40%", fontFamily: "signika-bold"}}>Submit</Text>
       </TouchableOpacity>
-    </View>
+    </LinearGradient>
   );
 };
 
@@ -202,14 +189,18 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     paddingVertical: 10,
     borderRadius: 10,
-    marginTop: 5,
+    overflow: "hidden",
+    margin: 20,
+    fontSize: 20,
+    fontFamily: "signika-medium"
   },
   button: {
     backgroundColor: "#0782F9",
-    width: "100%",
-    padding: 15,
+    width: "50%",
+    padding: 20,
     borderRadius: 10,
+    alignSelf: "center",
     alignItems: "center",
-    marginVertical: 15,
+    marginTop: 55,
   },
 });
