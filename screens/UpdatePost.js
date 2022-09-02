@@ -19,14 +19,14 @@ const UpdatePost = (props) => {
     <View>
         <Text>Update Description: </Text>
         <View style={styles.searchWrapperStyle}>
-            <TextInput  placeholder="Update Description"  style={styles.textInput} onChangeText={text => setDescription(text)} />
+            <TextInput  placeholder="Update Description" value={description} style={styles.textInput} onChangeText={text => setDescription(text)} />
             <MaterialCommunityIcons style={styles.iconStyle} name="backspace-outline"  size={23}onPress={() => {
                     setDescription('');
                 }} /> 
         </View>
         <Text>Update Content: </Text>
         <View style={styles.searchWrapperStyle}>
-            <TextInput  placeholder="Update Content"  style={styles.textInput}  onChangeText={text => setContent(text)} />
+            <TextInput  placeholder="Update Content" value={content} style={styles.textInput}  onChangeText={text => setContent(text)} />
             <MaterialCommunityIcons style={styles.iconStyle} name="backspace-outline"  size={23}onPress={() => {
                     setContent('');
                 }} /> 

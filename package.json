@@ -11,10 +11,15 @@
     "dev:tailwind": "concurrently \"tailwindcss --input input.css --output tailwind.css --no-autoprefixer --watch\" \"tailwind-rn --watch\""
   },
   "dependencies": {
+
     "@emotion/react": "^11.10.0",
     "@emotion/styled": "^11.10.0",
-    "@expo/webpack-config": "^0.17.0",
+ 
     "@mui/material": "^5.10.3",
+
+    "@expo/vector-icons": "^13.0.0",
+    "@expo/webpack-config": "^0.17.0",
+
     "@react-native-async-storage/async-storage": "^1.17.10",
     "@react-native-community/datetimepicker": "^6.3.2",
     "@react-native-material/core": "^1.3.7",
@@ -28,6 +33,7 @@
     "expo-image-picker": "^13.3.1",
     "expo-linear-gradient": "^11.4.0",
     "expo-location": "~14.3.0",
+    "expo-splash-screen": "^0.16.2",
     "expo-status-bar": "~1.4.0",
     "expo-task-manager": "~10.3.0",
     "firebase": "^9.9.2",
@@ -35,9 +41,11 @@
     "gifs": "^0.0.8",
     "react": "18.0.0",
     "react-dom": "18.0.0",
+
     "react-native": "^0.69.5",
     "react-native-animated-splash-screen": "^2.0.5",
     "react-native-async-storage": "^0.0.1",
+
     "react-native-dialog-input": "^1.0.8",
     "react-native-dropdown-picker": "^5.4.2",
     "react-native-dynamic-search-bar": "^2.0.2",
@@ -52,20 +60,27 @@
     "react-native-screens": "~3.15.0",
     "react-native-select-dropdown": "^2.0.4",
     "react-native-uuid": "^2.0.1",
+
     "react-native-vector-icons": "^9.2.0",
+
+
     "react-native-web": "~0.18.7",
     "react-redux": "^8.0.2",
     "redux": "^4.2.0",
     "redux-thunk": "^2.4.1",
     "tailwind-react-native-classnames": "^1.5.1",
+
     "tailwind-rn": "^4.2.0",
+
     "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
     "@types/uuid": "^8.3.4",
+
     "concurrently": "^7.3.0",
     "postcss": "^8.4.16",
+
     "tailwindcss": "^3.1.8",
     "typescript": "^4.8.2"
   },
