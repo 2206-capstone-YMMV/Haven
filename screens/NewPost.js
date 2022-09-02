@@ -28,6 +28,7 @@ import firebaseConfig from "../firebaseConfig.tsx";
 import { initializeApp } from "firebase/app"; //validate yourself
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { useFonts } from "expo-font";
+import { LinearGradient } from 'expo-linear-gradient';
 
 initializeApp(firebaseConfig);
 const NewPost = () => {
@@ -113,30 +114,6 @@ const NewPost = () => {
     navigation.navigate("Home");
   };
 
-  //to pick image and display image
-  // const showImagePicker = async () => {
-  //   const permissionResult =
-  //     await ImagePicker.requestMediaLibraryPermissionsAsync();
-  //   if (permissionResult.granted === false) {
-  //     alert("You've refused to allow this appp to access your photos!");
-  //     return;
-  //   }
-
-  //   const result = await ImagePicker.launchImageLibraryAsync({
-  //     mediaTypes: ImagePicker.MediaTypeOptions.All,
-  //     allowsEditing: true,
-  //     aspect: [4, 3],
-  //     quality: 0,
-  //   });
-
-  //   let imageUrl =
-  //     Platform.OS === "ios" ? result.uri.replace("file://", "") : result.uri;
-  //   if (!result.cancelled) {
-  //     setImage(imageUrl);
-  //   }
-  // };
-
-  //real deal sent to firebase
   const pickImage = async () => {
     const result = await ImagePicker.launchCameraAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -174,7 +151,7 @@ const NewPost = () => {
   };
 
   return (
-    <View>
+    <LinearGradient colors={["#7c41be", "#7d768a"]} style={{width: "100%", height: "100%"}}>
       <TextInput
         style={{...styles.input, fontFamily: 'signika-semi'}}
         placeholder="Title"
@@ -200,7 +177,7 @@ const NewPost = () => {
       <TouchableOpacity onPress={handleAddPost} style={[styles.button]}>
         <Text style={{fontSize: "40%", fontFamily: "signika-bold"}}>Submit</Text>
       </TouchableOpacity>
-    </View>
+    </LinearGradient>
   );
 };
 

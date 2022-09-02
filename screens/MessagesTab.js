@@ -25,6 +25,7 @@ export default function MessagesTab({ navigation }) {
         (snapshot) =>
           setConversations(
             snapshot.docs.map((convo) => {
+              console.log("Grabbing Convos")
               return convo.data();
             })
           )
@@ -33,7 +34,14 @@ export default function MessagesTab({ navigation }) {
   );
 
   const conversationIds = conversations.map((convo) => convo.conversationId);
-  const otherUsersId = conversations.map((convo) => convo.otherUser);
+  const otherUsersId = conversations.map((convo) => {
+    if (convo.user === auth.currentUser.uid){
+      return convo.otherUser
+    }
+    else{
+      return convo.user
+    }
+    convo.otherUser});
 
   if (otherUsersId.length === 0) {
     otherUsersId.push("aaaaaaaaaaa");
@@ -49,6 +57,7 @@ export default function MessagesTab({ navigation }) {
     ).then((users) =>
       setOtherUsers(
         users.docs.map((user) => {
+          console.log("Grabbing aquaintances")
           return user.data();
         })
       )
