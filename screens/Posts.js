@@ -199,7 +199,9 @@ const Posts = () => {
             underlineColorAndroid="transparent"
             onChangeText={(text) => setSearch(text)}
           />
-          <FlatList data={filterData} renderItem={renderFriend} />
+          <View style={{ paddingBottom: 280 }}>
+            <FlatList data={filterData} renderItem={renderFriend} />
+          </View>
         </View>
       </View>
     </>
