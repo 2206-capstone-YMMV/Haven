@@ -16,7 +16,9 @@ import NewPost from "./screens/NewPost";
 import SinglePost from "./screens/SinglePost";
 import MyPosts from "./screens/MyPosts";
 import EditProfile from "./screens/EditProfile";
-
+import UpdatePost from './screens/UpdatePost';
+import FriendsView from './screens/FriendsView';
+import FriendPost from "./screens/FriendPost";
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -45,6 +47,9 @@ export default function App() {
             <Stack.Screen name="NewPost" component={NewPost} />
             <Stack.Screen name="SinglePost" component={SinglePost} />
             <Stack.Screen name="MyPosts" component={MyPosts} />
+            <Stack.Screen name="UpdatePost" component={UpdatePost}  />
+            <Stack.Screen name="FriendPost" component={FriendPost} />
+            <Stack.Screen name="FriendsView" component={FriendsView} options={{title: 'Edit Friends'}}/>
             <Stack.Screen
               name="NewConversation"
               component={StartConversation}

@@ -5,7 +5,6 @@ import React, { useEffect, useState } from 'react'
 import { db } from '../firebase'
 import { auth } from '../firebase'
 import { collection, onSnapshot, query, where, addDoc, deleteDoc, doc } from 'firebase/firestore' 
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { useNavigation } from '@react-navigation/core'
 import tw from 'tailwind-react-native-classnames';
 import { Feather } from "@expo/vector-icons"
@@ -15,7 +14,6 @@ const Friends = () => {
     const [users, setUsers] = useState([])
     const [search, setSearch] = useState('')
     const [friends, setFriends] = useState([])
-    const [friendId, setFriendId] = useState('')
     let isFriend = false
     const colRef = collection(db, 'Friends')
     
@@ -138,10 +136,6 @@ const Friends = () => {
     })
   return (
     <View>
-        {/* <Image
-            source={{uri:'https://i0.wp.com/artisthue.com/wp-content/uploads/2020/12/Story-sale-for-@kbellemichelle.jpg'}}
-            style={StyleSheet.absoluteFillObject}
-        /> */}
          <View style={styles.container}>
             <Feather
             name="search"
