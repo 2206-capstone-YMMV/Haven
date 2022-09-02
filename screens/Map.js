@@ -59,7 +59,9 @@ const MapScreen = (props) => {
   const [gifValue, setGifValue] = React.useState(null)
   const [eventValue, setEventValue] = React.useState(false)
   const [dropDownValue, setDropDownValue] = React.useState('markers')
+  const [dropDownText, setDropDownText] = React.useState('Locations')
   const [distanceValue, setDistanceValue] = React.useState('All')
+  const [distanceText, setDistanceText] = React.useState('All')
 
   const [items, setItems] = React.useState([
     { label: "Food", value: "food" },
@@ -246,21 +248,26 @@ const MapScreen = (props) => {
   const dropDownSwitch = () => {
     if (dropDownValue === 'markers'){
       setDropDownValue('posts')
+      setDropDownText('Posts')
     }
     else{
       setDropDownValue('markers')
+      setDropDownText('Locations')
     }
   }
 
   const distanceSwitch = () => {
     if (distanceValue === 'All'){
       setDistanceValue('10')
+      setDistanceText('Near')
     }
     else if (distanceValue === '10'){
       setDistanceValue('500')
+      setDistanceText('Far')
     }
     else{
       setDistanceValue('All')
+      setDistanceText('All')
     }
   }
 
@@ -507,8 +514,8 @@ const MapScreen = (props) => {
                         onChangeText={(text) => setSearch(text)}
                         />
               </View>
-              <Text style={[styles.filter]} onPress={() => dropDownSwitch()}>{dropDownValue}</Text>
-              <Text style={[styles.filter, styles.distance]} onPress={() => distanceSwitch()}>{distanceValue}</Text>
+              <Text style={[styles.filter]} onPress={() => dropDownSwitch()}>{dropDownText}</Text>
+              <Text style={[styles.filter, styles.distance]} onPress={() => distanceSwitch()}>{distanceText}</Text>
               <Text
                 style={styles.Btn}
                 onPress={() => setIsVis(!isVis)}
@@ -556,11 +563,12 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     overflow: "hidden",
     borderWidth: 2,
-    backgroundColor: "white",
+    backgroundColor: "#eeecef",
     alignSelf: "flex-end",
     marginTop: -5,
     top: 65,
     right: 10,
+    fontWeight: "bold"
   },
   viewWrap: {
     flex: 1,
@@ -614,15 +622,16 @@ const styles = StyleSheet.create({
   filter: {
     position: "absolute",
     top: 60,
-    backgroundColor: "white",
+    backgroundColor: "#eeecef",
     padding: 10,
     borderRadius: 20,
     overflow: "hidden",
     borderWidth: 2,
-    left: 10
+    left: 10,
+    fontWeight: "bold"
   },
   distance: {
-    left: 100
+    left: 120
   },
   iconStyle: {
     marginTop: 12,

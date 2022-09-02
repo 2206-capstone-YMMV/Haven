@@ -74,7 +74,7 @@ export default function Message({ route }) {
       style={{ flex: 1, alignItems: "center", justifyContent: "space-between"}}
       keyboardVerticalOffset={100}
     >
-    <LinearGradient colors={["#8c5aa5", "#f2e797"]} style={{width: "100%", height: "100%"}}>
+    <LinearGradient colors={["#5b019c", "#e0baff"]} style={{width: "100%", height: "100%"}}>
     <ScrollView>
       <View style={styles.messageContainer}>
         {conversation.map((convo, index) => {
@@ -119,7 +119,7 @@ const styles = StyleSheet.create({
     width: '100%'
   },
   message: {
-    backgroundColor: "white",
+    backgroundColor: "#eeecef",
     paddingVertical: 5,
     paddingHorizontal: 5,
     marginTop: 5,
@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
   inputContainer: {
     alignSelf: "center",
     width: "80%",
-    backgroundColor: "white",
+    backgroundColor: "#eeecef",
     paddingHorizontal: 15,
     paddingVertical: 10,
     borderRadius: 10,
