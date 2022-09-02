@@ -9,6 +9,7 @@ import {
   FlatList,
   ScrollView,
   Dimensions,
+  KeyboardAvoidingView,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
@@ -41,6 +42,21 @@ const SinglePost = (props) => {
   const commentId = element.id;
   const [comments, setComments] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
+  const [displayName, setDisplayName] = useState("");
+
+  // console.log(element);
+
+  let milliDate = element.createAt.seconds;
+  let date = new Date(milliDate * 1000);
+  let hours = date.getHours();
+  let ampm = hours >= 12 ? "PM" : "AM";
+  hours = hours % 12;
+  hours = hours ? hours : 12;
+  let minutes = date.getMinutes();
+  minutes = minutes < 10 ? "0" + minutes : minutes;
+  let day = date.getUTCDate();
+  let month = date.getUTCMonth();
+  let year = date.getUTCFullYear();
 
   useEffect(
     () =>
@@ -69,139 +85,158 @@ const SinglePost = (props) => {
         color="black"
         onPress={() => setModalVisible(true)}
       />
-      <View>
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={modalVisible}
-          onRequestClose={() => {
-            Alert.alert("Modal has been closed.");
-            setModalVisible(!modalVisible);
-          }}
-        >
-          <View style={styles.centeredView}>
-            <View style={styles.modalView}>
-              <View style={styles.container}>
-                <TouchableOpacity
-                  onPress={() => {
-                    inappropriate(element.id, element.reports);
-                    setModalVisible(!modalVisible);
-                  }}
-                >
-                  <Text style={styles.title}>Inappropriate</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => {
-                    falseLocation(element.id, element.reports);
-                    setModalVisible(!modalVisible);
-                  }}
-                >
-                  <Text style={styles.title}>False Location</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => {
-                    spam(element.id, element.reports);
-                    setModalVisible(!modalVisible);
-                  }}
-                >
-                  <Text style={styles.title}>Spam</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => {
-                    misinformation(element.id, element.reports);
-                    setModalVisible(!modalVisible);
-                  }}
-                >
-                  <Text style={styles.title}>Misinformation</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => {
-                    outOfSupplies(element.id, element.reports);
-                    setModalVisible(!modalVisible);
-                  }}
-                >
-                  <Text style={styles.title}>Out of Supplies</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => {
-                    harassment(element.id, element.reports);
-                    setModalVisible(!modalVisible);
-                  }}
-                >
-                  <Text style={styles.title}>Harassment </Text>
-                </TouchableOpacity>
-              </View>
-              <Pressable
-                style={[styles.button, styles.buttonClose]}
-                onPress={() => setModalVisible(!modalVisible)}
+
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          Alert.alert("Modal has been closed.");
+          setModalVisible(!modalVisible);
+        }}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <View style={styles.container}>
+              <TouchableOpacity
+                onPress={() => {
+                  inappropriate(element.id, element.reports);
+                  setModalVisible(!modalVisible);
+                }}
               >
-                <Text style={styles.textStyle}>Cancel</Text>
-              </Pressable>
+                <Text style={styles.title}>Inappropriate</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  falseLocation(element.id, element.reports);
+                  setModalVisible(!modalVisible);
+                }}
+              >
+                <Text style={styles.title}>False Location</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  spam(element.id, element.reports);
+                  setModalVisible(!modalVisible);
+                }}
+              >
+                <Text style={styles.title}>Spam</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  misinformation(element.id, element.reports);
+                  setModalVisible(!modalVisible);
+                }}
+              >
+                <Text style={styles.title}>Misinformation</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  outOfSupplies(element.id, element.reports);
+                  setModalVisible(!modalVisible);
+                }}
+              >
+                <Text style={styles.title}>Out of Supplies</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  harassment(element.id, element.reports);
+                  setModalVisible(!modalVisible);
+                }}
+              >
+                <Text style={styles.title}>Harassment </Text>
+              </TouchableOpacity>
+            </View>
+            <Pressable
+              style={[styles.button, styles.buttonClose]}
+              onPress={() => setModalVisible(!modalVisible)}
+            >
+              <Text style={styles.textStyle}>Cancel</Text>
+            </Pressable>
+          </View>
+        </View>
+      </Modal>
+      <KeyboardAvoidingView
+        style={{ flex: 1, backgroundColor: "transparent" }}
+        behavior="padding"
+        keyboardVerticalOffset={10}
+      >
+        <ScrollView>
+          <View style={styles.contentHead}>
+            <View
+              style={{
+                flex: 1,
+                justifyContent: "center",
+                paddingLeft: 10,
+                height: 56,
+              }}
+            >
+              <Text style={{ fontWeight: "bold", fontSize: 20 }}>
+                by: {element.username}
+              </Text>
+              <Text style={{ color: "#999", fontSize: 18 }}>
+                {element.description}
+              </Text>
             </View>
           </View>
-        </Modal>
-        <View style={styles.contentHead}>
-          <View
-            style={{
-              flex: 1,
-              justifyContent: "center",
-              paddingLeft: 10,
-              height: 56,
-            }}
-          >
-            <Text style={{ fontWeight: "bold", fontSize: 20 }}>
-              Post By: {element.username}
+
+          <View style={styles.image}>
+            <Text style={{ fontSize: 22, padding: 10 }}>
+              {element.contents}
             </Text>
-            <Text style={{ color: "#999", fontSize: 18 }}>
-              {element.description}
+
+            {element.image !== null && (
+              <Image
+                style={{ width: 350, height: 350, borderRadius: 30 }}
+                source={{ uri: element.image }}
+              />
+            )}
+          </View>
+
+          <View style={styles.footBar}>
+            {element.likes > 0 ? (
+              <Entypo
+                name={"heart"}
+                size={18}
+                style={{ marginLeft: 4 }}
+                color={element.likes > 0 ? "red" : "black"}
+              />
+            ) : (
+              <Entypo
+                name={"heart-outlined"}
+                size={18}
+                style={{ marginLeft: 4 }}
+                color={element.likes > 0 ? "red" : "black"}
+              />
+            )}
+            <Text style={{ fontWeight: "bold", fontSize: 16, paddingRight: 5 }}>
+              {" "}
+              {element.likes}
+            </Text>
+            <Text style={{ color: "#999", fontSize: 15 }}>
+              {hours}:{minutes} {ampm} • {month}/{day}/{year}
             </Text>
           </View>
-        </View>
+          <Input commentId={element.id} />
+        </ScrollView>
+      </KeyboardAvoidingView>
 
-        <View style={styles.image}>
-          <Text style={{ fontSize: 22, padding: 10 }}>{element.contents}</Text>
-
-          {element.image !== null && (
-            <Image
-              style={{ width: 350, height: 350, borderRadius: 30 }}
-              source={{ uri: element.image }}
-            />
-          )}
-        </View>
-
-        <View style={styles.footBar}>
-          {element.likes > 0 ? (
-            <Entypo
-              name={"heart"}
-              size={18}
-              style={{ marginLeft: 4 }}
-              color={element.likes > 0 ? "red" : "black"}
-            />
-          ) : (
-            <Entypo
-              name={"heart-outlined"}
-              size={18}
-              style={{ marginLeft: 4 }}
-              color={element.likes > 0 ? "red" : "black"}
-            />
-          )}
-          <Text style={{ fontWeight: "bold", fontSize: 16, paddingRight: 5 }}>
-            {" "}
-            {element.likes}
-          </Text>
-        </View>
-
-        {/* Begin Comment section */}
-
-        <Input commentId={element.id} />
+      {/* Begin Comment section */}
+      <View style={{ paddingBottom: 125 }}>
+        <ScrollView
+          contentContainerStyle={{
+            alignItems: "flex-end",
+            justifyContent: "flex-start",
+          }}
+          style={styles.commentContainer}
+        >
+          {comments.map((comment, idx) => (
+            <Text key={idx} style={styles.message}>
+              {comment.content}
+            </Text>
+          ))}
+        </ScrollView>
       </View>
-      <ScrollView style={styles.commentContainer}>
-        {comments.map((comment, idx) => (
-          <Text key={idx} style={styles.message}>
-            {comment.content}
-          </Text>
-        ))}
-      </ScrollView>
     </>
   );
 };
@@ -216,11 +251,13 @@ export default connect(mapState)(SinglePost);
 
 const styles = StyleSheet.create({
   commentContainer: {
-    alignSelf: "flex-start",
-    // alignItems: "left",
-    width: Dimensions.get("window").width - 40,
-    left: 20,
-    right: 20,
+    zIndex: 999,
+    paddingLeft: 20,
+    paddingRight: 20,
+    borderRadius: 20,
+    fontSize: 18,
+    height: 50,
+    color: "#ECECEC",
   },
   message: {
     backgroundColor: "white",
@@ -237,7 +274,6 @@ const styles = StyleSheet.create({
   },
   title: {
     margin: 20,
-
     backgroundColor: "#2196F3",
     borderRadius: 20,
     padding: 10,
