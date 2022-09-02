@@ -1,7 +1,7 @@
 import { createStore, applyMiddleware } from "redux";
 import ThunkMiddleware from "redux-thunk";
 import { db } from "../firebase";
-import { collection, onSnapshot, query, where } from "firebase/firestore";
+import { collection, onSnapshot, query, where, getDocs } from "firebase/firestore";
 // initial State
 const initialState = {};
 
@@ -14,12 +14,12 @@ const getPost = (post) => ({
 
 export const get_Post = (user) => {
   return async (dispatch) => {
-    const unsbuscribe = onSnapshot(
-      query(collection(db, "Post"), where("createAt", "==", user.createAt)),
-      (snapshot) =>
+
+      getDocs(query(collection(db, "Post"), where("createAt", "==", user.createAt)))
+      .then((snapshot) =>
         // console.log('------------------------------------',snapshot.docs[0].data())
         dispatch(getPost(snapshot.docs[0].data()))
-    );
+      );
     return unsbuscribe;
   };
 };
