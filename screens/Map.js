@@ -33,8 +33,7 @@ import { get_Post } from "../redux";
 import DropDownPicker from "react-native-dropdown-picker";
 import Gifs from "../gifs/gifs";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
-import getDistance from 'geolib/es/getDistance'
-
+import getDistance from "geolib/es/getDistance";
 
 const { width, height } = Dimensions.get("window");
 const CARD_HEIGHT = 220;
@@ -50,16 +49,16 @@ const MapScreen = (props) => {
   const [isVis, setIsVis] = React.useState(false);
   const [title, setTitle] = React.useState("");
   const [content, setContent] = React.useState("");
-  const [search, setSearch] = React.useState('')
+  const [search, setSearch] = React.useState("");
 
   const [open, setOpen] = React.useState(false);
-  const [gifOpen, setGifOpen] = React.useState(false)
-  const [eventOpen, setEventOpen] = React.useState(false)
+  const [gifOpen, setGifOpen] = React.useState(false);
+  const [eventOpen, setEventOpen] = React.useState(false);
   const [value, setValue] = React.useState(null);
-  const [gifValue, setGifValue] = React.useState(null)
-  const [eventValue, setEventValue] = React.useState(false)
-  const [dropDownValue, setDropDownValue] = React.useState('markers')
-  const [distanceValue, setDistanceValue] = React.useState('All')
+  const [gifValue, setGifValue] = React.useState(null);
+  const [eventValue, setEventValue] = React.useState(false);
+  const [dropDownValue, setDropDownValue] = React.useState("markers");
+  const [distanceValue, setDistanceValue] = React.useState("All");
 
   const [items, setItems] = React.useState([
     { label: "Food", value: "food" },
@@ -67,20 +66,20 @@ const MapScreen = (props) => {
     { label: "Shelter", value: "shelter" },
     { label: "Items", value: "items" },
   ]);
-  const gifs = []
-  for (let key in Gifs){
-    gifs.push({label: key, value: key})
+  const gifs = [];
+  for (let key in Gifs) {
+    gifs.push({ label: key, value: key });
   }
-  const [gifItems, setGifItems] = React.useState(gifs)
+  const [gifItems, setGifItems] = React.useState(gifs);
   const [eventItems, setEventItems] = React.useState([
-    {label: "Is Event", value: true},
-    {label: "Is Location", value: false}
-  ])
+    { label: "Is Event", value: true },
+    { label: "Is Location", value: false },
+  ]);
 
-  const [date, setDate] = React.useState(new Date())
-  const [user, setUser] = React.useState(null)
+  const [date, setDate] = React.useState(new Date());
+  const [user, setUser] = React.useState(null);
 
-  console.log(user)
+  console.log(user);
 
   const colRef = collection(db, "Post");
   const locationCollectionRef = collection(db, "location");
@@ -100,14 +99,17 @@ const MapScreen = (props) => {
   React.useEffect(
     () =>
       onSnapshot(locationCollectionRef, (snapshot) =>
-        setMarkers(snapshot.docs.map((docu) => {
-        let date = docu.data().date
-        if (date && date.seconds < (Date.now() / 1000)){ //Events timer are stored in seconds, while Date.now is milliseconds
-          console.log("deleting event")
-          deleteDoc(doc(db, 'location', docu.id))
-        }
-        return ({ ...docu.data(), id: docu.id })
-      }))
+        setMarkers(
+          snapshot.docs.map((docu) => {
+            let date = docu.data().date;
+            if (date && date.seconds < Date.now() / 1000) {
+              //Events timer are stored in seconds, while Date.now is milliseconds
+              console.log("deleting event");
+              deleteDoc(doc(db, "location", docu.id));
+            }
+            return { ...docu.data(), id: docu.id };
+          })
+        )
       ),
     []
   );
@@ -124,23 +126,21 @@ const MapScreen = (props) => {
     getDocs(
       query(collection(db, "users"), where("uid", "==", auth.currentUser?.uid))
     ).then((user) => {
-      console.log("Grabbing Username"),
-        setUser(user.docs[0].data().role);
+      console.log("Grabbing Username"), setUser(user.docs[0].data().role);
     });
   }
 
   const mapMarkerAll = () => {
     return filterMarkersData?.map((pin) => (
-
       <Marker
         key={pin.id}
         coordinate={{ latitude: pin.coords._lat, longitude: pin.coords._long }}
         title={pin.title}
         description={pin.content?.inputText}
       >
-      {pin.gif ? (<Image 
-                  style={styles.pin}
-                  source={{uri: Gifs[pin.gif]}} />) : null}
+        {pin.gif ? (
+          <Image style={styles.pin} source={{ uri: Gifs[pin.gif] }} />
+        ) : null}
       </Marker>
     ));
   };
@@ -162,8 +162,8 @@ const MapScreen = (props) => {
 
   const sendInput = async (title, inputText, value, gif, date) => {
     console.log(title, inputText);
-    if (!eventValue){
-      date = null
+    if (!eventValue) {
+      date = null;
     }
     await addDoc(locationCollectionRef, {
       content: { inputText },
@@ -177,94 +177,98 @@ const MapScreen = (props) => {
     setIsVis(!isVis);
   };
 
-  const settingDate = (datepicker,selectedDate) => {
-    setDate(selectedDate)
-  }
+  const settingDate = (datepicker, selectedDate) => {
+    setDate(selectedDate);
+  };
 
+  // filter
+  const post10 = () =>
+    post.filter((po) => {
+      let postLat = po.location.latitude;
+      let postLon = po.location.longitude;
+      let value = getDistance(
+        { latitude: lat, longitude: lon },
+        { latitude: postLat, longitude: postLon }
+      );
+      value = Math.floor(value * 0.00062137);
+      if (Number(value) <= 10 && po.description.indexOf(search) >= 0) {
+        return po;
+      }
+    });
 
-  // filter 
-  const post10 =  () => post.filter((po) => {
-    let postLat = po.location.latitude
-    let postLon = po.location.longitude
-    let value = getDistance(
-      {latitude: lat, longitude: lon},
-      {latitude: postLat, longitude: postLon}
-    )
-    value = Math.floor(value * 0.00062137)
-    if(Number(value) <= 10 && po.description.indexOf(search) >= 0) {
-       return po
-    }
-  })
+  const post500 = () =>
+    post.filter((po) => {
+      // return Number(set_postDistance(po)) <= 500 && po.description.indexOf(search) >= 0
+      let postLat = po.location.latitude;
+      let postLon = po.location.longitude;
+      let value = getDistance(
+        { latitude: lat, longitude: lon },
+        { latitude: postLat, longitude: postLon }
+      );
+      value = Math.floor(value * 0.00062137);
+      if (Number(value) <= 500 && po.description.indexOf(search) >= 0) {
+        return po;
+      }
+    });
 
-  const post500 = () => post.filter((po) => {
-    // return Number(set_postDistance(po)) <= 500 && po.description.indexOf(search) >= 0
-    let postLat = po.location.latitude
-    let postLon = po.location.longitude
-    let value = getDistance(
-      {latitude: lat, longitude: lon},
-      {latitude: postLat, longitude: postLon}
-    )
-    value = Math.floor(value * 0.00062137)
-    if(Number(value) <= 500 && po.description.indexOf(search) >= 0) {
-       return po
-    }
-  })
+  const marker10 = () =>
+    markers.filter((marker) => {
+      let postLat = marker.coords.latitude;
+      let postLon = marker.coords.longitude;
+      let value = getDistance(
+        { latitude: lat, longitude: lon },
+        { latitude: postLat, longitude: postLon }
+      );
+      value = Math.floor(value * 0.00062137);
+      if (
+        Number(value) <= 10 &&
+        marker.content.inputText.indexOf(search) >= 0
+      ) {
+        return marker;
+      }
+    });
 
-  const marker10 = () => markers.filter((marker) => {
-
-           let postLat = marker.coords.latitude
-       let postLon = marker.coords.longitude
-        let value = getDistance(
-          {latitude: lat, longitude: lon},
-          {latitude: postLat, longitude: postLon}
-        )
-        value = Math.floor(value * 0.00062137)
-        if(Number(value) <= 10 && marker.content.inputText.indexOf(search) >= 0) {
-           return marker
-        }
-      })
-    
-      const marker500 = () => markers.filter((marker) => {
-
-        let postLat = marker.coords.latitude
-        let postLon = marker.coords.longitude
-         let value = getDistance(
-           {latitude: lat, longitude: lon},
-           {latitude: postLat, longitude: postLon}
-         )
-         value = Math.floor(value * 0.00062137)
-         if(Number(value) <= 500 && marker.content.inputText.indexOf(search) >= 0) {
-            return marker
-         }
-      })
+  const marker500 = () =>
+    markers.filter((marker) => {
+      let postLat = marker.coords.latitude;
+      let postLon = marker.coords.longitude;
+      let value = getDistance(
+        { latitude: lat, longitude: lon },
+        { latitude: postLat, longitude: postLon }
+      );
+      value = Math.floor(value * 0.00062137);
+      if (
+        Number(value) <= 500 &&
+        marker.content.inputText.indexOf(search) >= 0
+      ) {
+        return marker;
+      }
+    });
   const filterMarkersData = markers.filter((maker) => {
-    return maker.content.inputText.indexOf(search) >= 0
-})
-    
-    const filterPostsData = post.filter((po) => {
-      return po.description.indexOf(search) >= 0
-    })
+    return maker.content.inputText.indexOf(search) >= 0;
+  });
+
+  const filterPostsData = post.filter((po) => {
+    return po.description.indexOf(search) >= 0;
+  });
 
   const dropDownSwitch = () => {
-    if (dropDownValue === 'markers'){
-      setDropDownValue('posts')
+    if (dropDownValue === "markers") {
+      setDropDownValue("posts");
+    } else {
+      setDropDownValue("markers");
     }
-    else{
-      setDropDownValue('markers')
-    }
-  }
+  };
 
   const distanceSwitch = () => {
-    if (distanceValue === 'All'){
-      setDistanceValue('10')
+    if (distanceValue === "All") {
+      setDistanceValue("10");
+    } else if (distanceValue === "10") {
+      setDistanceValue("500");
+    } else {
+      setDistanceValue("All");
     }
-    else if (distanceValue === '10'){
-      setDistanceValue('500')
-    }
-    else{
-      setDistanceValue('All')
-    }
-  }
+  };
 
   return (
     <>
@@ -320,26 +324,32 @@ const MapScreen = (props) => {
                     zIndex={9}
                   />
 
-                  {user === 'helper' ? 
-
-                  (<DropDownPicker
-                    open={eventOpen}
-                    value={eventValue}
-                    items={eventItems}
-                    setOpen={setEventOpen}
-                    setValue={setEventValue}
-                    setItems={setEventItems}
-                    style={styles.dropdown}
-                  />)
-                  : null}
-                  {eventValue ?
-                    (<RNDateTimePicker value={date} onChange={settingDate} mode="datetime" minimumDate={Date.now()}/>): null
-                  }   
+                  {user === "helper" ? (
+                    <DropDownPicker
+                      open={eventOpen}
+                      value={eventValue}
+                      items={eventItems}
+                      setOpen={setEventOpen}
+                      setValue={setEventValue}
+                      setItems={setEventItems}
+                      style={styles.dropdown}
+                    />
+                  ) : null}
+                  {eventValue ? (
+                    <RNDateTimePicker
+                      value={date}
+                      onChange={settingDate}
+                      mode="datetime"
+                      minimumDate={Date.now()}
+                    />
+                  ) : null}
                 </View>
                 <View zIndex={9}>
                   <Button
                     title="Submit"
-                    onPress={() => sendInput(title, content, value, gifValue, date)}
+                    onPress={() =>
+                      sendInput(title, content, value, gifValue, date)
+                    }
                   />
                   <Button title="Hide" onPress={() => setIsVis(!isVis)} />
                 </View>
@@ -369,153 +379,173 @@ const MapScreen = (props) => {
                     />
                   ))}
 
-{Number(distanceValue ) == 10 && dropDownValue == 'markers'? marker10().map((pin) => (
-          <Marker
-          key={pin.id}
-          coordinate={{ latitude: pin.coords._lat, longitude: pin.coords._long }}
-          title={pin.title}
-          description={pin.content?.inputText}
-        >
-        {pin.gif ? (<Image 
-                    style={styles.pin}
-                    source={{uri: Gifs[pin.gif]}} />) : null}
-        </Marker>
-              )) : ''}
-              {Number(distanceValue ) == 500 && dropDownValue == 'markers'? marker500().map((pin) => (
-      <Marker
-        key={pin.id}
-        coordinate={{ latitude: pin.coords._lat, longitude: pin.coords._long }}
-        title={pin.title}
-        description={pin.content?.inputText}
-      >
-      {pin.gif ? (<Image 
-                  style={styles.pin}
-                  source={{uri: Gifs[pin.gif]}} />) : null}
-      </Marker>
-              )) : ''}
-                {distanceValue  == 'All' && dropDownValue == 'markers'? mapMarkerAll() : ''}
-
-
-
-                 {Number(distanceValue) == 10 && dropDownValue === 'posts'? post10().map((item, index) => (
-
+              {Number(distanceValue) == 10 && dropDownValue == "markers"
+                ? marker10().map((pin) => (
                     <Marker
-                      keyExtractor={item.email}
-                      coordinate={item.location}
-                      title={item.username}
-                      description={item.description}
-                      key={index}
+                      key={pin.id}
+                      coordinate={{
+                        latitude: pin.coords._lat,
+                        longitude: pin.coords._long,
+                      }}
+                      title={pin.title}
+                      description={pin.content?.inputText}
                     >
-
-                  
-                      <MaterialCommunityIcons
-                        name={item.role === "Helper" ? "heart" : "account"}
-                        color={item.role === "Helper" ? "red" : "blue"}
-                        size={25}
-                        onPress={() => props.getPost(item)}
-
-                      />
-                      <Callout tooltip style={styles.box}>
-                        <View>
-                          <View style={styles.bubble}>
-                            <Text>{item.description}</Text>
-                            <TouchableOpacity
-
-                              onPress={() => navigation.navigate("SinglePost", {item})}
-
-                            >
-                              <Text style={styles.buttonOutLineText}>
-                                View Detail
-                              </Text>
-
-                         
-                            </TouchableOpacity>
-                          </View>
-                        </View>
-                      </Callout>
-                    </Marker>
-                  )) : ''}
-                  {Number(distanceValue) == 500 && dropDownValue === 'posts'? post500().map((item, index) => (
-                    <Marker
-                      keyExtractor={item.email}
-                      coordinate={item.location}
-                      title={item.username}
-                      description={item.description}
-                      key={index}
-                    >
-                  
-                      <MaterialCommunityIcons
-                        name={item.role === "Helper" ? "heart" : "account"}
-                        color={item.role === "Helper" ? "red" : "blue"}
-                        size={25}
-                        onPress={() => props.getPost(item)}
-                      />
-                      <Callout tooltip style={styles.box}>
-                        <View>
-                          <View style={styles.bubble}>
-                            <Text>{item.description}</Text>
-                            <TouchableOpacity
-                              onPress={() => navigation.navigate("SinglePost", {item})}
-                            >
-                              <Text style={styles.buttonOutLineText}>
-                                View Detail
-                              </Text>
-              
-                            </TouchableOpacity>
-                          </View>
-                        </View>
-                      </Callout>
-                    </Marker>
-                  )) : ''}
-                   {distanceValue == 'All' && dropDownValue === 'posts'? filterPostsData.map((item, index) => (
-                    <Marker
-                      keyExtractor={item.email}
-                      coordinate={item.location}
-                      title={item.username}
-                      description={item.description}
-                      key={index}
-                    >
-                  
-                      <MaterialCommunityIcons
-                        name={item.role === "Helper" ? "heart" : "account"}
-                        color={item.role === "Helper" ? "red" : "blue"}
-                        size={25}
-                        onPress={() => props.getPost(item)}
-                      />
-                      <Callout tooltip style={styles.box}>
-                        <View>
-                          <View style={styles.bubble}>
-                            <Text>{item.description}</Text>
-                            <TouchableOpacity
-                              onPress={() => navigation.navigate("SinglePost", {item})}
-                            >
-                              <Text style={styles.buttonOutLineText}>
-                                View Detail
-                              </Text>
-                  
-                            </TouchableOpacity>
-
-                          </View>
-                        </View>
-                      </Callout>
-                    </Marker>
-
-                  )) : ''}
-              <View style={styles.searchWrapperStyle}>
-                <TextInput 
-                        style={styles.textInput}
-                        value={search}
-                        placeholder='Search By Content'
-                        underlineColorAndroid='transparent'
-                        onChangeText={(text) => setSearch(text)}
+                      {pin.gif ? (
+                        <Image
+                          style={styles.pin}
+                          source={{ uri: Gifs[pin.gif] }}
                         />
+                      ) : null}
+                    </Marker>
+                  ))
+                : ""}
+              {Number(distanceValue) == 500 && dropDownValue == "markers"
+                ? marker500().map((pin) => (
+                    <Marker
+                      key={pin.id}
+                      coordinate={{
+                        latitude: pin.coords._lat,
+                        longitude: pin.coords._long,
+                      }}
+                      title={pin.title}
+                      description={pin.content?.inputText}
+                    >
+                      {pin.gif ? (
+                        <Image
+                          style={styles.pin}
+                          source={{ uri: Gifs[pin.gif] }}
+                        />
+                      ) : null}
+                    </Marker>
+                  ))
+                : ""}
+              {distanceValue == "All" && dropDownValue == "markers"
+                ? mapMarkerAll()
+                : ""}
+
+              {Number(distanceValue) == 10 && dropDownValue === "posts"
+                ? post10().map((item, index) => (
+                    <Marker
+                      keyExtractor={item.email}
+                      coordinate={item.location}
+                      title={item.username}
+                      description={item.description}
+                      key={index}
+                    >
+                      <MaterialCommunityIcons
+                        name={item.role === "Helper" ? "heart" : "account"}
+                        color={item.role === "Helper" ? "red" : "blue"}
+                        size={25}
+                        onPress={() => props.getPost(item)}
+                      />
+                      <Callout tooltip style={styles.box}>
+                        <View>
+                          <View style={styles.bubble}>
+                            <Text>{item.description}</Text>
+                            <TouchableOpacity
+                              onPress={() =>
+                                navigation.navigate("SinglePost", { item })
+                              }
+                            >
+                              <Text style={styles.buttonOutLineText}>
+                                View Detail
+                              </Text>
+                            </TouchableOpacity>
+                          </View>
+                        </View>
+                      </Callout>
+                    </Marker>
+                  ))
+                : ""}
+              {Number(distanceValue) == 500 && dropDownValue === "posts"
+                ? post500().map((item, index) => (
+                    <Marker
+                      keyExtractor={item.email}
+                      coordinate={item.location}
+                      title={item.username}
+                      description={item.description}
+                      key={index}
+                    >
+                      <MaterialCommunityIcons
+                        name={item.role === "Helper" ? "heart" : "account"}
+                        color={item.role === "Helper" ? "red" : "blue"}
+                        size={25}
+                        onPress={() => props.getPost(item)}
+                      />
+                      <Callout tooltip style={styles.box}>
+                        <View>
+                          <View style={styles.bubble}>
+                            <Text>{item.description}</Text>
+                            <TouchableOpacity
+                              onPress={() =>
+                                navigation.navigate("SinglePost", { item })
+                              }
+                            >
+                              <Text style={styles.buttonOutLineText}>
+                                View Detail
+                              </Text>
+                            </TouchableOpacity>
+                          </View>
+                        </View>
+                      </Callout>
+                    </Marker>
+                  ))
+                : ""}
+              {distanceValue == "All" && dropDownValue === "posts"
+                ? filterPostsData.map((item, index) => (
+                    <Marker
+                      keyExtractor={item.email}
+                      coordinate={item.location}
+                      title={item.username}
+                      description={item.description}
+                      key={index}
+                    >
+                      <MaterialCommunityIcons
+                        name={item.role === "Helper" ? "heart" : "account"}
+                        color={item.role === "Helper" ? "red" : "blue"}
+                        size={25}
+                        onPress={() => props.getPost(item)}
+                      />
+                      <Callout tooltip style={styles.box}>
+                        <View>
+                          <View style={styles.bubble}>
+                            <Text>{item.description}</Text>
+                            <TouchableOpacity
+                              onPress={() =>
+                                navigation.navigate("SinglePost", { item })
+                              }
+                            >
+                              <Text style={styles.buttonOutLineText}>
+                                View Detail
+                              </Text>
+                            </TouchableOpacity>
+                          </View>
+                        </View>
+                      </Callout>
+                    </Marker>
+                  ))
+                : ""}
+              <View style={styles.searchWrapperStyle}>
+                <TextInput
+                  style={styles.textInput}
+                  value={search}
+                  placeholder="Search By Content"
+                  underlineColorAndroid="transparent"
+                  onChangeText={(text) => setSearch(text)}
+                />
               </View>
-              <Text style={[styles.filter]} onPress={() => dropDownSwitch()}>{dropDownValue}</Text>
-              <Text style={[styles.filter, styles.distance]} onPress={() => distanceSwitch()}>{distanceValue}</Text>
+              <Text style={[styles.filter]} onPress={() => dropDownSwitch()}>
+                {dropDownValue}
+              </Text>
               <Text
-                style={styles.Btn}
-                onPress={() => setIsVis(!isVis)}
-              >Add</Text>
+                style={[styles.filter, styles.distance]}
+                onPress={() => distanceSwitch()}
+              >
+                {distanceValue}
+              </Text>
+              <Text style={styles.Btn} onPress={() => setIsVis(!isVis)}>
+                Add
+              </Text>
             </MapView>
           </View>
         )}
@@ -581,10 +611,10 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     paddingHorizontal: 0,
     marginBottom: 30,
-    borderColor: '#009688',
-    backgroundColor: 'white',
+    borderColor: "#009688",
+    backgroundColor: "white",
     borderRadius: 10,
-    overflow: "hidden"
+    overflow: "hidden",
   },
   screen: {
     flex: 1,
@@ -622,21 +652,19 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     overflow: "hidden",
     borderWidth: 2,
-    left: 10
+    left: 10,
   },
   distance: {
-    left: 100
+    left: 100,
   },
   iconStyle: {
     marginTop: 12,
     marginHorizontal: 8,
   },
-
 });
 
 const mapDispatchToProps = (dispatch) => ({
   getPost: (post) => dispatch(get_Post(post)),
 });
-
 
 export default connect(null, mapDispatchToProps)(MapScreen);
