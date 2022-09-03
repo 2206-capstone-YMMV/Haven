@@ -18,6 +18,11 @@ import MyPosts from "./screens/MyPosts";
 import EditProfile from "./screens/EditProfile";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 
+import FriendsView from "./screens/FriendsView";
+import FriendPost from "./screens/FriendPost";
+import ReportScreen from "./screens/ReportScreen";
+import UpdatePost from './screens/UpdatePost';
+
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -82,6 +87,9 @@ export default function App() {
               }}
             />
             <Stack.Screen name="MyPosts" component={MyPosts} />
+            <Stack.Screen name="FriendPost" component={FriendPost} />
+            <Stack.Screen name="UpdatePost" component={UpdatePost}  />
+            <Stack.Screen name="FriendsView" component={FriendsView} options={{title: 'Edit Friends'}}/>
             <Stack.Screen
               name="NewConversation"
               component={StartConversation}
@@ -111,3 +119,4 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 });
+

@@ -83,8 +83,7 @@ export default function Message({ route }) {
       keyboardVerticalOffset={100}
     >
       <View
-        style={{ width: "100%", height: "100%", backgroundColor: "#251934" }}
-      >
+        style={{ width: "100%", height: "100%", backgroundColor: "#251934" }}>
         <ScrollView>
           <View style={styles.messageContainer}>
             {conversation.map((convo, index) => {
@@ -150,6 +149,7 @@ export default function Message({ route }) {
             </TouchableOpacity>
           </View>
         </ScrollView>
+
       </View>
     </KeyboardAvoidingView>
   );

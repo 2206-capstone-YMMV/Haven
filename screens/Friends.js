@@ -1,18 +1,17 @@
-import { StyleSheet, Text, View, FlatList, TouchableOpacity,TextInput, Image, Alert } from 'react-native'
+import { StyleSheet, Text, View, FlatList, TouchableOpacity,TextInput, Image, Alert, Button } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { db } from '../firebase'
 import { auth } from '../firebase'
 import { collection, onSnapshot, query, where, addDoc, deleteDoc, doc } from 'firebase/firestore' 
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { useNavigation } from '@react-navigation/core'
 import tw from 'tailwind-react-native-classnames';
+import { Feather } from "@expo/vector-icons"
 
 const Friends = () => {
     const navigation = useNavigation()
     const [users, setUsers] = useState([])
     const [search, setSearch] = useState('')
     const [friends, setFriends] = useState([])
-    const [friendId, setFriendId] = useState('')
     let isFriend = false
     const colRef = collection(db, 'Friends')
     
@@ -44,13 +43,13 @@ const Friends = () => {
           })
         .then(() => {
         
-            navigation.navigate('Profile')
+            navigation.navigate('FriendsView')
  
         })
     }
 
     const removeFriend = (friend) => {
-      deleteDoc(doc(db, 'Friends', friendId))
+      deleteDoc(doc(db, 'Friends', friend.friendId))
     }
     
     const reset = () => {
@@ -93,52 +92,67 @@ const Friends = () => {
 
     const renderFriend = (({item}) => {
         return (
-            <View style={{flexDirection: 'row', padding: 20, marginBottom: 20, backgroundColor:'white', borderRadius: 12,
-            shadowColor: '#000', shadowOffset: {width:0, height: 10}, shadowOpacity: 0.3, shadowRadius: 20
-            }}>
+    
+            <View style={styles.itemContainer}>
+            {item.friendRole === 'helper' ?   
+            <View style={styles.profileImageContainer}>
+                <Image source={require('../gifs/download.jpeg')} style={styles.profileImage} />
+            </View> : 
+            <View style={styles.profileImageContainer}>
+                <Image source={require('../gifs/default-user-image.png')} style={styles.profileImage} />
+            </View>
+            }
             <View>
-                <Text style={{fontSize: 22, fontWeight: '700'}}>{item.name}</Text>
-                <Text style={{fontSize: 18, opacity: 0.7}}>{item.role}</Text>
-                <Text style={{fontSize: 14, opacity: 0.8, color: '#0099cc'}}>{item.email} </Text>
-               {friends.filter((friend) => {
-                if (friend.friendEmail === item.email) {
-                    isFriend = true
-                    setFriendId(friend.id)
-                }
-                })}
-                {isFriend === false ?  <TouchableOpacity
-                  onPress={() => addFriendAlert(item)}
-                  >
-                  <Text >Add Friend</Text>
-                </TouchableOpacity> : <TouchableOpacity
-                  onPress={() => removeFriendAlert(item)}
-                  >
-                  <Text >remove friend</Text>
-                </TouchableOpacity> 
-                }
-                {reset()}
+                <Text style={{fontSize: 22, fontWeight: '700'}}>{item.name} <Text style={styles.textRole}>{item.role}</Text></Text>
+                <Text>{item.email}</Text>
+            </View>
+            <View style={{position: "absolute", right: 0}}>
+                {friends.filter((friend) => {
+                    if (friend.friendEmail === item.email) {
+                        isFriend = true
+                        item.friendId = friend.id
+                    }
+                    })}
+                    {isFriend === false ?  <TouchableOpacity
+                    style={tw`bg-blue-500  w-20 mt-5 border-solid rounded-full`} 
+                      onPress={() => addFriendAlert(item)}
+                      >
+                      <Text style={tw`text-center text-white `}>Add</Text>
+                    </TouchableOpacity> : <TouchableOpacity
+                     style={tw`bg-red-500  w-20 mt-5 border-solid rounded-full`}
+                      onPress={() => removeFriendAlert(item)}
+                      >
+                      <Text style={tw`text-center text-white `}>Remove</Text>
+                    </TouchableOpacity> 
+                    }
+                    {reset()}
             </View>
         </View>
         )
     })
   return (
     <View>
-        {/* <Image
-            source={{uri:'https://i0.wp.com/artisthue.com/wp-content/uploads/2020/12/Story-sale-for-@kbellemichelle.jpg'}}
-            style={StyleSheet.absoluteFillObject}
-        /> */}
-            <View style={styles.searchWrapperStyle}>
-                <TextInput 
+         <View style={styles.container}>
+            <Feather
+            name="search"
+            size={20}
+            color="black"
+            style={{ marginLeft: 1 }}
+            />
+            <TextInput 
                 style={styles.textInput}
                 value={search}
                 placeholder='Search By Name'
                 underlineColorAndroid='transparent'
                 onChangeText={(text) => setSearch(text)}
-                />
-                <MaterialCommunityIcons style={styles.iconStyle} name="backspace-outline"  size={23}onPress={() => {
-                    setSearch('');
-                }} /> 
+            />
+            <View>
+                <Button
+                title="Cancel"
+                onPress={() => {setSearch('')}}
+                ></Button>
             </View>
+        </View>
             <View style={tw`pb-52`}>
             <FlatList 
                 data={filterData}
@@ -156,24 +170,47 @@ export default Friends
 
 const styles = StyleSheet.create({
     textInput: {
-        height: 50,
-        borderWidth: 1,
-        paddingLeft: 20,
-        margin: 5,
-        flex: 1,
-        fontSize: 16,
-        paddingVertical: 8,
-        paddingHorizontal: 0,
-        marginBottom: 30,
-        borderColor: '#009688',
-        backgroundColor: 'white',
+        fontSize: 20,
+        marginLeft: 10,
+        width: "75%",
       },
-      iconStyle: {
-        marginTop: 12,
-        marginHorizontal: 8,
-      },
-      searchWrapperStyle: {
+      container: {
+        margin: 15,
+        justifyContent: "flex-start",
+        alignItems: "center",
         flexDirection: "row",
-        justifyContent: "space-between",
+        width: "90%",
+    
+      },   itemContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginLeft: 10,
+        marginBottom: 10,
+      },
+      profileImage: {
+        width: 50,
+        height: 50,
+        borderRadius: 100,
+        overflow: 'hidden',
+        marginRight: 30
+      },
+      textRole: {
+        fontSize: 13,
+        color: 'grey'
       },
 })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

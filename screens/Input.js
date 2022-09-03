@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   TextInput,
   Text,
@@ -11,7 +11,6 @@ import { db } from "../firebase";
 import { auth } from "../firebase";
 import {
   collection,
-  onSnapshot,
   query,
   where,
   addDoc,
@@ -52,13 +51,11 @@ export default function Input({ commentId }) {
     });
   }
   return (
-    <KeyboardAvoidingView behavior="position">
       <View style={styles.container}>
         <TextInput
           placeholder="add a comment"
           keyboardType="twitter"
           style={styles.input}
-          autoFocus={true}
           value={text}
           onChangeText={(text) => setText(text)}
         />
@@ -66,7 +63,6 @@ export default function Input({ commentId }) {
           <Text style={[styles.text, !text ? styles.inactive : []]}>Post</Text>
         </TouchableOpacity>
       </View>
-    </KeyboardAvoidingView>
   );
 }
 
@@ -78,6 +74,7 @@ const styles = StyleSheet.create({
     borderColor: "#EEE",
     alignItems: "center",
     paddingLeft: 15,
+    borderRadius: 40
   },
   button: {
     height: 40,
@@ -87,7 +84,6 @@ const styles = StyleSheet.create({
   },
   input: {
     flex: 1,
-    height: 40,
     fontSize: 15,
     fontFamily: "signika-regular",
   },

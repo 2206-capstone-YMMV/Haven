@@ -163,9 +163,9 @@ const SinglePost = (props) => {
         </View>
       </Modal>
       <KeyboardAvoidingView
-        style={{ flex: 1, backgroundColor: "transparent" }}
-        behavior="padding"
-        keyboardVerticalOffset={10}
+        style={{ backgroundColor: "transparent", height: "87%", justifyContent: "flex-end"}}
+        behavior="position"
+        keyboardVerticalOffset={95}
       >
         <ScrollView>
           <View style={styles.contentHead}>
@@ -254,8 +254,22 @@ const SinglePost = (props) => {
               {hours}:{minutes} {ampm} • {month}/{day}/{year}
             </Text>
           </View>
-          <Input commentId={element.id} />
+          <ScrollView
+            contentContainerStyle={{
+              alignItems: "flex-end",
+              justifyContent: "flex-start",
+            }}
+            style={styles.commentContainer}
+          >
+            {comments.map((comment, idx) => (
+              <Text key={idx} style={styles.message}>
+                {comment.content}
+              </Text>
+            ))}
+          </ScrollView>
+          
         </ScrollView>
+        <Input commentId={element.id}/>
       </KeyboardAvoidingView>
 
       {/* Begin Comment section */}
@@ -291,16 +305,16 @@ const styles = StyleSheet.create({
     zIndex: 999,
     paddingLeft: 20,
     paddingRight: 20,
+    paddingBottom: 5,
     borderRadius: 20,
     fontSize: 18,
-    height: 50,
     color: "#ECECEC",
   },
   message: {
     backgroundColor: "white",
     paddingVertical: 5,
-    paddingHorizontal: 5,
-    marginTop: 5,
+    paddingHorizontal: 10,
+    marginTop: 10,
     borderRadius: 10,
     fontFamily: "signika-light",
   },

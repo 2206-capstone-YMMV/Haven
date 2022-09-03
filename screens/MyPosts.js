@@ -1,5 +1,6 @@
+
 import React, { useEffect, useState } from 'react'
-import { Text, View, FlatList, StyleSheet, TextInput, TouchableOpacity, Alert } from "react-native";
+import { Text, View, FlatList, StyleSheet, TextInput, TouchableOpacity } from "react-native";
 import { db } from '../firebase'
 import { auth } from '../firebase'
 import { collection, onSnapshot, query, where, deleteDoc, doc } from 'firebase/firestore' 
@@ -8,9 +9,14 @@ import { connect } from "react-redux";
 import { get_Post } from "../redux";
 import tw from 'tailwind-react-native-classnames';
 import UpdatePost from './UpdatePost';
+import Entypo from "react-native-vector-icons/Entypo";
+import SearchBar from "react-native-dynamic-search-bar";
+import { Avatar, ListItem } from 'react-native-elements'
+import { useNavigation } from "@react-navigation/core";
 const MyPosts = () => {
     const [posts, setPosts] = useState([])
     const [search, setSearch] = useState('')
+    const navigation = useNavigation();
     const filterData = posts.filter((post) => {
         return post.description.indexOf(search) >= 0
     })
@@ -23,61 +29,41 @@ const MyPosts = () => {
         )
       ,[])
       
-      const deletePost = (post) => {
+      const delectPost = (post) => {
         deleteDoc(doc(db, 'Post', post.id))
-      }
-
-      const deleteAlert = (item) => {
-        Alert.alert(
-          `DELETION`,
-          `Are you sure you want to delete ${item.description}`,
-          [
-            {
-              text: "Delete",
-              onPress: () => deletePost(item)
-            },
-            {
-              text: "Cancel",
-              style: "cancel"
-            }
-          ]
-        )
       }
       
 
       const renderFriend = (({item}) => {
         return (
-            <View style={{flexDirection: 'row', padding: 20, marginBottom: 20, backgroundColor:'white', borderRadius: 12,
-            shadowColor: '#000', shadowOffset: {width:0, height: 10}, shadowOpacity: 0.3, shadowRadius: 20
-            }}>
-            <View>
-                <Text>Description: {item.description}</Text>
-                <Text style={tw`mb-5`}>Contents: {item.contents}</Text>
-                <UpdatePost data={item}/>
-                <TouchableOpacity
-                style={tw`bg-red-500  w-24 mt-5 border-solid rounded-full`}
-                  onPress={() => deleteAlert(item)}
-                  >
-                  <Text style={tw`text-center text-white `}>Delete Post</Text>
-                </TouchableOpacity >
-            </View>
+        <View>
+                   <ListItem 
+               onPress={() => navigation.navigate("UpdatePost", { item })}
+                containerStyle={styles.listItemContainer}
+              >
+                <Avatar source={require('../gifs/1141031.png')}/>
+                <ListItem.Content>
+                  <ListItem.Title >{item.description}</ListItem.Title>
+
+                  </ListItem.Content>
+                <ListItem.Chevron color="gray" />
+              </ListItem>
         </View>
         )
     })
 
   return (
     <View>
-           <View style={styles.searchWrapperStyle}>
-                <TextInput 
-                style={styles.textInput}
-                value={search}
-                placeholder='Search By description'
-                underlineColorAndroid='transparent'
-                onChangeText={(text) => setSearch(text)}
-                />
-                <MaterialCommunityIcons style={styles.iconStyle} name="backspace-outline"  size={23}onPress={() => {
-                    setSearch('');
-                }} /> 
+           <View >
+           <SearchBar
+            style={styles.formField}
+            placeholder="Search by Description"
+            value={search}
+            fontColor="#fff"
+            // placeholder="Search by description..."
+            underlineColorAndroid="transparent"
+            onChangeText={(text) => setSearch(text)}
+          />
             </View>
             <View style={tw`pb-52`}>
                 <FlatList 
@@ -101,41 +87,123 @@ const mapDispatchToProps = (dispatch) => ({
 export default connect(null, mapDispatchToProps)(MyPosts);
 
 const styles = StyleSheet.create({
-    posts: {
-        marginTop: 10,
-        marginBottom: 30
-    },
-    textInput: {
-        height: 50,
-        borderWidth: 1,
-        paddingLeft: 20,
-        margin: 5,
-        flex: 1,
-        fontSize: 16,
-        paddingVertical: 8,
-        paddingHorizontal: 0,
-        marginBottom: 30,
-        borderColor: '#009688',
-        backgroundColor: 'white',
-
-      },
-      iconStyle: {
-        marginTop: 12,
-        marginHorizontal: 8,
-      },
-      searchWrapperStyle: {
-        flexDirection: "row",
-        justifyContent: "space-between",
-      },
-      input: {
-        backgroundColor: 'white',
-        paddingHorizontal: 15,
-        paddingVertical: 10,
-        borderRadius: 10,
-        marginTop: 5,
-      },
-})
-
-
-
-
+  container: {
+    flex: 1,
+    borderBottomColor: "#ECECEC",
+    borderBottomWidth: 0.5,
+    flexDirection: "column",
+    backgroundColor: "#fff",
+    marginBottom: 30
+  },
+  innerContainer: {
+    flex: 1,
+    borderColor: "green",
+    flexDirection: "row",
+    borderWidth: 0,
+    height: "auto",
+  },
+  photoContainer: {
+    flex: 0.23,
+    borderColor: "yellow",
+    flexDirection: "column",
+    borderWidth: 0,
+  },
+  innerPhotoContainer: { height: 100, alignItems: "center" },
+  photo: {
+    width: 70,
+    height: 70,
+    borderRadius: 10,
+    left: 2,
+    marginTop: 10,
+  },
+  info: {
+    flex: 0.77,
+    borderColor: "yellow",
+    flexDirection: "column",
+    borderWidth: 0,
+    marginTop: 5,
+  },
+  userDetails: {
+    flex: 1,
+    borderColor: "blue",
+    borderWidth: 0,
+    marginTop: 5,
+  },
+  textTitle: { color: "black", fontWeight: "bold", fontFamily: "signika-bold" },
+  textContentContainer: { flex: 1, borderColor: "grey", borderWidth: 0 },
+  textContent: {
+    color: "black",
+    paddingRight: 10,
+    fontFamily: "signika-light",
+  },
+  actionsContainer: {
+    flex: 1,
+    borderColor: "blue",
+    borderWidth: 0,
+    marginTop: 5,
+    flexDirection: "row",
+    paddingBottom: 5,
+  },
+  likeButton: {
+    padding: 5,
+    flex: 0.25,
+    alignItems: "center",
+    flexDirection: "row",
+    borderColor: "red",
+    borderWidth: 0,
+    color: "black",
+  },
+  likeButtonIcon: {
+    position: "absolute",
+    left: 27,
+    marginLeft: 3,
+  },
+  addButton: {
+    position: "absolute",
+    color: "#ECECEC",
+    flex: 1,
+    zIndex: 100,
+    bottom: 80,
+    left: 20,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 7 },
+    shadowOpacity: 0.5,
+    shadowRadius: 4,
+  },
+  posts: {
+    marginTop: 10,
+    marginBottom: 30,
+  },
+  textInput: {
+    height: 50,
+    borderWidth: 1,
+    paddingLeft: 20,
+    margin: 5,
+    flex: 1,
+    fontSize: 16,
+    paddingVertical: 8,
+    paddingHorizontal: 0,
+    marginBottom: 30,
+    borderColor: "#009688",
+    backgroundColor: "white",
+  },
+  iconStyle: {
+    marginTop: 12,
+    marginHorizontal: 8,
+  },
+  formField: {
+    padding: 12,
+    paddingLeft: 20,
+    paddingRight: 20,
+    borderRadius: 20,
+    fontSize: 18,
+    height: 50,
+    marginBottom: 15,
+    color: "#ECECEC",
+  },
+  listItemContainer: {
+    height: 55,
+    borderWidth: 0.5,
+    borderColor: '#ECECEC',
+  },
+});
