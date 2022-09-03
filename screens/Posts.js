@@ -73,7 +73,7 @@ const Posts = () => {
   );
 
   const renderFriend = ({ item }) => {
-    let milliDate = item.createAt.seconds;
+    let milliDate = item.createAt?.seconds;
     let unix = Math.floor(date.getTime() / 1000);
     let diff = (unix - milliDate) / 3600;
     let timeDisplay;

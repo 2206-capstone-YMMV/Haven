@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   TextInput,
   Text,
@@ -11,7 +11,6 @@ import { db } from "../firebase";
 import { auth } from "../firebase";
 import {
   collection,
-  onSnapshot,
   query,
   where,
   addDoc,
