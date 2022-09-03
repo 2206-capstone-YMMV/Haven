@@ -2,6 +2,7 @@ import * as React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { Text, View } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { useFonts } from "expo-font";
 
 import Map from "./Map";
 import Profile from "./Profile";
@@ -12,6 +13,14 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 const Tab = createBottomTabNavigator();
 
 export default function Home() {
+  const [fontsLoaded] = useFonts({
+    "signika-bold": require("../fonts/SignikaNegative-Bold.ttf"),
+    "signika-light": require("../fonts/SignikaNegative-Light.ttf"),
+    "signika-medium": require("../fonts/SignikaNegative-Medium.ttf"),
+    "signika-regular": require("../fonts/SignikaNegative-Regular.ttf"),
+    "signika-semi": require("../fonts/SignikaNegative-SemiBold.ttf"),
+  });
+
   return (
     <Tab.Navigator
       initialRouteName="Map"
@@ -81,7 +90,9 @@ export default function Home() {
         name="Posts"
         component={Posts}
         options={{
+          headerTitleStyle: { fontFamily: "signika-bold" },
           headerShown: false,
+          headerStyle: { backgroundColor: "#251934" },
           tabBarIcon: ({ focused }) => (
             <View
               style={{
@@ -103,6 +114,8 @@ export default function Home() {
         name="Messages"
         component={MessagesTab}
         options={{
+          headerTitleStyle: { fontFamily: "signika-bold" },
+          headerShown: false,
           tabBarIcon: ({ focused }) => (
             <View
               style={{

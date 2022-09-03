@@ -131,14 +131,14 @@ const Posts = () => {
                       name={"heart"}
                       size={18}
                       style={{ marginLeft: 4 }}
-                      color={item.likes > 0 ? "red" : "black"}
+                      color={item.likes > 0 ? "red" : "white"}
                     />
                   ) : (
                     <Entypo
                       name={"heart-outlined"}
                       size={18}
                       style={{ marginLeft: 4 }}
-                      color={item.likes > 0 ? "red" : "black"}
+                      color={item.likes > 0 ? "red" : "white"}
                     />
                   )}
                   <Text
@@ -189,7 +189,7 @@ const Posts = () => {
         style={styles.addButton}
         onPress={() => navigation.navigate("NewPost")}
       />
-      <View style={{ marginTop: 50, backgroundColor: "#fff" }}>
+      <View style={{ marginTop: 50, backgroundColor: "#251934" }}>
         <View>
           <SearchBar
             style={styles.formField}
@@ -211,10 +211,10 @@ const Posts = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    borderBottomColor: "#ECECEC",
+    borderBottomColor: "#CB55FF",
     borderBottomWidth: 0.5,
     flexDirection: "column",
-    backgroundColor: "#fff",
+    backgroundColor: "#251934",
   },
   innerContainer: {
     flex: 1,
@@ -250,10 +250,10 @@ const styles = StyleSheet.create({
     borderWidth: 0,
     marginTop: 5,
   },
-  textTitle: { color: "black", fontWeight: "bold", fontFamily: "signika-bold" },
+  textTitle: { color: "white", fontWeight: "bold", fontFamily: "signika-bold" },
   textContentContainer: { flex: 1, borderColor: "grey", borderWidth: 0 },
   textContent: {
-    color: "black",
+    color: "white",
     paddingRight: 10,
     fontFamily: "signika-light",
   },
@@ -272,7 +272,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     borderColor: "red",
     borderWidth: 0,
-    color: "black",
+    color: "white",
   },
   likeButtonIcon: {
     position: "absolute",
