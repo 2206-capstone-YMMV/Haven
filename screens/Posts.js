@@ -211,7 +211,7 @@ const Posts = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    borderBottomColor: "#ECECEC",
+    borderBottomColor: "#CB55FF",
     borderBottomWidth: 0.5,
     flexDirection: "column",
     backgroundColor: "#251934",
