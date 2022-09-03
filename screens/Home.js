@@ -59,7 +59,7 @@ export default function Home() {
         name="Profile"
         component={Profile}
         options={{
-          headerShown: false ,
+          headerShown: false, 
           tabBarIcon: ({ focused }) => (
             <View
               style={{

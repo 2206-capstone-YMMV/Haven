@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react'
 import { Text, View, StyleSheet, Image, ImageBackground, Dimensions, ScrollView, TouchableOpacity, Alert} from "react-native";
 import { signOut } from 'firebase/auth'
@@ -121,10 +120,9 @@ const  Profile = ({ navigation }) => {
     )
 }
 
-export default Profile;
+export default Profile
 
 const styles = StyleSheet.create({
-
     line: {
       borderWidth: 1,
       margin: 5,
@@ -260,4 +258,3 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   })
-

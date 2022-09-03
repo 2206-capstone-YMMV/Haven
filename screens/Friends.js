@@ -1,6 +1,4 @@
-
 import { StyleSheet, Text, View, FlatList, TouchableOpacity,TextInput, Image, Alert, Button } from 'react-native'
-
 import React, { useEffect, useState } from 'react'
 import { db } from '../firebase'
 import { auth } from '../firebase'
@@ -105,7 +103,6 @@ const Friends = () => {
             </View>
             }
             <View>
-
                 <Text style={{fontSize: 22, fontWeight: '700'}}>{item.name} <Text style={styles.textRole}>{item.role}</Text></Text>
                 <Text>{item.email}</Text>
             </View>
@@ -129,7 +126,6 @@ const Friends = () => {
                     </TouchableOpacity> 
                     }
                     {reset()}
-
             </View>
         </View>
         )
@@ -203,6 +199,11 @@ const styles = StyleSheet.create({
         color: 'grey'
       },
 })
+
+
+
+
+
 
 
 

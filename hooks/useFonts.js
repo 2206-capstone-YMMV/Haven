@@ -7,8 +7,4 @@ export const useFonts = async () =>
     "signika-medium": require("../fonts/SignikaNegative-Medium.ttf"),
     "signika-regular": require("../fonts/SignikaNegative-Regular.ttf"),
     "signika-semi": require("../fonts/SignikaNegative-SemiBold.ttf"),
-<<<<<<< HEAD
   });
-=======
-  });
->>>>>>> 8ab826c (done profile css)

@@ -1,13 +1,15 @@
 
-
 import React, { useEffect, useState } from 'react'
-import { Text, View, FlatList, StyleSheet,} from "react-native";
+import { Text, View, FlatList, StyleSheet, TextInput, TouchableOpacity } from "react-native";
 import { db } from '../firebase'
 import { auth } from '../firebase'
 import { collection, onSnapshot, query, where, deleteDoc, doc } from 'firebase/firestore' 
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { connect } from "react-redux";
 import { get_Post } from "../redux";
 import tw from 'tailwind-react-native-classnames';
+import UpdatePost from './UpdatePost';
+import Entypo from "react-native-vector-icons/Entypo";
 import SearchBar from "react-native-dynamic-search-bar";
 import { Avatar, ListItem } from 'react-native-elements'
 import { useNavigation } from "@react-navigation/core";
