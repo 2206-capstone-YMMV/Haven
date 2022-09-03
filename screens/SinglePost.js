@@ -65,6 +65,17 @@ const SinglePost = (props) => {
   let month = date.getUTCMonth();
   let year = date.getUTCFullYear();
 
+  if (!displayName) {
+    getDocs(
+      query(collection(db, "users"), where("uid", "==", auth.currentUser?.uid))
+    ).then((user) => {
+      console.log("Grabbing Username");
+      setDisplayName(user.docs[0].data());
+    });
+  }
+
+  console.log("this is the display name", displayName.name);
+
   useEffect(
     () =>
       onSnapshot(
@@ -73,7 +84,7 @@ const SinglePost = (props) => {
           setComments(
             snapshot.docs
               .map((comment) => {
-                console.log("grabbing comments");
+                console.log("grabbing comments", comments);
 
                 return comment.data();
               })
@@ -163,7 +174,11 @@ const SinglePost = (props) => {
         </View>
       </Modal>
       <KeyboardAvoidingView
-        style={{ backgroundColor: "transparent", height: "87%", justifyContent: "flex-end"}}
+        style={{
+          backgroundColor: "transparent",
+          // height: "87%",
+          justifyContent: "flex-end",
+        }}
         behavior="position"
         keyboardVerticalOffset={95}
       >
@@ -179,7 +194,7 @@ const SinglePost = (props) => {
             >
               <Text
                 style={{
-                  fontFamily: "signika-bold",
+                  fontFamily: "signika-semi",
                   fontSize: 20,
                   color: "#fff",
                 }}
@@ -190,7 +205,7 @@ const SinglePost = (props) => {
                 style={{
                   color: "#999",
                   fontSize: 18,
-                  fontFamily: "signika-semi",
+                  fontFamily: "signika-bold",
                 }}
               >
                 {element.description}
@@ -201,9 +216,9 @@ const SinglePost = (props) => {
           <View style={styles.image}>
             <Text
               style={{
-                fontSize: 22,
+                fontSize: 20,
                 padding: 10,
-                fontFamily: "signika-light",
+                fontFamily: "signika-regular",
                 color: "#fff",
               }}
             >
@@ -254,40 +269,70 @@ const SinglePost = (props) => {
               {hours}:{minutes} {ampm} • {month}/{day}/{year}
             </Text>
           </View>
-          <ScrollView
-            contentContainerStyle={{
-              alignItems: "flex-end",
-              justifyContent: "flex-start",
-            }}
-            style={styles.commentContainer}
-          >
-            {comments.map((comment, idx) => (
-              <Text key={idx} style={styles.message}>
-                {comment.content}
-              </Text>
-            ))}
-          </ScrollView>
-          
         </ScrollView>
-        <Input commentId={element.id}/>
+        <Input commentId={element.id} />
       </KeyboardAvoidingView>
 
       {/* Begin Comment section */}
-      <View style={{ paddingBottom: 125, backgroundColor: "#251934" }}>
-        <ScrollView
-          contentContainerStyle={{
-            alignItems: "flex-end",
-            justifyContent: "flex-start",
-          }}
-          style={styles.commentContainer}
-        >
-          {comments.map((comment, idx) => (
-            <Text key={idx} style={styles.message}>
-              {comment.content}
-            </Text>
-          ))}
-        </ScrollView>
-      </View>
+      <ScrollView>
+        <View style={{ paddingBottom: 125, backgroundColor: "#251934" }}>
+          {comments.map((comment, idx) => {
+            let name = comment.content.split(":")[0];
+            let text = comment.content.split(":")[1];
+
+            if (name !== displayName.name) {
+              return (
+                <>
+                  <Text
+                    style={{
+                      color: "#55E5FF",
+                      marginTop: 2,
+                      marginLeft: 7,
+                      fontFamily: "signika-medium",
+                    }}
+                  >
+                    {name}{" "}
+                  </Text>
+                  <Text
+                    key={idx}
+                    style={{
+                      ...styles.message,
+                      alignSelf: "flex-start",
+                      textAlign: "left",
+                      justifyContent: "flex-start",
+                      marginRight: 30,
+                      marginLeft: 7,
+
+                      borderColor: "#55E5FF",
+                      fontFamily: "signika-regular",
+                    }}
+                  >
+                    {text}
+                  </Text>
+                </>
+              );
+            } else {
+              return (
+                <Text
+                  key={idx}
+                  style={{
+                    ...styles.message,
+                    alignSelf: "flex-end",
+                    textAlign: "right",
+                    justifyContent: "flex-end",
+                    marginLeft: 30,
+                    marginRight: 7,
+                    borderColor: "#CB55FF",
+                    fontFamily: "signika-medium",
+                  }}
+                >
+                  {text}
+                </Text>
+              );
+            }
+          })}
+        </View>
+      </ScrollView>
     </>
   );
 };
@@ -306,17 +351,19 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
     paddingRight: 20,
     paddingBottom: 5,
-    borderRadius: 20,
     fontSize: 18,
     color: "#ECECEC",
+    backgroundColor: "#251934",
   },
   message: {
-    backgroundColor: "white",
+    backgroundColor: "transparent",
+    color: "#fff",
     paddingVertical: 5,
-    paddingHorizontal: 10,
-    marginTop: 10,
+    paddingHorizontal: 5,
+    marginTop: 3,
     borderRadius: 10,
-    fontFamily: "signika-light",
+    borderWidth: 1,
+    overflow: "hidden",
   },
   centeredView: {
     flex: 1,
