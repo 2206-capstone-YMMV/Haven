@@ -18,13 +18,21 @@ import {
   addDoc,
   getDocs,
 } from "firebase/firestore";
-import { LinearGradient } from "expo-linear-gradient";
+import { useFonts } from "expo-font";
 
 export default function Message({ route }) {
   const { conversationId } = route.params;
   const [conversation, setConversation] = useState([]);
   const [message, setMessage] = useState("");
   const [displayName, setDisplayName] = useState("");
+
+  const [fontsLoaded] = useFonts({
+    "signika-bold": require("../fonts/SignikaNegative-Bold.ttf"),
+    "signika-light": require("../fonts/SignikaNegative-Light.ttf"),
+    "signika-medium": require("../fonts/SignikaNegative-Medium.ttf"),
+    "signika-regular": require("../fonts/SignikaNegative-Regular.ttf"),
+    "signika-semi": require("../fonts/SignikaNegative-SemiBold.ttf"),
+  });
 
   useEffect(
     () =>
@@ -74,23 +82,55 @@ export default function Message({ route }) {
       style={{ flex: 1, alignItems: "center", justifyContent: "space-between" }}
       keyboardVerticalOffset={100}
     >
-      <LinearGradient
-        colors={["#8c5aa5", "#f2e797"]}
-        style={{ width: "100%", height: "100%" }}
+      <View
+        style={{ width: "100%", height: "100%", backgroundColor: "#251934" }}
       >
         <ScrollView>
           <View style={styles.messageContainer}>
             {conversation.map((convo, index) => {
               if (convo.messenger.uid !== auth.currentUser.uid) {
                 return (
-                  <Text key={index} style={styles.message}>
-                    {convo.messenger.name + ": " + convo.content}
-                  </Text>
+                  <>
+                    <Text
+                      style={{
+                        color: "#55E5FF",
+                        marginTop: 2,
+                        fontFamily: "signika-medium",
+                      }}
+                    >
+                      {convo.messenger.name}{" "}
+                    </Text>
+                    <Text
+                      key={index}
+                      style={{
+                        ...styles.message,
+                        alignSelf: "flex-start",
+                        textAlign: "left",
+                        justifyContent: "flex-start",
+                        marginRight: 75,
+                        borderColor: "#55E5FF",
+                        fontFamily: "signika-regular",
+                      }}
+                    >
+                      {convo.content}
+                    </Text>
+                  </>
                 );
               } else {
                 return (
-                  <Text key={index} style={[styles.message, styles.user]}>
-                    {"You: " + convo.content}
+                  <Text
+                    key={index}
+                    style={{
+                      ...styles.message,
+                      alignSelf: "flex-end",
+                      textAlign: "right",
+                      justifyContent: "flex-end",
+                      marginLeft: 75,
+                      borderColor: "#CB55FF",
+                      fontFamily: "signika-medium",
+                    }}
+                  >
+                    {convo.content}
                   </Text>
                 );
               }
@@ -104,13 +144,13 @@ export default function Message({ route }) {
               style={styles.input}
               multiline={true}
               blurOnSubmit={true}
-            ></TextInput>
+            />
             <TouchableOpacity onPress={handleSend} style={styles.button}>
               <Text style={styles.buttonText}>Send</Text>
             </TouchableOpacity>
           </View>
         </ScrollView>
-      </LinearGradient>
+      </View>
     </KeyboardAvoidingView>
   );
 }
@@ -119,27 +159,24 @@ const styles = StyleSheet.create({
   messageContainer: {
     alignSelf: "flex-start",
     alignItems: "left",
-    paddingHorizontal: "10%",
-    width: "100%",
+    paddingHorizontal: 15,
   },
   message: {
-    backgroundColor: "white",
+    backgroundColor: "transparent",
+    color: "#fff",
     paddingVertical: 5,
     paddingHorizontal: 5,
-    marginTop: 5,
+    marginTop: 3,
     borderRadius: 10,
+    borderWidth: 1,
     overflow: "hidden",
-  },
-  user: {
-    alignSelf: "flex-end",
   },
   inputContainer: {
     alignSelf: "center",
-    width: "80%",
     backgroundColor: "white",
     paddingHorizontal: 15,
     paddingVertical: 10,
-    borderRadius: 10,
+    borderRadius: 4,
     flexDirection: "row",
     marginTop: 10,
     marginBottom: 10,
@@ -152,13 +189,14 @@ const styles = StyleSheet.create({
   },
   button: {
     padding: 5,
-    backgroundColor: "#0782F9",
-    borderRadius: 10,
+    backgroundColor: "#CB55FF",
+    borderRadius: 5,
     alignItems: "center",
   },
   buttonText: {
     color: "white",
     fontWeight: "700",
     fontSize: 16,
+    fontFamily: "signika-medium",
   },
 });

@@ -28,6 +28,7 @@ import firebaseConfig from "../firebaseConfig.tsx";
 import { initializeApp } from "firebase/app"; //validate yourself
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { useFonts } from "expo-font";
+import Entypo from "react-native-vector-icons/Entypo";
 
 initializeApp(firebaseConfig);
 const NewPost = () => {
@@ -174,32 +175,50 @@ const NewPost = () => {
   };
 
   return (
-    <View>
-      <TextInput
-        style={{...styles.input, fontFamily: 'signika-semi'}}
-        placeholder="Title"
-        onChangeText={(text) => setDescription(text)}
-      />
-      <TextInput
-        style={{ ...styles.input, height: "40%" }}
-        placeholder="Content"
-        onChangeText={(text) => setContents(text)}
-        multiline
-        blurOnSubmit={true}
-        numberOfLines={4}
-      />
+    <View style={{ backgroundColor: "#251934", flex: 1 }}>
+      <View>
+        <TextInput
+          style={{
+            ...styles.input,
+            height: "8%",
+            fontFamily: "signika-light",
+          }}
+          placeholder="Title"
+          onChangeText={(text) => setDescription(text)}
+        />
+        <TextInput
+          style={{
+            ...styles.input,
+            height: "50%",
+            fontFamily: "signika-light",
+          }}
+          placeholder="Content"
+          onChangeText={(text) => setContents(text)}
+          multiline
+          blurOnSubmit={true}
+          numberOfLines={4}
+        />
+      </View>
       {image && (
         <Image
           source={{ uri: image }}
           style={{ width: 300, height: 300 }}
         ></Image>
       )}
-      <TouchableOpacity onPress={pickImage} style={[styles.button]}>
-        <MaterialCommunityIcons name="camera" style={{fontSize: "60%"}}/>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={handleAddPost} style={[styles.button]}>
-        <Text style={{fontSize: "40%", fontFamily: "signika-bold"}}>Submit</Text>
-      </TouchableOpacity>
+      <Entypo
+        onPress={handleAddPost}
+        size={50}
+        name="plus"
+        color="#fff"
+        style={{ ...styles.button, top: 310, right: 10 }}
+      />
+      <MaterialCommunityIcons
+        onPress={pickImage}
+        name="camera"
+        size={40}
+        color="#fff"
+        style={{ ...styles.button, top: 317, left: 10 }}
+      />
     </View>
   );
 };
@@ -210,20 +229,16 @@ const styles = StyleSheet.create({
   input: {
     backgroundColor: "white",
     paddingHorizontal: 15,
-    paddingVertical: 10,
-    borderRadius: 10,
-    overflow: "hidden",
-    margin: 20,
+    borderRadius: 4,
+    margin: 10,
     fontSize: 20,
-    fontFamily: "signika-medium"
+    fontFamily: "signika-medium",
   },
   button: {
-    backgroundColor: "#0782F9",
-    width: "50%",
-    padding: 20,
+    position: "absolute",
+    flex: 1,
     borderRadius: 10,
     alignSelf: "center",
     alignItems: "center",
-    marginTop: 55,
   },
 });

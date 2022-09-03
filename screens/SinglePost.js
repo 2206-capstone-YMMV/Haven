@@ -25,6 +25,7 @@ import {
   where,
 } from "firebase/firestore";
 import Entypo from "react-native-vector-icons/Entypo";
+import { useFonts } from "expo-font";
 
 import { db, auth } from "../firebase";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -44,7 +45,13 @@ const SinglePost = (props) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [displayName, setDisplayName] = useState("");
 
-  // console.log(element);
+  const [fontsLoaded] = useFonts({
+    "signika-bold": require("../fonts/SignikaNegative-Bold.ttf"),
+    "signika-light": require("../fonts/SignikaNegative-Light.ttf"),
+    "signika-medium": require("../fonts/SignikaNegative-Medium.ttf"),
+    "signika-regular": require("../fonts/SignikaNegative-Regular.ttf"),
+    "signika-semi": require("../fonts/SignikaNegative-SemiBold.ttf"),
+  });
 
   let milliDate = element.createAt.seconds;
   let date = new Date(milliDate * 1000);
@@ -82,7 +89,6 @@ const SinglePost = (props) => {
         style={styles.flag}
         name="flag-outline"
         size={30}
-        color="black"
         onPress={() => setModalVisible(true)}
       />
 
@@ -171,17 +177,36 @@ const SinglePost = (props) => {
                 height: 56,
               }}
             >
-              <Text style={{ fontWeight: "bold", fontSize: 20 }}>
+              <Text
+                style={{
+                  fontFamily: "signika-bold",
+                  fontSize: 20,
+                  color: "#fff",
+                }}
+              >
                 by: {element.username}
               </Text>
-              <Text style={{ color: "#999", fontSize: 18 }}>
+              <Text
+                style={{
+                  color: "#999",
+                  fontSize: 18,
+                  fontFamily: "signika-semi",
+                }}
+              >
                 {element.description}
               </Text>
             </View>
           </View>
 
           <View style={styles.image}>
-            <Text style={{ fontSize: 22, padding: 10 }}>
+            <Text
+              style={{
+                fontSize: 22,
+                padding: 10,
+                fontFamily: "signika-light",
+                color: "#fff",
+              }}
+            >
               {element.contents}
             </Text>
 
@@ -199,21 +224,33 @@ const SinglePost = (props) => {
                 name={"heart"}
                 size={18}
                 style={{ marginLeft: 4 }}
-                color={element.likes > 0 ? "red" : "black"}
+                color={element.likes > 0 ? "red" : "white"}
               />
             ) : (
               <Entypo
                 name={"heart-outlined"}
                 size={18}
                 style={{ marginLeft: 4 }}
-                color={element.likes > 0 ? "red" : "black"}
+                color={element.likes > 0 ? "red" : "white"}
               />
             )}
-            <Text style={{ fontWeight: "bold", fontSize: 16, paddingRight: 5 }}>
+            <Text
+              style={{
+                fontSize: 16,
+                paddingRight: 5,
+                color: "white",
+              }}
+            >
               {" "}
               {element.likes}
             </Text>
-            <Text style={{ color: "#999", fontSize: 15 }}>
+            <Text
+              style={{
+                color: "#999",
+                fontSize: 15,
+                fontFamily: "signika-light",
+              }}
+            >
               {hours}:{minutes} {ampm} • {month}/{day}/{year}
             </Text>
           </View>
@@ -222,7 +259,7 @@ const SinglePost = (props) => {
       </KeyboardAvoidingView>
 
       {/* Begin Comment section */}
-      <View style={{ paddingBottom: 125 }}>
+      <View style={{ paddingBottom: 125, backgroundColor: "#251934" }}>
         <ScrollView
           contentContainerStyle={{
             alignItems: "flex-end",
@@ -265,6 +302,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 5,
     marginTop: 5,
     borderRadius: 10,
+    fontFamily: "signika-light",
   },
   centeredView: {
     flex: 1,
@@ -307,7 +345,7 @@ const styles = StyleSheet.create({
   },
   flag: {
     position: "absolute",
-    color: "#000",
+    color: "#fff",
     flex: 1,
     zIndex: 100,
     bottom: 20,
@@ -343,6 +381,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 10,
     paddingBottom: 0,
+    backgroundColor: "#251934",
   },
   footBar: {
     flexDirection: "row",
@@ -350,6 +389,7 @@ const styles = StyleSheet.create({
     padding: 10,
     borderBottomColor: "#CCC",
     borderBottomWidth: StyleSheet.hairlineWidth,
+    backgroundColor: "#251934",
   },
   likeButtonIcon: {
     position: "absolute",
@@ -360,6 +400,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: "#251934",
   },
 });
 

@@ -17,10 +17,19 @@ import {
   addDoc,
   getDocs,
 } from "firebase/firestore";
+import { useFonts } from "expo-font";
 
 export default function Input({ commentId }) {
   const [text, setText] = useState("");
   const [displayName, setDisplayName] = useState("");
+
+  const [fontsLoaded] = useFonts({
+    "signika-bold": require("../fonts/SignikaNegative-Bold.ttf"),
+    "signika-light": require("../fonts/SignikaNegative-Light.ttf"),
+    "signika-medium": require("../fonts/SignikaNegative-Medium.ttf"),
+    "signika-regular": require("../fonts/SignikaNegative-Regular.ttf"),
+    "signika-semi": require("../fonts/SignikaNegative-SemiBold.ttf"),
+  });
 
   const submit = () => {
     addDoc(collection(db, "Comments"), {
@@ -80,6 +89,7 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 40,
     fontSize: 15,
+    fontFamily: "signika-regular",
   },
   inactive: {
     color: "#CCC",
@@ -87,7 +97,8 @@ const styles = StyleSheet.create({
   text: {
     color: "#3F51B5",
     fontWeight: "bold",
-    fontFamily: "Avenir",
+    fontFamily: "signika-bold",
     textAlign: "center",
     fontSize: 15,
-  },})
+  },
+});

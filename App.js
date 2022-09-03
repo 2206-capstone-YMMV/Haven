@@ -16,6 +16,7 @@ import NewPost from "./screens/NewPost";
 import SinglePost from "./screens/SinglePost";
 import MyPosts from "./screens/MyPosts";
 import EditProfile from "./screens/EditProfile";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 
 const Stack = createNativeStackNavigator();
 
@@ -40,14 +41,59 @@ export default function App() {
               component={Home}
               options={{ headerShown: false }}
             />
-            <Stack.Screen name="Message" component={Message} />
+            <Stack.Screen
+              name="Message"
+              component={Message}
+              options={{
+                title: "Message",
+                headerBackTitle: "",
+                headerTitleStyle: {
+                  color: "#fff",
+                  fontFamily: "signika-bold",
+                },
+                headerStyle: { backgroundColor: "#251934" },
+              }}
+            />
             <Stack.Screen name="Friends" component={Friends} />
-            <Stack.Screen name="NewPost" component={NewPost} />
-            <Stack.Screen name="SinglePost" component={SinglePost} />
+            <Stack.Screen
+              name="NewPost"
+              component={NewPost}
+              options={{
+                title: "New Post",
+                headerBackTitle: "",
+                headerTitleStyle: {
+                  color: "#fff",
+                  fontFamily: "signika-bold",
+                },
+                headerStyle: { backgroundColor: "#251934" },
+              }}
+            />
+            <Stack.Screen
+              name="SinglePost"
+              component={SinglePost}
+              options={{
+                title: "Post",
+                headerBackTitle: "",
+                headerTitleStyle: {
+                  color: "#fff",
+                  fontFamily: "signika-bold",
+                },
+                headerStyle: { backgroundColor: "#251934" },
+              }}
+            />
             <Stack.Screen name="MyPosts" component={MyPosts} />
             <Stack.Screen
               name="NewConversation"
               component={StartConversation}
+              options={{
+                title: "New message",
+                headerBackTitle: "",
+                headerTitleStyle: {
+                  color: "#fff",
+                  fontFamily: "signika-bold",
+                },
+                headerStyle: { backgroundColor: "#251934" },
+              }}
             />
             <Stack.Screen name="EditProfile" component={EditProfile} />
           </Stack.Navigator>
