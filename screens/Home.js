@@ -47,6 +47,7 @@ export default function Home() {
         name="Map"
         component={Map}
         options={{
+          headerShown: false, 
           tabBarIcon: ({ focused }) => (
             <View
               style={{

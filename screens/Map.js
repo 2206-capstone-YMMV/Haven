@@ -549,13 +549,6 @@ const MapScreen = (props) => {
 
               <Text style={[styles.filter]} onPress={() => dropDownSwitch()}>{dropDownText}</Text>
               <Text style={[styles.filter, styles.distance]} onPress={() => distanceSwitch()}>{distanceText}</Text>
-
-              <Text
-                style={[styles.filter, styles.distance]}
-                onPress={() => distanceSwitch()}
-              >
-                {distanceValue}
-              </Text>
               <Text style={styles.Btn} onPress={() => setIsVis(!isVis)}>
                 Add
               </Text>
@@ -605,7 +598,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#eeecef",
     alignSelf: "flex-end",
     marginTop: -5,
-    top: 65,
+    top: 115,
     right: 10,
     fontWeight: "bold"
   },
@@ -624,6 +617,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     paddingVertical: 8,
     paddingHorizontal: 0,
+    marginTop: 50,
     marginBottom: 30,
     borderColor: "#009688",
     backgroundColor: "white",
@@ -660,7 +654,7 @@ const styles = StyleSheet.create({
   },
   filter: {
     position: "absolute",
-    top: 60,
+    top: 115,
     backgroundColor: "#eeecef",
     padding: 10,
     borderRadius: 20,
