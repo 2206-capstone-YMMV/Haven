@@ -189,7 +189,7 @@ const Posts = () => {
         style={styles.addButton}
         onPress={() => navigation.navigate("NewPost")}
       />
-      <View style={{ marginTop: 50, backgroundColor: "#251934" }}>
+      <View style={{ paddingTop: 50, backgroundColor: "#251934" }}>
         <View>
           <SearchBar
             style={styles.formField}
@@ -319,6 +319,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     fontSize: 18,
     height: 50,
+    marginTop: 15,
     marginBottom: 15,
     color: "#ECECEC",
   },

@@ -8,12 +8,21 @@ import InfoText from '../components/infoText';
 import { Avatar, ListItem } from 'react-native-elements'
 import { Feather } from "@expo/vector-icons"
 import { useNavigation } from "@react-navigation/core";
+import { useFonts } from "expo-font";
 
 const FriendsView = () => {
     const [search, setSearch] = useState('')
     const [friends, setFriends] = useState([])
     const colRef = query(collection(db, 'Friends'), where('uid', '==', auth.currentUser?.uid))
     const navigation = useNavigation();
+
+    const [fontsLoaded] = useFonts({
+      "signika-bold": require("../fonts/SignikaNegative-Bold.ttf"),
+      "signika-light": require("../fonts/SignikaNegative-Light.ttf"),
+      "signika-medium": require("../fonts/SignikaNegative-Medium.ttf"),
+      "signika-regular": require("../fonts/SignikaNegative-Regular.ttf"),
+      "signika-semi": require("../fonts/SignikaNegative-SemiBold.ttf"),
+    });
 
     const filterData = friends.filter((friend) => {
         return friend.friendName.indexOf(search) >= 0
@@ -38,9 +47,9 @@ const FriendsView = () => {
                 </View>
                 }
                 <View>
-                    <Text style={{fontSize: 22, fontWeight: '700'}}>{item.friendName}  <Text style={styles.textRole}>{item.friendRole}</Text></Text>
+                    <Text style={{fontSize: 22, color: "white", fontFamily: "signika-bold"}}>{item.friendName}  <Text style={styles.textRole}>{item.friendRole}</Text></Text>
                     <TouchableOpacity style={tw`bg-yellow-500  w-24  border-solid rounded-full`} onPress={() => navigation.navigate('FriendPost', {item})}>
-                        <Text style={tw`text-center text-white `}>View All Post</Text>
+                        <Text style={{color: "white", textAlign: "center", fontFamily: "signika-regular"}}>View All Post</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -48,7 +57,7 @@ const FriendsView = () => {
         )
     })
   return (
-    <View>
+    <View style={{backgroundColor: "#251934", height: "100%"}}>
         <View>
             <InfoText text="Add / Remove Friends" />
             <ListItem 
@@ -57,7 +66,7 @@ const FriendsView = () => {
               >
                 <Avatar source={require('../gifs/420140.png')}/>
                 <ListItem.Content>
-                  <ListItem.Title>Edit</ListItem.Title>
+                  <ListItem.Title style={{fontFamily: "signika-regular"}}>Edit</ListItem.Title>
                   </ListItem.Content>
                 <ListItem.Chevron color="gray" />
               </ListItem>
@@ -77,18 +86,12 @@ const FriendsView = () => {
                 underlineColorAndroid='transparent'
                 onChangeText={(text) => setSearch(text)}
             />
-            <View>
-                <Button
-                title="Cancel"
-                onPress={() => {setSearch('')}}
-                ></Button>
-            </View>
         </View>
-        <View style={tw`pb-96 mb-24`}>
+        <View>
             <FlatList 
                 data={filterData}
                 contentContainerStyle={{
-                padding: 15
+                padding: 15,
                 }}
                 renderItem={renderFriend}
             />
@@ -104,6 +107,7 @@ const styles = StyleSheet.create({
         fontSize: 20,
         marginLeft: 10,
         width: "75%",
+        fontFamily: "signika-regular"
       },
       searchWrapperStyle: {
         flexDirection: "row",
@@ -117,14 +121,17 @@ const styles = StyleSheet.create({
         height: 55,
         borderWidth: 0.5,
         borderColor: '#ECECEC',
+        backgroundColor: '#F4F5F4'
       },
       container: {
         margin: 15,
+        padding: 10,
         justifyContent: "flex-start",
         alignItems: "center",
         flexDirection: "row",
         width: "90%",
-        
+        borderRadius: 20,
+        backgroundColor: "white"
       },
       profileImage: {
         width: 50,
@@ -135,7 +142,8 @@ const styles = StyleSheet.create({
       },
       textRole: {
         fontSize: 13,
-        color: 'grey'
+        color: 'grey',
+        fontFamily: "signika-bold"
       },
       itemContainer: {
         flexDirection: 'row',

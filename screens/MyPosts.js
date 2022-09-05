@@ -10,9 +10,11 @@ import { get_Post } from "../redux";
 import tw from 'tailwind-react-native-classnames';
 import UpdatePost from './UpdatePost';
 import Entypo from "react-native-vector-icons/Entypo";
-import SearchBar from "react-native-dynamic-search-bar";
+import { Feather } from "@expo/vector-icons"
 import { Avatar, ListItem } from 'react-native-elements'
 import { useNavigation } from "@react-navigation/core";
+import { useFonts } from "expo-font";
+
 const MyPosts = () => {
     const [posts, setPosts] = useState([])
     const [search, setSearch] = useState('')
@@ -21,6 +23,13 @@ const MyPosts = () => {
         return post.description.indexOf(search) >= 0
     })
 
+    const [fontsLoaded] = useFonts({
+      "signika-bold": require("../fonts/SignikaNegative-Bold.ttf"),
+      "signika-light": require("../fonts/SignikaNegative-Light.ttf"),
+      "signika-medium": require("../fonts/SignikaNegative-Medium.ttf"),
+      "signika-regular": require("../fonts/SignikaNegative-Regular.ttf"),
+      "signika-semi": require("../fonts/SignikaNegative-SemiBold.ttf"),
+    });
 
     useEffect(  
         () => 
@@ -43,7 +52,7 @@ const MyPosts = () => {
               >
                 <Avatar source={require('../gifs/1141031.png')}/>
                 <ListItem.Content>
-                  <ListItem.Title >{item.description}</ListItem.Title>
+                  <ListItem.Title style={{fontFamily: "signika-regular"}}>{item.description}</ListItem.Title>
 
                   </ListItem.Content>
                 <ListItem.Chevron color="gray" />
@@ -53,17 +62,21 @@ const MyPosts = () => {
     })
 
   return (
-    <View>
-           <View >
-           <SearchBar
-            style={styles.formField}
-            placeholder="Search by Description"
-            value={search}
-            fontColor="#fff"
-            // placeholder="Search by description..."
-            underlineColorAndroid="transparent"
-            onChangeText={(text) => setSearch(text)}
-          />
+    <View style={{backgroundColor: "#251934", height: "100%"}}>
+           <View style={styles.container}>
+            <Feather
+            name="search"
+            size={20}
+            color="black"
+            style={{ marginLeft: 1 }}
+            />
+            <TextInput 
+                style={styles.textInput}
+                value={search}
+                placeholder='Search By Name'
+                underlineColorAndroid='transparent'
+                onChangeText={(text) => setSearch(text)}
+            />
             </View>
             <View style={tw`pb-52`}>
                 <FlatList 
@@ -88,12 +101,14 @@ export default connect(null, mapDispatchToProps)(MyPosts);
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    borderBottomColor: "#ECECEC",
-    borderBottomWidth: 0.5,
-    flexDirection: "column",
-    backgroundColor: "#fff",
-    marginBottom: 30
+    margin: 15,
+    justifyContent: "flex-start",
+    alignItems: "center",
+    flexDirection: "row",
+    width: "90%",
+    backgroundColor: "white",
+    padding: 10,
+    borderRadius: 20
   },
   innerContainer: {
     flex: 1,
@@ -175,17 +190,9 @@ const styles = StyleSheet.create({
     marginBottom: 30,
   },
   textInput: {
-    height: 50,
-    borderWidth: 1,
-    paddingLeft: 20,
-    margin: 5,
-    flex: 1,
-    fontSize: 16,
-    paddingVertical: 8,
-    paddingHorizontal: 0,
-    marginBottom: 30,
-    borderColor: "#009688",
-    backgroundColor: "white",
+    fontSize: 20,
+    marginLeft: 10,
+    width: "75%",
   },
   iconStyle: {
     marginTop: 12,
@@ -195,6 +202,7 @@ const styles = StyleSheet.create({
     padding: 12,
     paddingLeft: 20,
     paddingRight: 20,
+    marginTop: 10,
     borderRadius: 20,
     fontSize: 18,
     height: 50,

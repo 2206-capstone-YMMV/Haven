@@ -163,7 +163,7 @@ const SinglePost = (props) => {
         </View>
       </Modal>
       <KeyboardAvoidingView
-        style={{ backgroundColor: "transparent", height: "87%", justifyContent: "flex-end"}}
+        style={{ backgroundColor: "transparent", height: "92%", justifyContent: "flex-end", backgroundColor: "#251934"}}
         behavior="position"
         keyboardVerticalOffset={95}
       >
@@ -270,24 +270,9 @@ const SinglePost = (props) => {
           
         </ScrollView>
         <Input commentId={element.id}/>
+        
       </KeyboardAvoidingView>
-
-      {/* Begin Comment section */}
-      <View style={{ paddingBottom: 125, backgroundColor: "#251934" }}>
-        <ScrollView
-          contentContainerStyle={{
-            alignItems: "flex-end",
-            justifyContent: "flex-start",
-          }}
-          style={styles.commentContainer}
-        >
-          {comments.map((comment, idx) => (
-            <Text key={idx} style={styles.message}>
-              {comment.content}
-            </Text>
-          ))}
-        </ScrollView>
-      </View>
+      <View style={{height: "8%", backgroundColor: "#251934"}}></View>
     </>
   );
 };
@@ -316,6 +301,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     marginTop: 10,
     borderRadius: 10,
+    overflow: "hidden",
     fontFamily: "signika-light",
   },
   centeredView: {
@@ -362,7 +348,7 @@ const styles = StyleSheet.create({
     color: "#fff",
     flex: 1,
     zIndex: 100,
-    bottom: 20,
+    bottom: 18,
     left: 20,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 7 },
