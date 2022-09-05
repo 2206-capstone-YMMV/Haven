@@ -71,7 +71,7 @@ const  Profile = ({ navigation }) => {
               <View style={styles.profileImageContainer}>
                 <Image source={require('../gifs/download.jpeg')} style={styles.profileImage} />
               </View> : <View style={styles.profileImageContainer}>
-                <Image source={require('../gifs/default-user-image.png')} style={styles.profileImage} />
+                <Image source={require('../gifs/puzzle-piece.png')} style={styles.profileImage} />
               </View>
               }
               </View>
@@ -225,6 +225,7 @@ const styles = StyleSheet.create({
       position: 'absolute',
     },
     profileImage: {
+      backgroundColor: "white",
       borderColor: '#FFF',
       borderRadius: 55,
       borderWidth: 3,

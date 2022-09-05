@@ -43,7 +43,7 @@ const FriendsView = () => {
                     <Image source={require('../gifs/download.jpeg')} style={styles.profileImage} />
                 </View> : 
                 <View style={styles.profileImageContainer}>
-                    <Image source={require('../gifs/default-user-image.png')} style={styles.profileImage} />
+                    <Image source={require('../gifs/puzzle-piece.png')} style={styles.profileImage} />
                 </View>
                 }
                 <View>
@@ -134,6 +134,7 @@ const styles = StyleSheet.create({
         backgroundColor: "white"
       },
       profileImage: {
+        backgroundColor: "white",
         width: 50,
         height: 50,
         borderRadius: 100,
