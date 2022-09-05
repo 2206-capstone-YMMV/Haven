@@ -187,14 +187,14 @@ const NewPost = () => {
         size={50}
         name="plus"
         color="#fff"
-        style={{ ...styles.button, top: 310, right: 10 }}
+        style={{ ...styles.button, top: 320, right: 10 }}
       />
       <MaterialCommunityIcons
         onPress={pickImage}
         name="camera"
         size={40}
         color="#fff"
-        style={{ ...styles.button, top: 317, left: 10 }}
+        style={{ ...styles.button, top: 327, left: 10 }}
       />
     </View>
 

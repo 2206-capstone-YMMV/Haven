@@ -40,7 +40,7 @@ const FriendPost = (item) => {
         )
     })
   return (
-    <View>
+    <View style={{backgroundColor: "#251934", height: "100%"}}>
     
        <View style={styles.container}>
             <Feather
@@ -56,12 +56,6 @@ const FriendPost = (item) => {
                 underlineColorAndroid='transparent'
                 onChangeText={(text) => setSearch(text)}
             />
-            <View>
-                <Button
-                title="Cancel"
-                onPress={() => {setSearch('')}}
-                ></Button>
-            </View>
             
         </View>
         <InfoText text={`${item.route.params.item.friendName}'s Post`}/>
@@ -89,6 +83,9 @@ const styles = StyleSheet.create({
         alignItems: "center",
         flexDirection: "row",
         width: "90%",
+        backgroundColor: "white",
+        padding: 10,
+        borderRadius: 20
       },
       textInput: {
         fontSize: 20,
