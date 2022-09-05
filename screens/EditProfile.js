@@ -63,7 +63,7 @@ const EditProfile = () => {
 
   return (
     <View style={styles.container}>
-        <Image source={require('../gifs/default-user-image.png')} style={styles.profileImage} />
+        <Image source={require('../gifs/puzzle-piece.png')} style={styles.profileImage} />
         <TextInput style={styles.input} placeholder="Full Name" onChangeText={text => setName(text)} />
         <DropDownPicker
         open={open}
