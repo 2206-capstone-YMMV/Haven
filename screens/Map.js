@@ -142,7 +142,30 @@ const MapScreen = (props) => {
       console.log("Grabbing Username"), setUser(user.docs[0].data().role);
     });
   }
-
+  const votes = (id) => {
+    getDocs(
+      query(
+        collection(db, "location"),
+        where("locationId", "==", id)
+        // where("uid", "==", auth.currentUser.uid)
+      )
+    ).then(updateDoc(doc(db, "location", id), { vote: increment(1) }));
+  };
+  const ratings = (id, rating) => {
+    getDocs(
+      query(
+        collection(db, "location"),
+        where("locationId", "==", id)
+        // where("uid", "==", auth.currentUser.uid)
+      )
+    ).then(
+      updateDoc(
+        doc(db, "location", id),
+        { ratings: increment(rating) }
+        // { vote: increment(1) }
+      )
+    );
+  };
   const mapMarkerAll = () => {
     return filterMarkersData?.map((pin) => (
       <Marker
