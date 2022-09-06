@@ -11,6 +11,7 @@ import {
   Button,
   TextInput,
   Modal,
+  Alert,
 } from "react-native";
 import * as Location from "expo-location";
 import { db } from "../firebase";
@@ -25,6 +26,8 @@ import {
   getDocs,
   GeoPoint,
   onSnapshot,
+  updateDoc,
+  increment,
 } from "firebase/firestore";
 import { useNavigation } from "@react-navigation/core";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
