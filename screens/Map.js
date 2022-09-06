@@ -11,6 +11,7 @@ import {
   Button,
   TextInput,
   Modal,
+  Alert,
 } from "react-native";
 import * as Location from "expo-location";
 import { db } from "../firebase";
@@ -25,6 +26,8 @@ import {
   getDocs,
   GeoPoint,
   onSnapshot,
+  updateDoc,
+  increment,
 } from "firebase/firestore";
 import { useNavigation } from "@react-navigation/core";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
@@ -142,7 +145,30 @@ const MapScreen = (props) => {
       console.log("Grabbing Username"), setUser(user.docs[0].data().role);
     });
   }
-
+  const votes = (id) => {
+    getDocs(
+      query(
+        collection(db, "location"),
+        where("locationId", "==", id)
+        // where("uid", "==", auth.currentUser.uid)
+      )
+    ).then(updateDoc(doc(db, "location", id), { vote: increment(1) }));
+  };
+  const ratings = (id, rating) => {
+    getDocs(
+      query(
+        collection(db, "location"),
+        where("locationId", "==", id)
+        // where("uid", "==", auth.currentUser.uid)
+      )
+    ).then(
+      updateDoc(
+        doc(db, "location", id),
+        { ratings: increment(rating) }
+        // { vote: increment(1) }
+      )
+    );
+  };
   const mapMarkerAll = () => {
     return filterMarkersData?.map((pin) => (
       <Marker
