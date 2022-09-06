@@ -36,6 +36,7 @@ import RNDateTimePicker from "@react-native-community/datetimepicker";
 import getDistance from "geolib/es/getDistance";
 import { useFonts } from "expo-font";
 import { withTheme } from "react-native-elements";
+import { Rating, AirbnbRating } from "react-native-ratings";
 
 const { width, height } = Dimensions.get("window");
 const CARD_HEIGHT = 220;
@@ -64,6 +65,7 @@ const MapScreen = (props) => {
   const [dropDownText, setDropDownText] = React.useState("Locations");
   const [distanceValue, setDistanceValue] = React.useState("All");
   const [distanceText, setDistanceText] = React.useState("All");
+  const [modalVisible, setModalVisible] = React.useState(false);
 
   const [fontsLoaded] = useFonts({
     "signika-bold": require("../fonts/SignikaNegative-Bold.ttf"),
