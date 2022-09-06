@@ -46,9 +46,9 @@ Haven is a unique utility app designed to serve the communities of those in need
 
 This section should list any major frameworks/libraries used to bootstrap your project. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples.
 
-* React Native[React-native-url]
-* FireBase[Firebase-url]
-* Expo[Expo-url]
+* [React-Native]
+* [Firebase]
+* [Expo]
 
 
 
@@ -84,6 +84,6 @@ This section should list any major frameworks/libraries used to bootstrap your p
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[React-native-url]: https://reactnative.dev/
-[Firebase-url]: https://firebase.google.com/
-[Expo-url]: https://expo.dev/
+[React-Native]: https://reactnative.dev/
+[Firebase]: https://firebase.google.com/
+[Expo]: https://expo.dev/
