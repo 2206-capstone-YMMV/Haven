@@ -11,7 +11,6 @@ import {
   Button,
   TextInput,
   Modal,
-  Alert,
 } from "react-native";
 import * as Location from "expo-location";
 import { db } from "../firebase";
@@ -26,22 +25,17 @@ import {
   getDocs,
   GeoPoint,
   onSnapshot,
-  updateDoc,
-  increment,
 } from "firebase/firestore";
 import { useNavigation } from "@react-navigation/core";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { connect } from "react-redux";
 import { get_Post } from "../redux";
 import DropDownPicker from "react-native-dropdown-picker";
-import DateTimePicker from "@react-native-community/datetimepicker";
-import { Rating, AirbnbRating } from "react-native-ratings";
-
-import SelectDropdown from "react-native-select-dropdown";
 import Gifs from "../gifs/gifs";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
 import getDistance from "geolib/es/getDistance";
 import { useFonts } from "expo-font";
+import { withTheme } from "react-native-elements";
 
 const { width, height } = Dimensions.get("window");
 const CARD_HEIGHT = 220;
@@ -58,7 +52,6 @@ const MapScreen = (props) => {
   const [title, setTitle] = React.useState("");
   const [content, setContent] = React.useState("");
   const [search, setSearch] = React.useState("");
-  const [modalVisible, setModalVisible] = React.useState(false);
 
   const [open, setOpen] = React.useState(false);
   const [gifOpen, setGifOpen] = React.useState(false);
@@ -102,9 +95,6 @@ const MapScreen = (props) => {
   const colRef = collection(db, "Post");
   const locationCollectionRef = collection(db, "location");
 
-  const dropDownData = ["markers", "posts"];
-  const distanceVlaue = ["10", "500", "All"];
-
   React.useEffect(() => {
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
@@ -142,47 +132,22 @@ const MapScreen = (props) => {
       ),
     []
   );
-  const votes = (id) => {
-    getDocs(
-      query(
-        collection(db, "location"),
-        where("locationId", "==", id)
-        // where("uid", "==", auth.currentUser.uid)
-      )
-    ).then(updateDoc(doc(db, "location", id), { vote: increment(1) }));
-  };
-  const ratings = (id, rating) => {
-    getDocs(
-      query(
-        collection(db, "location"),
-        where("locationId", "==", id)
-        // where("uid", "==", auth.currentUser.uid)
-      )
-    ).then(
-      updateDoc(
-        doc(db, "location", id),
-        { ratings: increment(rating) }
-        // { vote: increment(1) }
-      )
-    );
-  };
 
-  // React.useEffect(
-  //   () =>
-  //     onSnapshot(
-  //       collection(db, "users"),
-  //       where("uid", "==", auth.currentUser?.uid),
-  //       (snapshot) =>
-  //         console.log(snapshot.docs[0].data().role, snapshot.docs[0].id)
-  //     ),
-  //   []
-  // );
+  if (!user) {
+    getDocs(
+      query(collection(db, "users"), where("uid", "==", auth.currentUser?.uid))
+    ).then((user) => {
+      console.log("Grabbing Username"), setUser(user.docs[0].data().role);
+    });
+  }
 
   const mapMarkerAll = () => {
     return filterMarkersData?.map((pin) => (
       <Marker
         key={pin.id}
         coordinate={{ latitude: pin.coords._lat, longitude: pin.coords._long }}
+        title={pin.title}
+        description={pin.content?.inputText}
       >
         {pin.gif ? (
           <Image style={styles.pin} source={{ uri: Gifs[pin.gif] }} />
@@ -429,10 +394,12 @@ const MapScreen = (props) => {
                       setValue={setEventValue}
                       setItems={setEventItems}
                       style={styles.dropdown}
+                      zIndex={8}
                     />
                   ) : null}
                   {eventValue ? (
                     <RNDateTimePicker
+                      style={{ margin: 10, color: "white", marginRight: 40 }}
                       value={date}
                       onChange={settingDate}
                       mode="datetime"
@@ -681,7 +648,6 @@ const styles = StyleSheet.create({
   box: {
     width: 90,
   },
-
   Btn: {
     position: "absolute",
     zIndex: 10,
@@ -718,6 +684,8 @@ const styles = StyleSheet.create({
     marginBottom: 30,
     borderColor: "#009688",
     backgroundColor: "white",
+    borderRadius: 10,
+    overflow: "hidden",
   },
   screen: {
     flex: 1,
