@@ -1,6 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useRef, useEffect, useState } from "react";
-import { StyleSheet, Text, View, Animated, Easing } from "react-native";
+import { StyleSheet, Text, View, Animated, Easing, LogBox } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { SafeAreaProvider } from "react-native-safe-area-context";
@@ -27,6 +27,7 @@ import AnimatedSplash from "react-native-animated-splash-screen";
 const Stack = createNativeStackNavigator();
 
 export default function App() {
+  LogBox.ignoreAllLogs()
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
