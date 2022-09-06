@@ -35,6 +35,7 @@ import Gifs from "../gifs/gifs";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
 import getDistance from "geolib/es/getDistance";
 import { useFonts } from "expo-font";
+import { withTheme } from "react-native-elements";
 
 const { width, height } = Dimensions.get("window");
 const CARD_HEIGHT = 220;
@@ -354,10 +355,12 @@ const MapScreen = (props) => {
                       setValue={setEventValue}
                       setItems={setEventItems}
                       style={styles.dropdown}
+                      zIndex={8}
                     />
                   ) : null}
                   {eventValue ? (
                     <RNDateTimePicker
+                      style={{margin: 10, color: "white", marginRight: 40}}
                       value={date}
                       onChange={settingDate}
                       mode="datetime"
