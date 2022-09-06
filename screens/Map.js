@@ -26,7 +26,6 @@ import {
   getDocs,
   GeoPoint,
   onSnapshot,
-  getDocs,
   updateDoc,
   increment,
 } from "firebase/firestore";
@@ -39,9 +38,6 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import { Rating, AirbnbRating } from "react-native-ratings";
 
 import SelectDropdown from "react-native-select-dropdown";
-import Gifs from "../gifs/gifs";
-import RNDateTimePicker from "@react-native-community/datetimepicker";
-import getDistance from "geolib/es/getDistance";
 import Gifs from "../gifs/gifs";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
 import getDistance from "geolib/es/getDistance";
@@ -62,6 +58,7 @@ const MapScreen = (props) => {
   const [title, setTitle] = React.useState("");
   const [content, setContent] = React.useState("");
   const [search, setSearch] = React.useState("");
+  const [modalVisible, setModalVisible] = React.useState(false);
 
   const [open, setOpen] = React.useState(false);
   const [gifOpen, setGifOpen] = React.useState(false);
@@ -188,19 +185,22 @@ const MapScreen = (props) => {
         coordinate={{ latitude: pin.coords._lat, longitude: pin.coords._long }}
         // title={pin.title} description={pin.content?.inputText}
       >
-        <Callout>
+        <Callout style={{ backgroundColor: "#eeecef" }}>
           <View
-            style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+            style={styles.calloutOne}
+
+            // style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
           >
-            <Text>
+            <Text style={{ fontFamily: "signika-regular" }}>
               {pin.title} {pin.content?.inputText}
             </Text>
 
-            <Text>
-              <Rating
-                readonly={true}
-                startingValue={(pin.ratings / pin.vote).toFixed(2)}
-                imageSize={22}
+            <Text style={{ fontFamily: "signika-regular" }}>
+              <AirbnbRating
+                isDisabled={true}
+                showRating={false}
+                defaultRating={(pin.ratings / pin.vote).toFixed(2)}
+                size={22}
               />
               ({pin.vote})
             </Text>
@@ -214,12 +214,11 @@ const MapScreen = (props) => {
             >
               <Rating
                 style={styles.modalContainer}
-                showRating
-                imageSize={40}
+                size={10}
                 onFinishRating={(rating) => {
                   votes(pin.id);
                   ratings(pin.id, rating);
-                  Alert.alert("Your report has been submitted.");
+                  Alert.alert("Your review has been submitted.");
                   setModalVisible(!modalVisible);
                 }}
               />
@@ -229,7 +228,9 @@ const MapScreen = (props) => {
                 setModalVisible(!modalVisible);
               }}
             >
-              <Text style={styles.title}>Click to rate location</Text>
+              <Text style={{ fontFamily: "signika-bold" }}>
+                Click to rate location
+              </Text>
             </TouchableOpacity>
           </View>
         </Callout>
@@ -788,14 +789,20 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     backgroundColor: "white",
     alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
+  },
+  calloutOne: {
+    height: 80,
+    borderWidth: 3,
+
+    fontSize: 16,
+    fontFamily: "signika-regular",
+    // paddingLeft: 20,
+    // paddingVertical: 8,
+    // paddingHorizontal: 0,
+    // marginTop: 50,
+    // marginBottom: 30,
+    borderColor: "black",
+    backgroundColor: "#eeecef",
   },
 });
 

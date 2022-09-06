@@ -410,7 +410,7 @@ const styles = StyleSheet.create({
     marginTop: 70,
   },
   title: {
-    margin: 20,
+    margin: 2,
     backgroundColor: "#2196F3",
     borderRadius: 20,
     padding: 10,
@@ -431,7 +431,7 @@ const styles = StyleSheet.create({
     margin: 20,
     backgroundColor: "white",
     borderRadius: 20,
-    padding: 35,
+    padding: 15,
     alignItems: "center",
     shadowColor: "#000",
     shadowOffset: {
