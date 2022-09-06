@@ -183,13 +183,12 @@ const MapScreen = (props) => {
       <Marker
         key={pin.id}
         coordinate={{ latitude: pin.coords._lat, longitude: pin.coords._long }}
-        // title={pin.title} description={pin.content?.inputText}
       >
+        {pin.gif ? (
+          <Image style={styles.pin} source={{ uri: Gifs[pin.gif] }} />
+        ) : null}
         <Callout style={styles.calloutOne}>
-          <View
-
-          // style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
-          >
+          <View>
             <Text style={{ fontFamily: "signika-regular" }}>
               {pin.title} {pin.content?.inputText}
             </Text>
@@ -233,9 +232,6 @@ const MapScreen = (props) => {
             </TouchableOpacity>
           </View>
         </Callout>
-        {pin.gif ? (
-          <Image style={styles.pin} source={{ uri: Gifs[pin.gif] }} />
-        ) : null}
       </Marker>
     ));
   };
@@ -786,21 +782,16 @@ const styles = StyleSheet.create({
   modalContainer: {
     margin: 300,
     borderRadius: 20,
-    backgroundColor: "white",
     alignItems: "center",
   },
   calloutOne: {
-    height: 80,
+    height: 90,
+    width: 200,
     borderWidth: 3,
     margin: 1,
     flex: 1,
     fontSize: 16,
     fontFamily: "signika-regular",
-    // paddingLeft: 20,
-    // paddingVertical: 8,
-    // paddingHorizontal: 0,
-    // marginTop: 50,
-    // marginBottom: 30,
     borderColor: "black",
     backgroundColor: "#eeecef",
   },
