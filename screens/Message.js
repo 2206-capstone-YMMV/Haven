@@ -79,8 +79,8 @@ export default function Message({ route }) {
   return (
     <KeyboardAvoidingView
       behavior="padding"
-      style={{ flex: 1, alignItems: "center", justifyContent: "space-between" }}
-      keyboardVerticalOffset={100}
+      style={{height: "100%"}}
+      keyboardVerticalOffset={90}
     >
       <View
         style={{ width: "100%", height: "100%", backgroundColor: "#251934" }}
