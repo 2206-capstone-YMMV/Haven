@@ -26,6 +26,9 @@ import "react-native-get-random-values";
 import { v4 as uuidv4 } from "uuid";
 import firebaseConfig from "../firebaseConfig.tsx";
 import { initializeApp } from "firebase/app"; //validate yourself
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import { useFonts } from "expo-font";
+import Entypo from "react-native-vector-icons/Entypo";
 
 initializeApp(firebaseConfig);
 const NewPost = () => {
@@ -38,6 +41,14 @@ const NewPost = () => {
   const colRef = collection(db, "Post");
   const [image, setImage] = useState("");
   const [url, setUrl] = useState(null);
+
+  const [fontsLoaded] = useFonts({
+    "signika-bold": require("../fonts/SignikaNegative-Bold.ttf"),
+    "signika-light": require("../fonts/SignikaNegative-Light.ttf"),
+    "signika-medium": require("../fonts/SignikaNegative-Medium.ttf"),
+    "signika-regular": require("../fonts/SignikaNegative-Regular.ttf"),
+    "signika-semi": require("../fonts/SignikaNegative-SemiBold.ttf"),
+  });
 
   //const [pickedImagePath, setPickedImagePath] = useState("");
   useEffect(() => {
@@ -60,6 +71,7 @@ const NewPost = () => {
     lat = location.coords.latitude;
     lon = location.coords.longitude;
   }
+
   useEffect(
     () =>
       onSnapshot(
@@ -82,6 +94,7 @@ const NewPost = () => {
       createAt: serverTimestamp(),
       contents: contents,
       image: url,
+      likes: 0,
       reports: {
         spam: 0,
         inappropriate: 0,
@@ -101,30 +114,6 @@ const NewPost = () => {
     navigation.navigate("Home");
   };
 
-  //to pick image and display image
-  // const showImagePicker = async () => {
-  //   const permissionResult =
-  //     await ImagePicker.requestMediaLibraryPermissionsAsync();
-  //   if (permissionResult.granted === false) {
-  //     alert("You've refused to allow this appp to access your photos!");
-  //     return;
-  //   }
-
-  //   const result = await ImagePicker.launchImageLibraryAsync({
-  //     mediaTypes: ImagePicker.MediaTypeOptions.All,
-  //     allowsEditing: true,
-  //     aspect: [4, 3],
-  //     quality: 0,
-  //   });
-
-  //   let imageUrl =
-  //     Platform.OS === "ios" ? result.uri.replace("file://", "") : result.uri;
-  //   if (!result.cancelled) {
-  //     setImage(imageUrl);
-  //   }
-  // };
-
-  //real deal sent to firebase
   const pickImage = async () => {
     const result = await ImagePicker.launchCameraAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -162,37 +151,50 @@ const NewPost = () => {
   // };
 
   return (
-    <View>
-      <Text>NewPost</Text>
-      {location === "" ? (
-        <Text>Loading</Text>
-      ) : (
-        <View>
-          <TextInput
-            style={styles.input}
-            placeholder="description"
-            onChangeText={(text) => setDescription(text)}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="contents"
-            onChangeText={(text) => setContents(text)}
-            multiline={true}
-          />
-          {image && (
-            <Image
-              source={{ uri: image }}
-              style={{ width: 300, height: 300 }}
-            ></Image>
-          )}
-          <TouchableOpacity onPress={pickImage} style={[styles.button]}>
-            <Text style={styles.buttonOutLineText}>Take Photo</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={handleAddPost} style={[styles.button]}>
-            <Text style={styles.buttonOutLineText}>Submit</Text>
-          </TouchableOpacity>
-        </View>
+    <View style={{ backgroundColor: "#251934", flex: 1 }}>
+      <View>
+        <TextInput
+          style={{
+            ...styles.input,
+            height: "8%",
+            fontFamily: "signika-light",
+          }}
+          placeholder="Title"
+          onChangeText={(text) => setDescription(text)}
+        />
+        <TextInput
+          style={{
+            ...styles.input,
+            height: "50%",
+            fontFamily: "signika-light",
+          }}
+          placeholder="Content"
+          onChangeText={(text) => setContents(text)}
+          multiline
+          blurOnSubmit={true}
+          numberOfLines={4}
+        />
+      </View>
+      {image && (
+        <Image
+          source={{ uri: image }}
+          style={{ width: 300, height: 300 }}
+        ></Image>
       )}
+      <Entypo
+        onPress={handleAddPost}
+        size={50}
+        name="plus"
+        color="#fff"
+        style={{ ...styles.button, top: 320, right: 10 }}
+      />
+      <MaterialCommunityIcons
+        onPress={pickImage}
+        name="camera"
+        size={40}
+        color="#fff"
+        style={{ ...styles.button, top: 327, left: 10 }}
+      />
     </View>
   );
 };
@@ -202,16 +204,16 @@ const styles = StyleSheet.create({
   input: {
     backgroundColor: "white",
     paddingHorizontal: 15,
-    paddingVertical: 10,
-    borderRadius: 10,
-    marginTop: 5,
+    borderRadius: 4,
+    margin: 10,
+    fontSize: 20,
+    fontFamily: "signika-medium",
   },
   button: {
-    backgroundColor: "#0782F9",
-    width: "100%",
-    padding: 15,
+    position: "absolute",
+    flex: 1,
     borderRadius: 10,
+    alignSelf: "center",
     alignItems: "center",
-    marginVertical: 15,
   },
 });

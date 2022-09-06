@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, View, ScrollView } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  FlatList,
+  TouchableOpacity,
+} from "react-native";
 import { auth } from "../firebase";
 import { db } from "../firebase";
 import {
@@ -10,10 +17,21 @@ import {
   getDocs,
 } from "firebase/firestore";
 import { LinearGradient } from "expo-linear-gradient";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import Entypo from "react-native-vector-icons/Entypo";
+import { useFonts } from "expo-font";
 
 export default function MessagesTab({ navigation }) {
   const [conversations, setConversations] = useState([]);
   const [otherUsers, setOtherUsers] = useState([]);
+
+  const [fontsLoaded] = useFonts({
+    "signika-bold": require("../fonts/SignikaNegative-Bold.ttf"),
+    "signika-light": require("../fonts/SignikaNegative-Light.ttf"),
+    "signika-medium": require("../fonts/SignikaNegative-Medium.ttf"),
+    "signika-regular": require("../fonts/SignikaNegative-Regular.ttf"),
+    "signika-semi": require("../fonts/SignikaNegative-SemiBold.ttf"),
+  });
 
   useEffect(
     () =>
@@ -25,6 +43,7 @@ export default function MessagesTab({ navigation }) {
         (snapshot) =>
           setConversations(
             snapshot.docs.map((convo) => {
+              console.log("Grabbing Convos")
               return convo.data();
             })
           )
@@ -33,7 +52,14 @@ export default function MessagesTab({ navigation }) {
   );
 
   const conversationIds = conversations.map((convo) => convo.conversationId);
-  const otherUsersId = conversations.map((convo) => convo.otherUser);
+  const otherUsersId = conversations.map((convo) => {
+    if (convo.user === auth.currentUser.uid){
+      return convo.otherUser
+    }
+    else{
+      return convo.user
+    }
+    convo.otherUser});
 
   if (otherUsersId.length === 0) {
     otherUsersId.push("aaaaaaaaaaa");
@@ -49,6 +75,7 @@ export default function MessagesTab({ navigation }) {
     ).then((users) =>
       setOtherUsers(
         users.docs.map((user) => {
+          console.log("Grabbing aquaintances")
           return user.data();
         })
       )
@@ -56,7 +83,6 @@ export default function MessagesTab({ navigation }) {
   }
 
   const names = otherUsersId.map((id) => {
-    //lining up names with the order of the conversationIds
     for (let i = 0; i < otherUsers.length; i++) {
       if (otherUsers[i].uid === id) {
         return otherUsers[i].name;
@@ -64,33 +90,47 @@ export default function MessagesTab({ navigation }) {
     }
   });
 
-  // console.log(names)
-
   return (
-    <LinearGradient
-      colors={["#8c5aa5", "#f2e797"]}
-      style={{ flex: 1, alignItems: "center", justifyContent: "space-between" }}
+    <View
+      style={{
+        flex: 1,
+        alignItems: "center",
+        justifyContent: "space-between",
+        backgroundColor: "#251934",
+      }}
     >
-      <Text
+      {/* <Text
         style={[styles.convo, styles.new]}
         onPress={() =>
           navigation.navigate("NewConversation", { conversations })
         }
       >
         New Conversation
-      </Text>
-      <ScrollView>
+      </Text> */}
+
+      <MaterialCommunityIcons
+        name="email"
+        size={50}
+        style={styles.addButton}
+        onPress={() =>
+          navigation.navigate("NewConversation", { conversations })
+        }
+      />
+
+      <ScrollView contentContainerStyle={{ marginTop: 50 }}>
         {conversationIds.map((conversationId, index) => (
-          <Text
-            key={index}
-            style={styles.convo}
+          <TouchableOpacity
             onPress={() => navigation.navigate("Message", { conversationId })}
           >
-            Conversation with {names[index]}
-          </Text>
+            <View style={styles.listView}>
+              <Text key={index} style={styles.textTitle}>
+                Conversation with {names[index]}
+              </Text>
+            </View>
+          </TouchableOpacity>
         ))}
       </ScrollView>
-    </LinearGradient>
+    </View>
   );
 }
 
@@ -109,4 +149,34 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 18,
   },
+  listView: {
+    padding: 20,
+    marginTop: 5,
+    backgroundColor: "transparent",
+    borderWidth: 1,
+    borderColor: "#CB55FF",
+    borderRadius: 10,
+    width: 350,
+  },
+  addButton: {
+    position: "absolute",
+    color: "#ECECEC",
+    flex: 1,
+    zIndex: 100,
+    bottom: 80,
+    left: 20,
+  },
+
+  textTitle: {
+    color: "white",
+    fontWeight: "bold",
+    fontFamily: "signika-bold",
+  },
+  textContentContainer: { flex: 1, borderColor: "grey", borderWidth: 0 },
+  textContent: {
+    color: "black",
+    paddingRight: 10,
+    fontFamily: "signika-light",
+  },
 });
+

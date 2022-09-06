@@ -23,6 +23,7 @@ import {
   doc,
   addDoc,
   deleteDoc,
+  getDocs,
   GeoPoint,
   onSnapshot,
   getDocs,
@@ -41,6 +42,11 @@ import SelectDropdown from "react-native-select-dropdown";
 import Gifs from "../gifs/gifs";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
 import getDistance from "geolib/es/getDistance";
+import Gifs from "../gifs/gifs";
+import RNDateTimePicker from "@react-native-community/datetimepicker";
+import getDistance from "geolib/es/getDistance";
+import { useFonts } from "expo-font";
+
 const { width, height } = Dimensions.get("window");
 const CARD_HEIGHT = 220;
 const CARD_WIDTH = width * 0.8;
@@ -55,17 +61,27 @@ const MapScreen = (props) => {
   const [isVis, setIsVis] = React.useState(false);
   const [title, setTitle] = React.useState("");
   const [content, setContent] = React.useState("");
+  const [search, setSearch] = React.useState("");
+
   const [open, setOpen] = React.useState(false);
   const [gifOpen, setGifOpen] = React.useState(false);
   const [eventOpen, setEventOpen] = React.useState(false);
   const [value, setValue] = React.useState(null);
+
   const [gifValue, setGifValue] = React.useState(null);
   const [eventValue, setEventValue] = React.useState(false);
-  const [modalVisible, setModalVisible] = React.useState(false);
-
-  const [search, setSearch] = React.useState("");
   const [dropDownValue, setDropDownValue] = React.useState("markers");
-  const [distanceDropValue, setDistanceDropValue] = React.useState("All");
+  const [dropDownText, setDropDownText] = React.useState("Locations");
+  const [distanceValue, setDistanceValue] = React.useState("All");
+  const [distanceText, setDistanceText] = React.useState("All");
+
+  const [fontsLoaded] = useFonts({
+    "signika-bold": require("../fonts/SignikaNegative-Bold.ttf"),
+    "signika-light": require("../fonts/SignikaNegative-Light.ttf"),
+    "signika-medium": require("../fonts/SignikaNegative-Medium.ttf"),
+    "signika-regular": require("../fonts/SignikaNegative-Regular.ttf"),
+    "signika-semi": require("../fonts/SignikaNegative-SemiBold.ttf"),
+  });
 
   const [items, setItems] = React.useState([
     { label: "Food", value: "food" },
@@ -82,6 +98,7 @@ const MapScreen = (props) => {
     { label: "Is Event", value: true },
     { label: "Is Location", value: false },
   ]);
+
   const [date, setDate] = React.useState(new Date());
   const [user, setUser] = React.useState(null);
 
@@ -111,7 +128,7 @@ const MapScreen = (props) => {
             let date = docu.data().date;
             if (date && date.seconds < Date.now() / 1000) {
               //Events timer are stored in seconds, while Date.now is milliseconds
-              // console.log("deleting event")
+              console.log("deleting event");
               deleteDoc(doc(db, "location", docu.id));
             }
             return { ...docu.data(), id: docu.id };
@@ -239,7 +256,7 @@ const MapScreen = (props) => {
   };
 
   const sendInput = async (title, inputText, value, gif, date) => {
-    // console.log(title, inputText);
+    console.log(title, inputText);
     if (!eventValue) {
       date = null;
     }
@@ -330,48 +347,36 @@ const MapScreen = (props) => {
     return po.description.indexOf(search) >= 0;
   });
 
+  const dropDownSwitch = () => {
+    if (dropDownValue === "markers") {
+      setDropDownValue("posts");
+      setDropDownText("Posts");
+    } else {
+      setDropDownValue("markers");
+      setDropDownText("Locations");
+    }
+  };
+
+  const distanceSwitch = () => {
+    if (distanceValue === "All") {
+      setDistanceValue("10");
+      setDistanceText("Near");
+    } else if (distanceValue === "10") {
+      setDistanceValue("500");
+      setDistanceText("Far");
+    } else {
+      setDistanceValue("All");
+      setDistanceText("All");
+    }
+  };
+
   return (
     <>
       <View>
-        <View style={styles.searchWrapperStyle}>
-          <TextInput
-            style={styles.textInput}
-            value={search}
-            placeholder="Search By Content"
-            underlineColorAndroid="transparent"
-            onChangeText={(text) => setSearch(text)}
-          />
-          <MaterialCommunityIcons
-            style={styles.iconStyle}
-            name="backspace-outline"
-            size={23}
-            onPress={() => {
-              setSearch("");
-            }}
-          />
-        </View>
         {!location ? (
           <Text style={{ textAlign: "center" }}>{text}</Text>
         ) : (
           <View style={styles.container}>
-            <View style={styles.searchWrapperStyle}>
-              <SelectDropdown
-                data={dropDownData}
-                defaultValue="markers"
-                style={styles.textInput}
-                onSelect={(selectedItem) => {
-                  setDropDownValue(selectedItem);
-                }}
-              />
-              <SelectDropdown
-                data={distanceVlaue}
-                defaultValue="All"
-                onSelect={(selectedItem) => {
-                  setDistanceDropValue(selectedItem);
-                }}
-              />
-            </View>
-
             <Modal visible={isVis}>
               <View
                 style={{
@@ -379,10 +384,11 @@ const MapScreen = (props) => {
                   alignItems: "center",
                   justifyContent: "center",
                   height: 50,
+                  backgroundColor: "#251934",
                 }}
               >
-                <Text style={styles.formLabel}> Location Form </Text>
-                <View>
+                <Text style={styles.formLabel}> Add Location </Text>
+                <View zIndex={10}>
                   <TextInput
                     onChangeText={(text) => setTitle(text)}
                     placeholder="Enter Title"
@@ -392,7 +398,7 @@ const MapScreen = (props) => {
                     onChangeText={(text) => setContent(text)}
                     placeholder="Content"
                     multiline
-                    numberOfLines={4}
+                    blurOnSubmit={true}
                     style={{ ...styles.inputStyle, height: 80 }}
                   />
                   <DropDownPicker
@@ -403,6 +409,8 @@ const MapScreen = (props) => {
                     setValue={setValue}
                     setItems={setItems}
                     style={styles.dropdown}
+                    stickyHeader={true}
+                    zIndex={10}
                   />
                   <DropDownPicker
                     open={gifOpen}
@@ -412,9 +420,11 @@ const MapScreen = (props) => {
                     setValue={setGifValue}
                     setItems={setGifItems}
                     style={styles.dropdown}
+                    stickyHeader={true}
+                    zIndex={9}
                   />
 
-                  {user === "Helper" ? (
+                  {user === "helper" ? (
                     <DropDownPicker
                       open={eventOpen}
                       value={eventValue}
@@ -434,14 +444,18 @@ const MapScreen = (props) => {
                     />
                   ) : null}
                 </View>
-                <View>
-                  <Button
-                    title="Submit"
+                <View zIndex={9}>
+                  <Text
+                    style={styles.button}
                     onPress={() =>
                       sendInput(title, content, value, gifValue, date)
                     }
-                  />
-                  <Button title="Hide" onPress={() => setIsVis(!isVis)} />
+                  >
+                    Submit
+                  </Text>
+                  <Text style={styles.button} onPress={() => setIsVis(!isVis)}>
+                    Hide
+                  </Text>
                 </View>
               </View>
             </Modal>
@@ -468,7 +482,8 @@ const MapScreen = (props) => {
                       }}
                     />
                   ))}
-              {Number(distanceDropValue) == 10 && dropDownValue == "markers"
+
+              {Number(distanceValue) == 10 && dropDownValue == "markers"
                 ? marker10().map((pin) => (
                     <Marker
                       key={pin.id}
@@ -484,11 +499,11 @@ const MapScreen = (props) => {
                           style={styles.pin}
                           source={{ uri: Gifs[pin.gif] }}
                         />
-                      ) : null}{" "}
+                      ) : null}
                     </Marker>
                   ))
                 : ""}
-              {Number(distanceDropValue) == 500 && dropDownValue == "markers"
+              {Number(distanceValue) == 500 && dropDownValue == "markers"
                 ? marker500().map((pin) => (
                     <Marker
                       key={pin.id}
@@ -508,10 +523,11 @@ const MapScreen = (props) => {
                     </Marker>
                   ))
                 : ""}
-              {distanceDropValue == "All" && dropDownValue == "markers"
+              {distanceValue == "All" && dropDownValue == "markers"
                 ? mapMarkerAll()
                 : ""}
-              {Number(distanceDropValue) == 10 && dropDownValue === "posts"
+
+              {Number(distanceValue) == 10 && dropDownValue === "posts"
                 ? post10().map((item, index) => (
                     <Marker
                       keyExtractor={item.email}
@@ -545,7 +561,7 @@ const MapScreen = (props) => {
                     </Marker>
                   ))
                 : ""}
-              {Number(distanceDropValue) == 500 && dropDownValue === "posts"
+              {Number(distanceValue) == 500 && dropDownValue === "posts"
                 ? post500().map((item, index) => (
                     <Marker
                       keyExtractor={item.email}
@@ -579,7 +595,7 @@ const MapScreen = (props) => {
                     </Marker>
                   ))
                 : ""}
-              {distanceDropValue == "All" && dropDownValue === "posts"
+              {distanceValue == "All" && dropDownValue === "posts"
                 ? filterPostsData.map((item, index) => (
                     <Marker
                       keyExtractor={item.email}
@@ -613,10 +629,28 @@ const MapScreen = (props) => {
                     </Marker>
                   ))
                 : ""}
-              <TouchableOpacity
-                style={styles.Btn}
-                onPress={() => setIsVis(!isVis)}
-              ></TouchableOpacity>
+              <View style={styles.searchWrapperStyle}>
+                <TextInput
+                  style={styles.textInput}
+                  value={search}
+                  placeholder="Search By Content"
+                  underlineColorAndroid="transparent"
+                  onChangeText={(text) => setSearch(text)}
+                />
+              </View>
+
+              <Text style={[styles.filter]} onPress={() => dropDownSwitch()}>
+                {dropDownText}
+              </Text>
+              <Text
+                style={[styles.filter, styles.distance]}
+                onPress={() => distanceSwitch()}
+              >
+                {distanceText}
+              </Text>
+              <Text style={styles.Btn} onPress={() => setIsVis(!isVis)}>
+                Add
+              </Text>
             </MapView>
           </View>
         )}
@@ -655,17 +689,18 @@ const styles = StyleSheet.create({
   Btn: {
     position: "absolute",
     zIndex: 10,
-    width: 40,
-    height: 40,
     justifyContent: "center",
     alignItems: "center",
     padding: 10,
-    borderRadius: 40,
-    backgroundColor: "orange",
+    borderRadius: 20,
+    overflow: "hidden",
+    borderWidth: 2,
+    backgroundColor: "#eeecef",
     alignSelf: "flex-end",
     marginTop: -5,
-    top: 10,
+    top: 115,
     right: 10,
+    fontFamily: "signika-bold",
   },
   viewWrap: {
     flex: 1,
@@ -680,8 +715,10 @@ const styles = StyleSheet.create({
     margin: 5,
     flex: 1,
     fontSize: 16,
+    fontFamily: "signika-regular",
     paddingVertical: 8,
     paddingHorizontal: 0,
+    marginTop: 50,
     marginBottom: 30,
     borderColor: "#009688",
     backgroundColor: "white",
@@ -694,7 +731,15 @@ const styles = StyleSheet.create({
   },
   formLabel: {
     fontSize: 20,
-    color: "black",
+    color: "white",
+    fontFamily: "signika-bold",
+  },
+  button: {
+    fontSize: 20,
+    color: "white",
+    fontFamily: "signika-bold",
+    paddingTop: 20,
+    alignSelf: "center",
   },
   inputStyle: {
     marginTop: 20,
@@ -702,6 +747,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     borderRadius: 10,
     backgroundColor: "#DCDCDC",
+    fontFamily: "signika-regular",
   },
   dropdown: {
     marginTop: 20,
@@ -710,10 +756,23 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: "#DCDCDC",
   },
-
   searchWrapperStyle: {
     flexDirection: "row",
     justifyContent: "space-between",
+  },
+  filter: {
+    position: "absolute",
+    top: 115,
+    backgroundColor: "#eeecef",
+    padding: 10,
+    borderRadius: 20,
+    overflow: "hidden",
+    borderWidth: 2,
+    left: 10,
+    fontFamily: "signika-bold",
+  },
+  distance: {
+    left: 120,
   },
   iconStyle: {
     marginTop: 12,
