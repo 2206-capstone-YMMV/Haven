@@ -30,7 +30,6 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 import { useFonts } from "expo-font";
 import Entypo from "react-native-vector-icons/Entypo";
 
-
 initializeApp(firebaseConfig);
 const NewPost = () => {
   const navigation = useNavigation();
@@ -85,7 +84,7 @@ const NewPost = () => {
     []
   );
 
-  const handleAddPost = async (pathUrl) => {
+  const handleAddPost = async () => {
     await addDoc(colRef, {
       uid: auth.currentUser?.uid,
       username: profile.name,
@@ -144,12 +143,12 @@ const NewPost = () => {
       console.log(e);
     }
   };
-  const combined = async () => {
-    let pathUrl = await pickImage();
-    await handleAddPost({
-      pathUrl,
-    });
-  };
+  // const combined = async () => {
+  //   let pathUrl = await pickImage();
+  //   await handleAddPost({
+  //     pathUrl,
+  //   });
+  // };
 
   return (
     <View style={{ backgroundColor: "#251934", flex: 1 }}>
@@ -197,10 +196,8 @@ const NewPost = () => {
         style={{ ...styles.button, top: 327, left: 10 }}
       />
     </View>
-
   );
 };
-
 export default NewPost;
 
 const styles = StyleSheet.create({

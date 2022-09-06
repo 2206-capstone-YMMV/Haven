@@ -46,8 +46,8 @@ export default function Input({ commentId }) {
     getDocs(
       query(collection(db, "users"), where("uid", "==", auth.currentUser?.uid))
     ).then((user) => {
-      console.log("Grabbing Username"),
-        setDisplayName(user.docs[0].data().name);
+      // console.log("Grabbing Username"),
+      setDisplayName(user.docs[0].data().name);
     });
   }
   return (

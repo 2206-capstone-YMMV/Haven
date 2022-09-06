@@ -26,7 +26,7 @@ import { getStorage, ref, getDownloadURL, listAll } from "firebase/storage"; //a
 import firebaseConfig from "../firebaseConfig.tsx";
 import { initializeApp } from "firebase/app"; //validate yourself
 import Entypo from "react-native-vector-icons/Entypo";
-import { Feather } from "@expo/vector-icons"
+import { Feather } from "@expo/vector-icons";
 import { useFonts } from "expo-font";
 
 initializeApp(firebaseConfig);
@@ -83,7 +83,30 @@ const Posts = () => {
     } else {
       timeDisplay = Math.ceil(diff) + "h";
     }
-
+    // <View>
+    //       {item.image !== null && (
+    //         <Image
+    //           style={{ width: 100, height: 100 }}
+    //           source={{ uri: item.image }}
+    //         ></Image>
+    //       )}
+    //       <TouchableOpacity
+    //         // onPress={() => navigation.navigate("Ratings", { item })}
+    //         onPress={() => navigation.navigate("SinglePost", { item })}
+    //       >
+    //         <Text style={{ fontSize: 22, fontWeight: "700" }}>
+    //           {item.description}
+    //         </Text>
+    //         <Text style={{ fontSize: 18, opacity: 0.7 }}>
+    //           posted by: {item.username}
+    //         </Text>
+    //         <Text style={{ fontSize: 14, opacity: 0.8, color: "#0099cc" }}>
+    //           {item.contents}
+    //         </Text>
+    //         <Text onPress={() => like(item.id, item.likes)}>
+    //           Like Likes: {item.likes}
+    //         </Text>
+    //       </TouchableOpacity>
     return (
       <TouchableOpacity
         onPress={() => navigation.navigate("SinglePost", { item })}
@@ -189,22 +212,24 @@ const Posts = () => {
         style={styles.addButton}
         onPress={() => navigation.navigate("NewPost")}
       />
-      <View style={{ paddingTop: 50, backgroundColor: "#251934", height: "100%" }}>
+      <View
+        style={{ paddingTop: 50, backgroundColor: "#251934", height: "100%" }}
+      >
         <View>
-        <View style={styles.searchContainer}>
+          <View style={styles.searchContainer}>
             <Feather
-            name="search"
-            size={20}
-            color="black"
-            style={{ marginLeft: 1 }}
+              name="search"
+              size={20}
+              color="black"
+              style={{ marginLeft: 1 }}
             />
-            <TextInput 
-                style={styles.formField}
-                value={search}
-                underlineColorAndroid='transparent'
-                onChangeText={(text) => setSearch(text)}
+            <TextInput
+              style={styles.formField}
+              value={search}
+              underlineColorAndroid="transparent"
+              onChangeText={(text) => setSearch(text)}
             />
-        </View>
+          </View>
           <View style={{ paddingBottom: 280 }}>
             <FlatList data={filterData} renderItem={renderFriend} />
           </View>
@@ -224,13 +249,13 @@ const styles = StyleSheet.create({
   },
   searchContainer: {
     margin: 15,
-        justifyContent: "flex-start",
-        alignItems: "center",
-        flexDirection: "row",
-        width: "90%",
-        backgroundColor: "white",
-        padding: 10,
-        borderRadius: 20
+    justifyContent: "flex-start",
+    alignItems: "center",
+    flexDirection: "row",
+    width: "90%",
+    backgroundColor: "white",
+    padding: 10,
+    borderRadius: 20,
   },
   innerContainer: {
     flex: 1,
@@ -330,8 +355,8 @@ const styles = StyleSheet.create({
   },
   formField: {
     fontSize: 20,
-        marginLeft: 10,
-        width: "75%",
+    marginLeft: 10,
+    width: "75%",
   },
 });
 
