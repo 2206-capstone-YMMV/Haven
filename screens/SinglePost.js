@@ -213,9 +213,10 @@ const SinglePost = (props) => {
       <KeyboardAvoidingView
         style={{
           backgroundColor: "transparent",
-          height: "92%",
+          height: "100%",
           justifyContent: "flex-end",
           backgroundColor: "#251934",
+          paddingTop: 100,
         }}
         behavior="position"
         keyboardVerticalOffset={95}
@@ -307,13 +308,7 @@ const SinglePost = (props) => {
               {hours}:{minutes} {ampm} • {month}/{day}/{year}
             </Text>
           </View>
-        </ScrollView>
-        <Input commentId={element.id} />
-      </KeyboardAvoidingView>
-
-      {/* Begin Comment section */}
-      <ScrollView>
-        <View style={{ paddingBottom: 125, backgroundColor: "#251934" }}>
+          <View style={{backgroundColor: "#251934" }}>
           {comments.map((comment, idx) => {
             let name = comment.content.split(":")[0];
             let text = comment.content.split(":")[1];
@@ -370,7 +365,10 @@ const SinglePost = (props) => {
             }
           })}
         </View>
-      </ScrollView>
+        </ScrollView>
+        <Input commentId={element.id} />
+        <View style={{height: "8%"}}></View>
+      </KeyboardAvoidingView>
     </>
   );
 };
