@@ -26,7 +26,7 @@ import { getStorage, ref, getDownloadURL, listAll } from "firebase/storage"; //a
 import firebaseConfig from "../firebaseConfig.tsx";
 import { initializeApp } from "firebase/app"; //validate yourself
 import Entypo from "react-native-vector-icons/Entypo";
-import SearchBar from "react-native-dynamic-search-bar";
+import { Feather } from "@expo/vector-icons"
 import { useFonts } from "expo-font";
 
 initializeApp(firebaseConfig);
@@ -189,16 +189,22 @@ const Posts = () => {
         style={styles.addButton}
         onPress={() => navigation.navigate("NewPost")}
       />
-      <View style={{ marginTop: 50, backgroundColor: "#251934" }}>
+      <View style={{ paddingTop: 50, backgroundColor: "#251934", height: "100%" }}>
         <View>
-          <SearchBar
-            style={styles.formField}
-            value={search}
-            fontColor="#fff"
-            // placeholder="Search by description..."
-            underlineColorAndroid="transparent"
-            onChangeText={(text) => setSearch(text)}
-          />
+        <View style={styles.searchContainer}>
+            <Feather
+            name="search"
+            size={20}
+            color="black"
+            style={{ marginLeft: 1 }}
+            />
+            <TextInput 
+                style={styles.formField}
+                value={search}
+                underlineColorAndroid='transparent'
+                onChangeText={(text) => setSearch(text)}
+            />
+        </View>
           <View style={{ paddingBottom: 280 }}>
             <FlatList data={filterData} renderItem={renderFriend} />
           </View>
@@ -215,6 +221,16 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0.5,
     flexDirection: "column",
     backgroundColor: "#251934",
+  },
+  searchContainer: {
+    margin: 15,
+        justifyContent: "flex-start",
+        alignItems: "center",
+        flexDirection: "row",
+        width: "90%",
+        backgroundColor: "white",
+        padding: 10,
+        borderRadius: 20
   },
   innerContainer: {
     flex: 1,
@@ -313,14 +329,9 @@ const styles = StyleSheet.create({
     marginHorizontal: 8,
   },
   formField: {
-    padding: 12,
-    paddingLeft: 20,
-    paddingRight: 20,
-    borderRadius: 20,
-    fontSize: 18,
-    height: 50,
-    marginBottom: 15,
-    color: "#ECECEC",
+    fontSize: 20,
+        marginLeft: 10,
+        width: "75%",
   },
 });
 

@@ -6,6 +6,7 @@ import { collection, onSnapshot, query, where, addDoc, deleteDoc, doc } from 'fi
 import { useNavigation } from '@react-navigation/core'
 import tw from 'tailwind-react-native-classnames';
 import { Feather } from "@expo/vector-icons"
+import { useFonts } from "expo-font";
 
 const Friends = () => {
     const navigation = useNavigation()
@@ -14,6 +15,14 @@ const Friends = () => {
     const [friends, setFriends] = useState([])
     let isFriend = false
     const colRef = collection(db, 'Friends')
+
+    const [fontsLoaded] = useFonts({
+      "signika-bold": require("../fonts/SignikaNegative-Bold.ttf"),
+      "signika-light": require("../fonts/SignikaNegative-Light.ttf"),
+      "signika-medium": require("../fonts/SignikaNegative-Medium.ttf"),
+      "signika-regular": require("../fonts/SignikaNegative-Regular.ttf"),
+      "signika-semi": require("../fonts/SignikaNegative-SemiBold.ttf"),
+    });
     
     const filterData = users.filter((user) => {
         return user.name.indexOf(search) >= 0
@@ -99,12 +108,12 @@ const Friends = () => {
                 <Image source={require('../gifs/download.jpeg')} style={styles.profileImage} />
             </View> : 
             <View style={styles.profileImageContainer}>
-                <Image source={require('../gifs/default-user-image.png')} style={styles.profileImage} />
+                <Image source={require('../gifs/puzzle-piece.png')} style={styles.profileImage} />
             </View>
             }
             <View>
-                <Text style={{fontSize: 22, fontWeight: '700'}}>{item.name} <Text style={styles.textRole}>{item.role}</Text></Text>
-                <Text>{item.email}</Text>
+                <Text style={{fontSize: 22, color: "white", fontFamily: "signika-bold"}}>{item.name} <Text style={styles.textRole}>{item.role}</Text></Text>
+                <Text style={{color: "grey", fontFamily: "signika-regular"}}>{item.email}</Text>
             </View>
             <View style={{position: "absolute", right: 0}}>
                 {friends.filter((friend) => {
@@ -117,12 +126,12 @@ const Friends = () => {
                     style={tw`bg-blue-500  w-20 mt-5 border-solid rounded-full`} 
                       onPress={() => addFriendAlert(item)}
                       >
-                      <Text style={tw`text-center text-white `}>Add</Text>
+                      <Text style={{color: "white", textAlign: "center", fontFamily: "signika-regular"}}>Add</Text>
                     </TouchableOpacity> : <TouchableOpacity
                      style={tw`bg-red-500  w-20 mt-5 border-solid rounded-full`}
                       onPress={() => removeFriendAlert(item)}
                       >
-                      <Text style={tw`text-center text-white `}>Remove</Text>
+                      <Text style={{color: "white", textAlign: "center", fontFamily: "signika-regular"}}>Remove</Text>
                     </TouchableOpacity> 
                     }
                     {reset()}
@@ -131,7 +140,7 @@ const Friends = () => {
         )
     })
   return (
-    <View>
+    <View style={{backgroundColor: "#251934"}}>
          <View style={styles.container}>
             <Feather
             name="search"
@@ -146,12 +155,6 @@ const Friends = () => {
                 underlineColorAndroid='transparent'
                 onChangeText={(text) => setSearch(text)}
             />
-            <View>
-                <Button
-                title="Cancel"
-                onPress={() => {setSearch('')}}
-                ></Button>
-            </View>
         </View>
             <View style={tw`pb-52`}>
             <FlatList 
@@ -180,14 +183,18 @@ const styles = StyleSheet.create({
         alignItems: "center",
         flexDirection: "row",
         width: "90%",
-    
-      },   itemContainer: {
+        backgroundColor: "white",
+        padding: 10,
+        borderRadius: 20
+      },
+      itemContainer: {
         flexDirection: 'row',
         alignItems: 'center',
         marginLeft: 10,
         marginBottom: 10,
       },
       profileImage: {
+        backgroundColor: "white",
         width: 50,
         height: 50,
         borderRadius: 100,
@@ -196,7 +203,7 @@ const styles = StyleSheet.create({
       },
       textRole: {
         fontSize: 13,
-        color: 'grey'
+        color: 'grey',
       },
 })
 

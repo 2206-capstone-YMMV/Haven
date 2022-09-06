@@ -34,6 +34,7 @@ import DropDownPicker from "react-native-dropdown-picker";
 import Gifs from "../gifs/gifs";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
 import getDistance from "geolib/es/getDistance";
+import { useFonts } from "expo-font";
 
 const { width, height } = Dimensions.get("window");
 const CARD_HEIGHT = 220;
@@ -63,6 +64,13 @@ const MapScreen = (props) => {
   const [distanceValue, setDistanceValue] = React.useState('All')
   const [distanceText, setDistanceText] = React.useState('All')
 
+  const [fontsLoaded] = useFonts({
+    "signika-bold": require("../fonts/SignikaNegative-Bold.ttf"),
+    "signika-light": require("../fonts/SignikaNegative-Light.ttf"),
+    "signika-medium": require("../fonts/SignikaNegative-Medium.ttf"),
+    "signika-regular": require("../fonts/SignikaNegative-Regular.ttf"),
+    "signika-semi": require("../fonts/SignikaNegative-SemiBold.ttf"),
+  });
 
   const [items, setItems] = React.useState([
     { label: "Food", value: "food" },
@@ -297,9 +305,10 @@ const MapScreen = (props) => {
                   alignItems: "center",
                   justifyContent: "center",
                   height: 50,
+                  backgroundColor: "#251934"
                 }}
               >
-                <Text style={styles.formLabel}> Location Form </Text>
+                <Text style={styles.formLabel}> Add Location </Text>
                 <View zIndex={10}>
                   <TextInput
                     onChangeText={(text) => setTitle(text)}
@@ -357,13 +366,13 @@ const MapScreen = (props) => {
                   ) : null}
                 </View>
                 <View zIndex={9}>
-                  <Button
-                    title="Submit"
+                  <Text
+                    style={styles.button}
                     onPress={() =>
                       sendInput(title, content, value, gifValue, date)
                     }
-                  />
-                  <Button title="Hide" onPress={() => setIsVis(!isVis)} />
+                  >Submit</Text>
+                  <Text style={styles.button} onPress={() => setIsVis(!isVis)}>Hide</Text>
                 </View>
               </View>
             </Modal>
@@ -549,13 +558,6 @@ const MapScreen = (props) => {
 
               <Text style={[styles.filter]} onPress={() => dropDownSwitch()}>{dropDownText}</Text>
               <Text style={[styles.filter, styles.distance]} onPress={() => distanceSwitch()}>{distanceText}</Text>
-
-              <Text
-                style={[styles.filter, styles.distance]}
-                onPress={() => distanceSwitch()}
-              >
-                {distanceValue}
-              </Text>
               <Text style={styles.Btn} onPress={() => setIsVis(!isVis)}>
                 Add
               </Text>
@@ -605,9 +607,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#eeecef",
     alignSelf: "flex-end",
     marginTop: -5,
-    top: 65,
+    top: 115,
     right: 10,
-    fontWeight: "bold"
+    fontFamily: "signika-bold"
   },
   viewWrap: {
     flex: 1,
@@ -622,8 +624,10 @@ const styles = StyleSheet.create({
     margin: 5,
     flex: 1,
     fontSize: 16,
+    fontFamily: "signika-regular",
     paddingVertical: 8,
     paddingHorizontal: 0,
+    marginTop: 50,
     marginBottom: 30,
     borderColor: "#009688",
     backgroundColor: "white",
@@ -638,7 +642,15 @@ const styles = StyleSheet.create({
   },
   formLabel: {
     fontSize: 20,
-    color: "black",
+    color: "white",
+    fontFamily: "signika-bold"
+  },
+  button: {
+    fontSize: 20,
+    color: "white",
+    fontFamily: "signika-bold",
+    paddingTop: 20,
+    alignSelf: "center"
   },
   inputStyle: {
     marginTop: 20,
@@ -646,6 +658,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     borderRadius: 10,
     backgroundColor: "#DCDCDC",
+    fontFamily: "signika-regular"
   },
   dropdown: {
     marginTop: 20,
@@ -660,15 +673,14 @@ const styles = StyleSheet.create({
   },
   filter: {
     position: "absolute",
-    top: 60,
+    top: 115,
     backgroundColor: "#eeecef",
     padding: 10,
     borderRadius: 20,
     overflow: "hidden",
     borderWidth: 2,
     left: 10,
-
-    fontWeight: "bold"
+    fontFamily: "signika-bold"
   },
   distance: {
     left: 120

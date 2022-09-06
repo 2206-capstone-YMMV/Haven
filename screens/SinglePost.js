@@ -174,11 +174,7 @@ const SinglePost = (props) => {
         </View>
       </Modal>
       <KeyboardAvoidingView
-        style={{
-          backgroundColor: "transparent",
-          // height: "87%",
-          justifyContent: "flex-end",
-        }}
+        style={{ backgroundColor: "transparent", height: "92%", justifyContent: "flex-end", backgroundColor: "#251934"}}
         behavior="position"
         keyboardVerticalOffset={95}
       >
@@ -363,7 +359,7 @@ const styles = StyleSheet.create({
     marginTop: 3,
     borderRadius: 10,
     borderWidth: 1,
-    overflow: "hidden",
+    fontFamily: "signika-light",
   },
   centeredView: {
     flex: 1,
@@ -409,7 +405,7 @@ const styles = StyleSheet.create({
     color: "#fff",
     flex: 1,
     zIndex: 100,
-    bottom: 20,
+    bottom: 18,
     left: 20,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 7 },

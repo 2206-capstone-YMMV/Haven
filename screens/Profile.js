@@ -6,9 +6,19 @@ import { db } from '../firebase'
 import { collection, onSnapshot, query, where } from 'firebase/firestore' 
 import { Avatar, ListItem } from 'react-native-elements'
 import InfoText from '../components/infoText';
+import { useFonts } from "expo-font";
+
 const  Profile = ({ navigation }) => {
     const [profile, setProfile] = useState({})
     const colRef = query(collection(db, 'Friends'), where('uid', '==', auth.currentUser?.uid))
+
+    const [fontsLoaded] = useFonts({
+      "signika-bold": require("../fonts/SignikaNegative-Bold.ttf"),
+      "signika-light": require("../fonts/SignikaNegative-Light.ttf"),
+      "signika-medium": require("../fonts/SignikaNegative-Medium.ttf"),
+      "signika-regular": require("../fonts/SignikaNegative-Regular.ttf"),
+      "signika-semi": require("../fonts/SignikaNegative-SemiBold.ttf"),
+    });
 
     const handleSignOut = () => {
         signOut(auth)
@@ -61,7 +71,7 @@ const  Profile = ({ navigation }) => {
               <View style={styles.profileImageContainer}>
                 <Image source={require('../gifs/download.jpeg')} style={styles.profileImage} />
               </View> : <View style={styles.profileImageContainer}>
-                <Image source={require('../gifs/default-user-image.png')} style={styles.profileImage} />
+                <Image source={require('../gifs/puzzle-piece.png')} style={styles.profileImage} />
               </View>
               }
               </View>
@@ -76,7 +86,7 @@ const  Profile = ({ navigation }) => {
               >
                 <Avatar source={require('../gifs/1141031.png')}/>
                 <ListItem.Content>
-                  <ListItem.Title >Friends</ListItem.Title>
+                  <ListItem.Title style={{fontFamily: "signika-regular"}}>Friends</ListItem.Title>
                   </ListItem.Content>
                 <ListItem.Chevron color="gray" />
               </ListItem>
@@ -85,7 +95,7 @@ const  Profile = ({ navigation }) => {
             <ListItem title='Profile'  onPress={() => navigation.navigate('EditProfile')} containerStyle={styles.listItemContainer}>
                 <Avatar source={require('../gifs/942748.png')}/>
                 <ListItem.Content>
-                  <ListItem.Title>Profile</ListItem.Title>
+                  <ListItem.Title style={{fontFamily: "signika-regular"}}>Profile</ListItem.Title>
                   </ListItem.Content>
                 <ListItem.Chevron color="gray" />
             </ListItem>
@@ -95,7 +105,7 @@ const  Profile = ({ navigation }) => {
               >
                 <Avatar source={require('../gifs/2921222.png')}/>
                 <ListItem.Content>
-                  <ListItem.Title >Posts</ListItem.Title>
+                  <ListItem.Title style={{fontFamily: "signika-regular"}}>Posts</ListItem.Title>
                   </ListItem.Content>
                 <ListItem.Chevron color="gray" />
               </ListItem>
@@ -103,7 +113,7 @@ const  Profile = ({ navigation }) => {
             <ListItem onPress={signOutAlert} containerStyle={styles.listItemContainer}>
                 <Avatar source={require('../gifs/4081653.png')}/>
                 <ListItem.Content>
-                  <ListItem.Title style={{color: 'red'}}>Sign Out</ListItem.Title>
+                  <ListItem.Title style={{color: 'red', fontFamily: "signika-regular"}}>Sign Out</ListItem.Title>
                 </ListItem.Content>
                 <ListItem.Chevron color="gray" />
             </ListItem>
@@ -153,7 +163,7 @@ const styles = StyleSheet.create({
       alignItems: 'center'
     },
     buttonText: {
-      fontSize: 20
+      fontSize: 20,
     },
     button: {
       backgroundColor: '#0782F9',
@@ -215,6 +225,7 @@ const styles = StyleSheet.create({
       position: 'absolute',
     },
     profileImage: {
+      backgroundColor: "white",
       borderColor: '#FFF',
       borderRadius: 55,
       borderWidth: 3,
@@ -229,7 +240,7 @@ const styles = StyleSheet.create({
     coverName: {
       color: '#FFF',
       fontSize: 28,
-      fontWeight: 'bold',
+      fontFamily: "signika-bold",
       paddingBottom: 2,
     },
     coverBio: {
@@ -253,8 +264,9 @@ const styles = StyleSheet.create({
       height: 55,
       borderWidth: 0.5,
       borderColor: '#ECECEC',
+      backgroundColor: '#F4F5F4'
     },
      scroll: {
-    backgroundColor: 'white',
+    backgroundColor: "#251934",
   },
   })

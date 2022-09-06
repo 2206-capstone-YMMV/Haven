@@ -157,7 +157,6 @@ export default function Message({ route }) {
 
 const styles = StyleSheet.create({
   messageContainer: {
-    alignSelf: "flex-start",
     alignItems: "left",
     paddingHorizontal: 15,
   },

@@ -5,10 +5,21 @@ import { db } from '../firebase'
 import tw from 'tailwind-react-native-classnames';
 import InfoText from '../components/infoText';
 import { useNavigation } from "@react-navigation/core";
+import { useFonts } from "expo-font";
+
 const UpdatePost = (props) => {
     const [description, setDescription] = useState(props.route.params.item.description)
     const [content, setContent] = useState(props.route.params.item.contents)
     const navigation = useNavigation();
+
+    const [fontsLoaded] = useFonts({
+      "signika-bold": require("../fonts/SignikaNegative-Bold.ttf"),
+      "signika-light": require("../fonts/SignikaNegative-Light.ttf"),
+      "signika-medium": require("../fonts/SignikaNegative-Medium.ttf"),
+      "signika-regular": require("../fonts/SignikaNegative-Regular.ttf"),
+      "signika-semi": require("../fonts/SignikaNegative-SemiBold.ttf"),
+    });
+
     const update = () => {
       const docRef = doc(db, 'Post', props.route.params.item.id)
       updateDoc(docRef, {
@@ -54,42 +65,28 @@ const deleteAlert = () => {
   )
 }
   return (
-    <View>
+    <View style={{backgroundColor: "#251934", height: "100%"}}>
         <InfoText text={`Current Description: \n\n${props.route.params.item.description}`}/>
         <View style={styles.searchWrapperStyle}>
-            <TextInput  multiline = {true} numberOfLines = {4} placeholder="Update Description" value={description} style={styles.textInput} onChangeText={text => setDescription(text)} />
+            <TextInput  multiline = {true} numberOfLines = {4} blurOnSubmit={true} placeholder="Update Description" value={description} style={styles.textInput} onChangeText={text => setDescription(text)} />
         </View>
-        <TouchableOpacity
-                style={tw`bg-yellow-500  w-20 mt-5 border-solid rounded-full h-5`}
-                onPress={() => setDescription('')}
-                  >
-                  <Text style={tw`text-center text-white `}>Clean</Text>
-                </TouchableOpacity >
         <InfoText text={`Currrent Content: \n\n${props.route.params.item.contents}`} />
         <View style={styles.searchWrapperStyle}>
-            <TextInput multiline = {true} numberOfLines={10} placeholder="Update Content" value={content} style={styles.textInput}  onChangeText={text => setContent(text)} />
+            <TextInput multiline = {true} numberOfLines={10} blurOnSubmit={true} placeholder="Update Content" value={content} style={styles.textInput}  onChangeText={text => setContent(text)} />
         </View>
-        <TouchableOpacity
-                style={tw`bg-yellow-500  w-20 mt-5 border-solid rounded-full h-5`}
-                onPress={() => setContent('')}
-                  >
-                  <Text style={tw`text-center text-white `}>Clean</Text>
-                </TouchableOpacity >
         <View style={styles.searchWrapperStyle1}>
           <View>
                <TouchableOpacity
-                style={tw`bg-blue-500  w-20 mt-5 border-solid rounded-full h-5 `}
                   onPress={() => updateAlert()}
                   >
-                  <Text style={tw`text-center text-white `}>Update</Text>
+                  <Text style={{color: "white", textAlign: "center", fontFamily: "signika-bold", fontSize: 20}}>Update</Text>
                 </TouchableOpacity >
           </View>
           <View>
                 <TouchableOpacity
-                style={tw`bg-red-500  w-20 mt-5 border-solid rounded-full h-5`}
                   onPress={() => deleteAlert()}
                   >
-                  <Text style={tw`text-center text-white `}>Delete</Text>
+                  <Text style={{color: "white", textAlign: "center", fontFamily: "signika-bold", fontSize: 20}}>Delete</Text>
                 </TouchableOpacity >
           </View>
         </View>
@@ -113,6 +110,7 @@ const styles = StyleSheet.create({
       fontSize: 16,
       backgroundColor: 'white',
       textAlignVertical: 'top',
+      fontFamily: "signika-regular"
     },
     iconStyle: {
       marginTop: 12,
@@ -121,7 +119,10 @@ const styles = StyleSheet.create({
     searchWrapperStyle: {
       flexDirection: "row",
       justifyContent: "space-between",
-      width: 360,
+      width: "95%",
+      alignSelf: "center",
+      borderRadius: 20,
+      overflow: "hidden"
    
     },
     searchWrapperStyle1: {
