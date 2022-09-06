@@ -13,7 +13,6 @@ import React, { useEffect, useState, useCallback } from "react";
 import { auth } from "../firebase";
 import { signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
 import { useFonts } from "expo-font";
-import * as SplashScreen from "expo-splash-screen";
 
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
@@ -63,7 +62,7 @@ const LoginScreen = ({ navigation }) => {
           <View style={{ padding: 40 }}>
             <Text
               style={{
-                color: "#4632A1",
+                color: "#251934",
                 fontSize: 34,
                 fontFamily: "signika-medium",
               }}
@@ -153,7 +152,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   signin: {
-    backgroundColor: "#4632A1",
+    backgroundColor: "#251934",
     elevation: 8,
     borderRadius: 20,
     paddingVertical: 10,

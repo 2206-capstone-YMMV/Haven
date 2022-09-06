@@ -18,7 +18,6 @@ import { collection, addDoc } from "firebase/firestore";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import DropDownPicker from "react-native-dropdown-picker";
 import { useFonts } from "expo-font";
-import * as SplashScreen from "expo-splash-screen";
 
 const SignUpScreen = () => {
   const navigation = useNavigation();
@@ -80,9 +79,9 @@ const SignUpScreen = () => {
           <View style={{ padding: 40, zIndex: 10 }}>
             <Text
               style={{
-                color: "#4632A1",
+                color: "#251934",
                 fontSize: 34,
-                fontFamily: "signika-medium",
+                fontFamily: "signika-regular",
               }}
             >
               Welcome
@@ -212,7 +211,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   signup: {
-    backgroundColor: "#4632A1",
+    backgroundColor: "#251934",
     elevation: 8,
     borderRadius: 20,
     paddingVertical: 10,

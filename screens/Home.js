@@ -47,7 +47,7 @@ export default function Home() {
         name="Map"
         component={Map}
         options={{
-          headerShown: false, 
+          headerShown: false,
           tabBarIcon: ({ focused }) => (
             <View
               style={{
@@ -58,7 +58,7 @@ export default function Home() {
             >
               <MaterialCommunityIcons
                 name="home"
-                style={{ color: focused ? "#4632A1" : "#fff" }}
+                style={{ color: focused ? "#251934" : "#fff" }}
                 size={30}
               />
             </View>
@@ -69,7 +69,7 @@ export default function Home() {
         name="Profile"
         component={Profile}
         options={{
-          headerShown: false, 
+          headerShown: false,
           tabBarIcon: ({ focused }) => (
             <View
               style={{
@@ -80,7 +80,7 @@ export default function Home() {
             >
               <MaterialCommunityIcons
                 name="account-circle"
-                style={{ color: focused ? "#4632A1" : "#fff" }}
+                style={{ color: focused ? "#251934" : "#fff" }}
                 size={30}
               />
             </View>
@@ -104,7 +104,7 @@ export default function Home() {
             >
               <MaterialCommunityIcons
                 name="plus-circle-outline"
-                style={{ color: focused ? "#4632A1" : "#fff" }}
+                style={{ color: focused ? "#251934" : "#fff" }}
                 size={30}
               />
             </View>
@@ -127,7 +127,7 @@ export default function Home() {
             >
               <MaterialCommunityIcons
                 name="chat"
-                style={{ color: focused ? "#4632A1" : "#fff" }}
+                style={{ color: focused ? "#251934" : "#fff" }}
                 size={30}
               />
             </View>
