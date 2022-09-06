@@ -11,7 +11,6 @@ import {
   Button,
   TextInput,
   Modal,
-  Alert,
 } from "react-native";
 import * as Location from "expo-location";
 import { db } from "../firebase";
@@ -26,22 +25,17 @@ import {
   getDocs,
   GeoPoint,
   onSnapshot,
-  updateDoc,
-  increment,
 } from "firebase/firestore";
 import { useNavigation } from "@react-navigation/core";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { connect } from "react-redux";
 import { get_Post } from "../redux";
 import DropDownPicker from "react-native-dropdown-picker";
-import DateTimePicker from "@react-native-community/datetimepicker";
-import { Rating, AirbnbRating } from "react-native-ratings";
-
-import SelectDropdown from "react-native-select-dropdown";
 import Gifs from "../gifs/gifs";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
 import getDistance from "geolib/es/getDistance";
 import { useFonts } from "expo-font";
+import { withTheme } from "react-native-elements";
 
 const { width, height } = Dimensions.get("window");
 const CARD_HEIGHT = 220;
@@ -58,19 +52,18 @@ const MapScreen = (props) => {
   const [title, setTitle] = React.useState("");
   const [content, setContent] = React.useState("");
   const [search, setSearch] = React.useState("");
-  const [modalVisible, setModalVisible] = React.useState(false);
 
   const [open, setOpen] = React.useState(false);
   const [gifOpen, setGifOpen] = React.useState(false);
   const [eventOpen, setEventOpen] = React.useState(false);
   const [value, setValue] = React.useState(null);
 
-  const [gifValue, setGifValue] = React.useState(null);
-  const [eventValue, setEventValue] = React.useState(false);
-  const [dropDownValue, setDropDownValue] = React.useState("markers");
-  const [dropDownText, setDropDownText] = React.useState("Locations");
-  const [distanceValue, setDistanceValue] = React.useState("All");
-  const [distanceText, setDistanceText] = React.useState("All");
+  const [gifValue, setGifValue] = React.useState(null)
+  const [eventValue, setEventValue] = React.useState(false)
+  const [dropDownValue, setDropDownValue] = React.useState('markers')
+  const [dropDownText, setDropDownText] = React.useState('Locations')
+  const [distanceValue, setDistanceValue] = React.useState('All')
+  const [distanceText, setDistanceText] = React.useState('All')
 
   const [fontsLoaded] = useFonts({
     "signika-bold": require("../fonts/SignikaNegative-Bold.ttf"),
@@ -99,11 +92,9 @@ const MapScreen = (props) => {
   const [date, setDate] = React.useState(new Date());
   const [user, setUser] = React.useState(null);
 
+
   const colRef = collection(db, "Post");
   const locationCollectionRef = collection(db, "location");
-
-  const dropDownData = ["markers", "posts"];
-  const distanceVlaue = ["10", "500", "All"];
 
   React.useEffect(() => {
     (async () => {
@@ -142,97 +133,23 @@ const MapScreen = (props) => {
       ),
     []
   );
-  const votes = (id) => {
-    getDocs(
-      query(
-        collection(db, "location"),
-        where("locationId", "==", id)
-        // where("uid", "==", auth.currentUser.uid)
-      )
-    ).then(updateDoc(doc(db, "location", id), { vote: increment(1) }));
-  };
-  const ratings = (id, rating) => {
-    getDocs(
-      query(
-        collection(db, "location"),
-        where("locationId", "==", id)
-        // where("uid", "==", auth.currentUser.uid)
-      )
-    ).then(
-      updateDoc(
-        doc(db, "location", id),
-        { ratings: increment(rating) }
-        // { vote: increment(1) }
-      )
-    );
-  };
 
-  // React.useEffect(
-  //   () =>
-  //     onSnapshot(
-  //       collection(db, "users"),
-  //       where("uid", "==", auth.currentUser?.uid),
-  //       (snapshot) =>
-  //         console.log(snapshot.docs[0].data().role, snapshot.docs[0].id)
-  //     ),
-  //   []
-  // );
+  if (!user) {
+    getDocs(
+      query(collection(db, "users"), where("uid", "==", auth.currentUser?.uid))
+    ).then((user) => {
+      console.log("Grabbing Username"), setUser(user.docs[0].data().role);
+    });
+  }
 
   const mapMarkerAll = () => {
     return filterMarkersData?.map((pin) => (
       <Marker
         key={pin.id}
         coordinate={{ latitude: pin.coords._lat, longitude: pin.coords._long }}
-        // title={pin.title} description={pin.content?.inputText}
+        title={pin.title}
+        description={pin.content?.inputText}
       >
-        <Callout style={styles.calloutOne}>
-          <View
-
-          // style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
-          >
-            <Text style={{ fontFamily: "signika-regular" }}>
-              {pin.title} {pin.content?.inputText}
-            </Text>
-
-            <Text style={{ fontFamily: "signika-regular" }}>
-              <AirbnbRating
-                isDisabled={true}
-                showRating={false}
-                defaultRating={(pin.ratings / pin.vote).toFixed(2)}
-                size={22}
-              />
-              ({pin.vote})
-            </Text>
-            <Modal
-              animationType="slide"
-              transparent={true}
-              visible={modalVisible}
-              onPress={() => {
-                setModalVisible(!modalVisible);
-              }}
-            >
-              <Rating
-                style={styles.modalContainer}
-                size={10}
-                onFinishRating={(rating) => {
-                  votes(pin.id);
-                  ratings(pin.id, rating);
-                  Alert.alert("Your review has been submitted.");
-                  setModalVisible(!modalVisible);
-                }}
-              />
-            </Modal>
-            <TouchableOpacity
-              onPress={() => {
-                setModalVisible(!modalVisible);
-              }}
-            >
-              <Text style={{ fontFamily: "signika-bold" }}>
-                Click to rate location
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </Callout>
         {pin.gif ? (
           <Image style={styles.pin} source={{ uri: Gifs[pin.gif] }} />
         ) : null}
@@ -348,27 +265,32 @@ const MapScreen = (props) => {
   });
 
   const dropDownSwitch = () => {
-    if (dropDownValue === "markers") {
-      setDropDownValue("posts");
-      setDropDownText("Posts");
-    } else {
-      setDropDownValue("markers");
-      setDropDownText("Locations");
+
+    if (dropDownValue === 'markers'){
+      setDropDownValue('posts')
+      setDropDownText('Posts')
     }
-  };
+    else{
+      setDropDownValue('markers')
+      setDropDownText('Locations')
+    }
+  }
 
   const distanceSwitch = () => {
-    if (distanceValue === "All") {
-      setDistanceValue("10");
-      setDistanceText("Near");
-    } else if (distanceValue === "10") {
-      setDistanceValue("500");
-      setDistanceText("Far");
-    } else {
-      setDistanceValue("All");
-      setDistanceText("All");
+    if (distanceValue === 'All'){
+      setDistanceValue('10')
+      setDistanceText('Near')
     }
-  };
+    else if (distanceValue === '10'){
+      setDistanceValue('500')
+      setDistanceText('Far')
+    }
+    else{
+      setDistanceValue('All')
+      setDistanceText('All')
+    }
+  }
+
 
   return (
     <>
@@ -384,7 +306,7 @@ const MapScreen = (props) => {
                   alignItems: "center",
                   justifyContent: "center",
                   height: 50,
-                  backgroundColor: "#251934",
+                  backgroundColor: "#251934"
                 }}
               >
                 <Text style={styles.formLabel}> Add Location </Text>
@@ -433,10 +355,12 @@ const MapScreen = (props) => {
                       setValue={setEventValue}
                       setItems={setEventItems}
                       style={styles.dropdown}
+                      zIndex={8}
                     />
                   ) : null}
                   {eventValue ? (
                     <RNDateTimePicker
+                      style={{margin: 10, color: "white", marginRight: 40}}
                       value={date}
                       onChange={settingDate}
                       mode="datetime"
@@ -450,12 +374,8 @@ const MapScreen = (props) => {
                     onPress={() =>
                       sendInput(title, content, value, gifValue, date)
                     }
-                  >
-                    Submit
-                  </Text>
-                  <Text style={styles.button} onPress={() => setIsVis(!isVis)}>
-                    Hide
-                  </Text>
+                  >Submit</Text>
+                  <Text style={styles.button} onPress={() => setIsVis(!isVis)}>Hide</Text>
                 </View>
               </View>
             </Modal>
@@ -639,15 +559,8 @@ const MapScreen = (props) => {
                 />
               </View>
 
-              <Text style={[styles.filter]} onPress={() => dropDownSwitch()}>
-                {dropDownText}
-              </Text>
-              <Text
-                style={[styles.filter, styles.distance]}
-                onPress={() => distanceSwitch()}
-              >
-                {distanceText}
-              </Text>
+              <Text style={[styles.filter]} onPress={() => dropDownSwitch()}>{dropDownText}</Text>
+              <Text style={[styles.filter, styles.distance]} onPress={() => distanceSwitch()}>{distanceText}</Text>
               <Text style={styles.Btn} onPress={() => setIsVis(!isVis)}>
                 Add
               </Text>
@@ -685,7 +598,6 @@ const styles = StyleSheet.create({
   box: {
     width: 90,
   },
-
   Btn: {
     position: "absolute",
     zIndex: 10,
@@ -700,7 +612,7 @@ const styles = StyleSheet.create({
     marginTop: -5,
     top: 115,
     right: 10,
-    fontFamily: "signika-bold",
+    fontFamily: "signika-bold"
   },
   viewWrap: {
     flex: 1,
@@ -722,6 +634,8 @@ const styles = StyleSheet.create({
     marginBottom: 30,
     borderColor: "#009688",
     backgroundColor: "white",
+    borderRadius: 10,
+    overflow: "hidden",
   },
   screen: {
     flex: 1,
@@ -732,14 +646,14 @@ const styles = StyleSheet.create({
   formLabel: {
     fontSize: 20,
     color: "white",
-    fontFamily: "signika-bold",
+    fontFamily: "signika-bold"
   },
   button: {
     fontSize: 20,
     color: "white",
     fontFamily: "signika-bold",
     paddingTop: 20,
-    alignSelf: "center",
+    alignSelf: "center"
   },
   inputStyle: {
     marginTop: 20,
@@ -747,7 +661,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     borderRadius: 10,
     backgroundColor: "#DCDCDC",
-    fontFamily: "signika-regular",
+    fontFamily: "signika-regular"
   },
   dropdown: {
     marginTop: 20,
@@ -769,40 +683,15 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     borderWidth: 2,
     left: 10,
-    fontFamily: "signika-bold",
+    fontFamily: "signika-bold"
   },
   distance: {
-    left: 120,
+    left: 120
+
   },
   iconStyle: {
     marginTop: 12,
     marginHorizontal: 8,
-  },
-  containerStyle: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  modalContainer: {
-    margin: 300,
-    borderRadius: 20,
-    backgroundColor: "white",
-    alignItems: "center",
-  },
-  calloutOne: {
-    height: 80,
-    borderWidth: 3,
-    margin: 1,
-    flex: 1,
-    fontSize: 16,
-    fontFamily: "signika-regular",
-    // paddingLeft: 20,
-    // paddingVertical: 8,
-    // paddingHorizontal: 0,
-    // marginTop: 50,
-    // marginBottom: 30,
-    borderColor: "black",
-    backgroundColor: "#eeecef",
   },
 });
 
