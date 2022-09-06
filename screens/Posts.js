@@ -46,7 +46,7 @@ const Posts = () => {
 
   const filterData = posts.filter((post) => {
     return post.description.indexOf(search) >= 0;
-  });
+  }).sort((a, b) => b.createAt - a.createAt);
 
   const [fontsLoaded] = useFonts({
     "signika-bold": require("../fonts/SignikaNegative-Bold.ttf"),
@@ -83,30 +83,7 @@ const Posts = () => {
     } else {
       timeDisplay = Math.ceil(diff) + "h";
     }
-    // <View>
-    //       {item.image !== null && (
-    //         <Image
-    //           style={{ width: 100, height: 100 }}
-    //           source={{ uri: item.image }}
-    //         ></Image>
-    //       )}
-    //       <TouchableOpacity
-    //         // onPress={() => navigation.navigate("Ratings", { item })}
-    //         onPress={() => navigation.navigate("SinglePost", { item })}
-    //       >
-    //         <Text style={{ fontSize: 22, fontWeight: "700" }}>
-    //           {item.description}
-    //         </Text>
-    //         <Text style={{ fontSize: 18, opacity: 0.7 }}>
-    //           posted by: {item.username}
-    //         </Text>
-    //         <Text style={{ fontSize: 14, opacity: 0.8, color: "#0099cc" }}>
-    //           {item.contents}
-    //         </Text>
-    //         <Text onPress={() => like(item.id, item.likes)}>
-    //           Like Likes: {item.likes}
-    //         </Text>
-    //       </TouchableOpacity>
+
     return (
       <TouchableOpacity
         onPress={() => navigation.navigate("SinglePost", { item })}
@@ -319,6 +296,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     left: 27,
     marginLeft: 3,
+    color: 'white'
   },
   addButton: {
     position: "absolute",
