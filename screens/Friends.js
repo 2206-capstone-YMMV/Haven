@@ -140,7 +140,7 @@ const Friends = () => {
         )
     })
   return (
-    <View style={{backgroundColor: "#251934"}}>
+    <View style={{backgroundColor: "#251934", height: "100%"}}>
          <View style={styles.container}>
             <Feather
             name="search"
