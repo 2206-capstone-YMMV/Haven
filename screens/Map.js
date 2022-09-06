@@ -185,11 +185,10 @@ const MapScreen = (props) => {
         coordinate={{ latitude: pin.coords._lat, longitude: pin.coords._long }}
         // title={pin.title} description={pin.content?.inputText}
       >
-        <Callout style={{ backgroundColor: "#eeecef" }}>
+        <Callout style={styles.calloutOne}>
           <View
-            style={styles.calloutOne}
 
-            // style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+          // style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
           >
             <Text style={{ fontFamily: "signika-regular" }}>
               {pin.title} {pin.content?.inputText}
@@ -793,7 +792,8 @@ const styles = StyleSheet.create({
   calloutOne: {
     height: 80,
     borderWidth: 3,
-
+    margin: 1,
+    flex: 1,
     fontSize: 16,
     fontFamily: "signika-regular",
     // paddingLeft: 20,
