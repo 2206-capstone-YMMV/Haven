@@ -58,12 +58,12 @@ const MapScreen = (props) => {
   const [eventOpen, setEventOpen] = React.useState(false);
   const [value, setValue] = React.useState(null);
 
-  const [gifValue, setGifValue] = React.useState(null)
-  const [eventValue, setEventValue] = React.useState(false)
-  const [dropDownValue, setDropDownValue] = React.useState('markers')
-  const [dropDownText, setDropDownText] = React.useState('Locations')
-  const [distanceValue, setDistanceValue] = React.useState('All')
-  const [distanceText, setDistanceText] = React.useState('All')
+  const [gifValue, setGifValue] = React.useState(null);
+  const [eventValue, setEventValue] = React.useState(false);
+  const [dropDownValue, setDropDownValue] = React.useState("markers");
+  const [dropDownText, setDropDownText] = React.useState("Locations");
+  const [distanceValue, setDistanceValue] = React.useState("All");
+  const [distanceText, setDistanceText] = React.useState("All");
 
   const [fontsLoaded] = useFonts({
     "signika-bold": require("../fonts/SignikaNegative-Bold.ttf"),
@@ -91,7 +91,6 @@ const MapScreen = (props) => {
 
   const [date, setDate] = React.useState(new Date());
   const [user, setUser] = React.useState(null);
-
 
   const colRef = collection(db, "Post");
   const locationCollectionRef = collection(db, "location");
@@ -153,6 +152,51 @@ const MapScreen = (props) => {
         {pin.gif ? (
           <Image style={styles.pin} source={{ uri: Gifs[pin.gif] }} />
         ) : null}
+        <Callout style={styles.calloutOne}>
+          <View>
+            <Text style={{ fontFamily: "signika-regular" }}>
+              {pin.title} {pin.content?.inputText}
+            </Text>
+
+            <Text style={{ fontFamily: "signika-regular" }}>
+              <AirbnbRating
+                isDisabled={true}
+                showRating={false}
+                defaultRating={(pin.ratings / pin.vote).toFixed(2)}
+                size={22}
+              />
+              ({pin.vote})
+            </Text>
+            <Modal
+              animationType="slide"
+              transparent={true}
+              visible={modalVisible}
+              onPress={() => {
+                setModalVisible(!modalVisible);
+              }}
+            >
+              <Rating
+                style={styles.modalContainer}
+                size={10}
+                onFinishRating={(rating) => {
+                  votes(pin.id);
+                  ratings(pin.id, rating);
+                  Alert.alert("Your review has been submitted.");
+                  setModalVisible(!modalVisible);
+                }}
+              />
+            </Modal>
+            <TouchableOpacity
+              onPress={() => {
+                setModalVisible(!modalVisible);
+              }}
+            >
+              <Text style={{ fontFamily: "signika-bold" }}>
+                Click to rate location
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </Callout>
       </Marker>
     ));
   };
@@ -265,32 +309,27 @@ const MapScreen = (props) => {
   });
 
   const dropDownSwitch = () => {
-
-    if (dropDownValue === 'markers'){
-      setDropDownValue('posts')
-      setDropDownText('Posts')
+    if (dropDownValue === "markers") {
+      setDropDownValue("posts");
+      setDropDownText("Posts");
+    } else {
+      setDropDownValue("markers");
+      setDropDownText("Locations");
     }
-    else{
-      setDropDownValue('markers')
-      setDropDownText('Locations')
-    }
-  }
+  };
 
   const distanceSwitch = () => {
-    if (distanceValue === 'All'){
-      setDistanceValue('10')
-      setDistanceText('Near')
+    if (distanceValue === "All") {
+      setDistanceValue("10");
+      setDistanceText("Near");
+    } else if (distanceValue === "10") {
+      setDistanceValue("500");
+      setDistanceText("Far");
+    } else {
+      setDistanceValue("All");
+      setDistanceText("All");
     }
-    else if (distanceValue === '10'){
-      setDistanceValue('500')
-      setDistanceText('Far')
-    }
-    else{
-      setDistanceValue('All')
-      setDistanceText('All')
-    }
-  }
-
+  };
 
   return (
     <>
@@ -306,7 +345,7 @@ const MapScreen = (props) => {
                   alignItems: "center",
                   justifyContent: "center",
                   height: 50,
-                  backgroundColor: "#251934"
+                  backgroundColor: "#251934",
                 }}
               >
                 <Text style={styles.formLabel}> Add Location </Text>
@@ -360,7 +399,7 @@ const MapScreen = (props) => {
                   ) : null}
                   {eventValue ? (
                     <RNDateTimePicker
-                      style={{margin: 10, color: "white", marginRight: 40}}
+                      style={{ margin: 10, color: "white", marginRight: 40 }}
                       value={date}
                       onChange={settingDate}
                       mode="datetime"
@@ -374,8 +413,12 @@ const MapScreen = (props) => {
                     onPress={() =>
                       sendInput(title, content, value, gifValue, date)
                     }
-                  >Submit</Text>
-                  <Text style={styles.button} onPress={() => setIsVis(!isVis)}>Hide</Text>
+                  >
+                    Submit
+                  </Text>
+                  <Text style={styles.button} onPress={() => setIsVis(!isVis)}>
+                    Hide
+                  </Text>
                 </View>
               </View>
             </Modal>
@@ -559,8 +602,15 @@ const MapScreen = (props) => {
                 />
               </View>
 
-              <Text style={[styles.filter]} onPress={() => dropDownSwitch()}>{dropDownText}</Text>
-              <Text style={[styles.filter, styles.distance]} onPress={() => distanceSwitch()}>{distanceText}</Text>
+              <Text style={[styles.filter]} onPress={() => dropDownSwitch()}>
+                {dropDownText}
+              </Text>
+              <Text
+                style={[styles.filter, styles.distance]}
+                onPress={() => distanceSwitch()}
+              >
+                {distanceText}
+              </Text>
               <Text style={styles.Btn} onPress={() => setIsVis(!isVis)}>
                 Add
               </Text>
@@ -612,7 +662,7 @@ const styles = StyleSheet.create({
     marginTop: -5,
     top: 115,
     right: 10,
-    fontFamily: "signika-bold"
+    fontFamily: "signika-bold",
   },
   viewWrap: {
     flex: 1,
@@ -646,14 +696,14 @@ const styles = StyleSheet.create({
   formLabel: {
     fontSize: 20,
     color: "white",
-    fontFamily: "signika-bold"
+    fontFamily: "signika-bold",
   },
   button: {
     fontSize: 20,
     color: "white",
     fontFamily: "signika-bold",
     paddingTop: 20,
-    alignSelf: "center"
+    alignSelf: "center",
   },
   inputStyle: {
     marginTop: 20,
@@ -661,7 +711,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     borderRadius: 10,
     backgroundColor: "#DCDCDC",
-    fontFamily: "signika-regular"
+    fontFamily: "signika-regular",
   },
   dropdown: {
     marginTop: 20,
@@ -683,15 +733,35 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     borderWidth: 2,
     left: 10,
-    fontFamily: "signika-bold"
+    fontFamily: "signika-bold",
   },
   distance: {
-    left: 120
-
+    left: 120,
   },
   iconStyle: {
     marginTop: 12,
     marginHorizontal: 8,
+  },
+  containerStyle: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalContainer: {
+    margin: 300,
+    borderRadius: 20,
+    alignItems: "center",
+  },
+  calloutOne: {
+    height: 90,
+    width: 200,
+    borderWidth: 3,
+    margin: 1,
+    flex: 1,
+    fontSize: 16,
+    fontFamily: "signika-regular",
+    borderColor: "black",
+    backgroundColor: "#eeecef",
   },
 });
 
