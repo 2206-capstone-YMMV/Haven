@@ -34,6 +34,7 @@ export const inappropriate = (id, inappropriate) => {
     updateDoc(doc(db, "Post", id), { "reports.inappropriate": increment(1) })
   );
 };
+
 export const falseLocation = (id, falseLocation) => {
   getDocs(
     query(
@@ -86,4 +87,13 @@ export const outOfSupplies = (id, spam) => {
   ).then(
     updateDoc(doc(db, "Post", id), { "reports.outOfSupplies": increment(1) })
   );
+};
+export const votes = (id) => {
+  getDocs(
+    query(
+      collection(db, "Post"),
+      where("postId", "==", id),
+      where("uid", "==", auth.currentUser.uid)
+    )
+  ).then(updateDoc(doc(db, "Post", id), { vote: increment(1) }));
 };

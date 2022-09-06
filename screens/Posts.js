@@ -101,6 +101,7 @@ const Posts = () => {
             ></Image>
           )}
           <TouchableOpacity
+            // onPress={() => navigation.navigate("Ratings", { item })}
             onPress={() => navigation.navigate("SinglePost", { item })}
           >
             <Text style={{ fontSize: 22, fontWeight: "700" }}>

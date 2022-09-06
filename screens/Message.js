@@ -18,7 +18,7 @@ import {
   addDoc,
   getDocs,
 } from "firebase/firestore";
-import { LinearGradient } from 'expo-linear-gradient';
+import { LinearGradient } from "expo-linear-gradient";
 
 export default function Message({ route }) {
   const { conversationId } = route.params;
@@ -37,7 +37,7 @@ export default function Message({ route }) {
           setConversation(
             snapshot.docs
               .map((convo) => {
-                console.log("Grabbing Messages");
+                // console.log("Grabbing Messages");
                 return convo.data();
               })
               .sort((a, b) => a.timestamp - b.timestamp)
@@ -50,8 +50,8 @@ export default function Message({ route }) {
     getDocs(
       query(collection(db, "users"), where("uid", "==", auth.currentUser?.uid))
     ).then((user) => {
-      console.log("Grabbing Username"),
-        setDisplayName(user.docs[0].data());
+      // console.log("Grabbing Username"),
+      setDisplayName(user.docs[0].data());
     });
   }
 
@@ -69,45 +69,49 @@ export default function Message({ route }) {
   };
 
   return (
-    
-    <KeyboardAvoidingView behavior="padding"
-      style={{ flex: 1, alignItems: "center", justifyContent: "space-between"}}
+    <KeyboardAvoidingView
+      behavior="padding"
+      style={{ flex: 1, alignItems: "center", justifyContent: "space-between" }}
       keyboardVerticalOffset={100}
     >
-    <LinearGradient colors={["#8c5aa5", "#f2e797"]} style={{width: "100%", height: "100%"}}>
-    <ScrollView>
-      <View style={styles.messageContainer}>
-        {conversation.map((convo, index) => {
-          if(convo.messenger.uid !== auth.currentUser.uid){
-            return (<Text key={index} style={styles.message}>
-              {convo.messenger.name + ': ' + convo.content}
-            </Text>)
-          }
-          else{
-            return (<Text key={index} style={[styles.message, styles.user]}>
-              {'You: ' + convo.content}
-            </Text>)
-          }
-          })}
-      </View>
-      <View style={styles.inputContainer}>
-        <TextInput
-          placeholder="Message"
-          value={message}
-          onChangeText={(text) => setMessage(text)}
-          style={styles.input}
-          multiline={true}
-          blurOnSubmit={true}
-        ></TextInput>
-        <TouchableOpacity onPress={handleSend} style={styles.button}>
-          <Text style={styles.buttonText}>Send</Text>
-        </TouchableOpacity>
-        
-      </View>
-      </ScrollView>
+      <LinearGradient
+        colors={["#8c5aa5", "#f2e797"]}
+        style={{ width: "100%", height: "100%" }}
+      >
+        <ScrollView>
+          <View style={styles.messageContainer}>
+            {conversation.map((convo, index) => {
+              if (convo.messenger.uid !== auth.currentUser.uid) {
+                return (
+                  <Text key={index} style={styles.message}>
+                    {convo.messenger.name + ": " + convo.content}
+                  </Text>
+                );
+              } else {
+                return (
+                  <Text key={index} style={[styles.message, styles.user]}>
+                    {"You: " + convo.content}
+                  </Text>
+                );
+              }
+            })}
+          </View>
+          <View style={styles.inputContainer}>
+            <TextInput
+              placeholder="Message"
+              value={message}
+              onChangeText={(text) => setMessage(text)}
+              style={styles.input}
+              multiline={true}
+              blurOnSubmit={true}
+            ></TextInput>
+            <TouchableOpacity onPress={handleSend} style={styles.button}>
+              <Text style={styles.buttonText}>Send</Text>
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
       </LinearGradient>
     </KeyboardAvoidingView>
-    
   );
 }
 
@@ -116,7 +120,7 @@ const styles = StyleSheet.create({
     alignSelf: "flex-start",
     alignItems: "left",
     paddingHorizontal: "10%",
-    width: '100%'
+    width: "100%",
   },
   message: {
     backgroundColor: "white",
@@ -124,10 +128,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 5,
     marginTop: 5,
     borderRadius: 10,
-    overflow: 'hidden'
+    overflow: "hidden",
   },
   user: {
-    alignSelf: 'flex-end'
+    alignSelf: "flex-end",
   },
   inputContainer: {
     alignSelf: "center",
@@ -138,10 +142,10 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     flexDirection: "row",
     marginTop: 10,
-    marginBottom: 10
+    marginBottom: 10,
   },
   input: {
-    width: "80%"
+    width: "80%",
   },
   buttonContainer: {
     width: "20%",

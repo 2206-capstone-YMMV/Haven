@@ -37,7 +37,7 @@ const NewPost = () => {
   const [profile, setProfile] = useState({});
   const colRef = collection(db, "Post");
   const [image, setImage] = useState("");
-  const [url, setUrl] = useState();
+  const [url, setUrl] = useState(null);
 
   //const [pickedImagePath, setPickedImagePath] = useState("");
   useEffect(() => {
@@ -72,10 +72,7 @@ const NewPost = () => {
     []
   );
 
-  const handleAddPost = async (pathUrl) => {
-    if (url == null) {
-      setUrl(null);
-    }
+  const handleAddPost = async () => {
     await addDoc(colRef, {
       uid: auth.currentUser?.uid,
       username: profile.name,
@@ -129,9 +126,6 @@ const NewPost = () => {
 
   //real deal sent to firebase
   const pickImage = async () => {
-    if (url == null) {
-      setUrl(null);
-    }
     const result = await ImagePicker.launchCameraAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
@@ -160,42 +154,48 @@ const NewPost = () => {
       console.log(e);
     }
   };
-  const combined = async () => {
-    let pathUrl = await pickImage();
-    await handleAddPost({
-      pathUrl,
-    });
-  };
+  // const combined = async () => {
+  //   let pathUrl = await pickImage();
+  //   await handleAddPost({
+  //     pathUrl,
+  //   });
+  // };
 
   return (
     <View>
-      <TextInput
-        style={styles.input}
-        placeholder="description"
-        onChangeText={(text) => setDescription(text)}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="contents"
-        onChangeText={(text) => setContents(text)}
-        multiline={true}
-      />
-      {image && (
-        <Image
-          source={{ uri: image }}
-          style={{ width: 300, height: 300 }}
-        ></Image>
+      <Text>NewPost</Text>
+      {location === "" ? (
+        <Text>Loading</Text>
+      ) : (
+        <View>
+          <TextInput
+            style={styles.input}
+            placeholder="description"
+            onChangeText={(text) => setDescription(text)}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="contents"
+            onChangeText={(text) => setContents(text)}
+            multiline={true}
+          />
+          {image && (
+            <Image
+              source={{ uri: image }}
+              style={{ width: 300, height: 300 }}
+            ></Image>
+          )}
+          <TouchableOpacity onPress={pickImage} style={[styles.button]}>
+            <Text style={styles.buttonOutLineText}>Take Photo</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={handleAddPost} style={[styles.button]}>
+            <Text style={styles.buttonOutLineText}>Submit</Text>
+          </TouchableOpacity>
+        </View>
       )}
-      <TouchableOpacity onPress={pickImage} style={[styles.button]}>
-        <Text style={styles.buttonOutLineText}>Take Photo</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={handleAddPost} style={[styles.button]}>
-        <Text style={styles.buttonOutLineText}>Submit</Text>
-      </TouchableOpacity>
     </View>
   );
 };
-
 export default NewPost;
 
 const styles = StyleSheet.create({

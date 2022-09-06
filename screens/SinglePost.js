@@ -6,6 +6,7 @@ import {
   Image,
   Modal,
   Pressable,
+  Alert,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
@@ -31,6 +32,8 @@ import {
   falseLocation,
   outOfSupplies,
 } from "./ReportScreen";
+import Ratings from "./Ratings";
+import { useNavigation } from "@react-navigation/core";
 
 const SinglePost = (props) => {
   const element = props.route.params.item;
@@ -38,6 +41,8 @@ const SinglePost = (props) => {
   const [comments, setComments] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [count, setCount] = useState();
+  const navigation = useNavigation();
+
   useEffect(
     () =>
       onSnapshot(
@@ -46,7 +51,7 @@ const SinglePost = (props) => {
           setComments(
             snapshot.docs
               .map((comment) => {
-                 console.log("grabbing comments");
+                //  console.log("grabbing comments");
 
                 return comment.data();
               })
@@ -63,7 +68,6 @@ const SinglePost = (props) => {
         transparent={true}
         visible={modalVisible}
         onRequestClose={() => {
-          Alert.alert("Modal has been closed.");
           setModalVisible(!modalVisible);
         }}
       >
@@ -74,6 +78,7 @@ const SinglePost = (props) => {
                 onPress={() => {
                   inappropriate(element.id, element.reports);
                   setModalVisible(!modalVisible);
+                  Alert.alert("Your report has been submitted.");
                 }}
               >
                 <Text style={styles.title}>Inappropriate</Text>
@@ -82,6 +87,7 @@ const SinglePost = (props) => {
                 onPress={() => {
                   falseLocation(element.id, element.reports);
                   setModalVisible(!modalVisible);
+                  Alert.alert("Your report has been submitted.");
                 }}
               >
                 <Text style={styles.title}>False Location</Text>
@@ -90,6 +96,7 @@ const SinglePost = (props) => {
                 onPress={() => {
                   spam(element.id, element.reports);
                   setModalVisible(!modalVisible);
+                  Alert.alert("Your report has been submitted.");
                 }}
               >
                 <Text style={styles.title}>Spam</Text>
@@ -98,6 +105,7 @@ const SinglePost = (props) => {
                 onPress={() => {
                   misinformation(element.id, element.reports);
                   setModalVisible(!modalVisible);
+                  Alert.alert("Your report has been submitted.");
                 }}
               >
                 <Text style={styles.title}>Misinformation</Text>
@@ -106,6 +114,7 @@ const SinglePost = (props) => {
                 onPress={() => {
                   outOfSupplies(element.id, element.reports);
                   setModalVisible(!modalVisible);
+                  Alert.alert("Your report has been submitted.");
                 }}
               >
                 <Text style={styles.title}>Out of Supplies</Text>
@@ -114,17 +123,19 @@ const SinglePost = (props) => {
                 onPress={() => {
                   harassment(element.id, element.reports);
                   setModalVisible(!modalVisible);
+                  Alert.alert("Your report has been submitted.");
                 }}
               >
                 <Text style={styles.title}>Harassment </Text>
               </TouchableOpacity>
+
+              <Pressable
+                //style={[styles.button, styles.buttonClose]}
+                onPress={() => setModalVisible(!modalVisible)}
+              >
+                <Text style={styles.title}>Cancel</Text>
+              </Pressable>
             </View>
-            <Pressable
-              style={[styles.button, styles.buttonClose]}
-              onPress={() => setModalVisible(!modalVisible)}
-            >
-              <Text style={styles.textStyle}>Cancel</Text>
-            </Pressable>
           </View>
         </View>
       </Modal>
@@ -137,11 +148,7 @@ const SinglePost = (props) => {
 
       <Text>Post By: {element.username}</Text>
       <Text>Description: {element.description}</Text>
-      {/* {element.role === "admin" ? (
-        <Text>{JSON.stringify(element.reports)}</Text>
-      ) : (
-        ""
-      )} */}
+
       <Text>Content: {element.contents}</Text>
 
       <Input commentId={element.id} />
@@ -154,11 +161,8 @@ const SinglePost = (props) => {
         ))}
       </View>
 
-      <Pressable
-        style={[styles.button, styles.buttonOpen]}
-        onPress={() => setModalVisible(true)}
-      >
-        <Ionicons name="flag-outline" size={30} color="black" />
+      <Pressable onPress={() => setModalVisible(true)}>
+        <Ionicons name="flag-outline" size={30} color="red" />
       </Pressable>
     </View>
   );
@@ -189,10 +193,10 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 22,
+    marginTop: 70,
   },
   title: {
-    margin: 20,
+    margin: 2,
 
     backgroundColor: "#2196F3",
     borderRadius: 20,
@@ -227,7 +231,7 @@ const styles = StyleSheet.create({
   },
   button: {
     borderRadius: 20,
-    padding: 10,
+    padding: 15,
     elevation: 2,
   },
   buttonOpen: {
