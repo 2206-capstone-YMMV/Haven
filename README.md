@@ -13,8 +13,9 @@
   </p>
 </div>
 
+<div align="center">
 ![image](https://user-images.githubusercontent.com/100179946/188930768-03ee959f-4820-40be-b1e7-f0402c8ea084.png)
-
+</div>
 
 
 <!-- TABLE OF CONTENTS -->
