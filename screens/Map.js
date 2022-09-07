@@ -195,7 +195,7 @@ const MapScreen = (props) => {
               />
               ({pin.vote})
             </Text>
-            <Modal
+            {/* <Modal
               animationType="slide"
               transparent={true}
               visible={modalVisible}
@@ -222,7 +222,7 @@ const MapScreen = (props) => {
               <Text style={{ fontFamily: "signika-bold" }}>
                 Click to rate location
               </Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
         </Callout>
       </Marker>
